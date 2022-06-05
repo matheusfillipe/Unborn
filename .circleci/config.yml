@@ -27,6 +27,7 @@ jobs:
           name: Github release
           command: bash .circleci/release.sh
 
+
 workflows:
   build-workflow:
     jobs:
