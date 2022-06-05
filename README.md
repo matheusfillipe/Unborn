@@ -6,7 +6,7 @@ https://futuregodotgame.herokuapp.com
 
 # FutureGodotGame
 
-Game developed for the ich.io godot wild jam of June 2022.
+Game developed for the itch.io godot wild jam of June 2022.
 
 
 # TODO
