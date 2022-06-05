@@ -16,6 +16,7 @@ zip linux.zip linux/*
 zip macos.zip macos/*
 zip windows.zip windows/*
 zip html5.zip ./html/*
+zip android.zip ./android/*
 mv *.zip release/
 
 echo "RELEASE VERSION $VERSION"
