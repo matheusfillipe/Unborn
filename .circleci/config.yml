@@ -14,13 +14,15 @@ jobs:
           mkdir -p ./build/windows
           mkdir -p ./build/macos
           mkdir -p ./build/linux
+          mkdir -v -p build/android
       - run: godot --export HTML5 ./build/html/index.html
       - run:
           name: Heroku deploy
           command: bash .circleci/deploy-heroku.sh
-      - run: godot --export "Windows Desktop" ./build/windows/cluennector.exe
-      - run: godot --export "Linux/X11" ./build/linux/cluennector
-      - run: godot --export "Mac OSX" ./build/macos/cluennector.dmg
+      - run: godot --export "Windows Desktop" ./build/windows/$HEROKU_APP_NAME.exe
+      - run: godot --export "Linux/X11" ./build/linux/$HEROKU_APP_NAME
+      - run: godot --export "Mac OSX" ./build/macos/$HEROKU_APP_NAME.dmg
+      - run: godot -v --export-debug "Android Debug" ./build/android/$HEROKU_APP_NAME-debug.apk
       - run:
           name: Github release
           command: bash .circleci/release.sh
