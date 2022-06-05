@@ -19,10 +19,10 @@ jobs:
       - run:
           name: Heroku deploy
           command: bash .circleci/deploy-heroku.sh
-      - run: godot --export "Windows Desktop" ./build/windows/$HEROKU_APP_NAME.exe
-      - run: godot --export "Linux/X11" ./build/linux/$HEROKU_APP_NAME
-      - run: godot --export "Mac OSX" ./build/macos/$HEROKU_APP_NAME.dmg
-      - run: godot -v --export-debug "Android Debug" ./build/android/$HEROKU_APP_NAME-debug.apk
+      - run: godot --export "Windows Desktop" ./build/windows/$CIRCLE_PROJECT_REPONAME.exe
+      - run: godot --export "Linux/X11" ./build/linux/$CIRCLE_PROJECT_REPONAME
+      - run: godot --export "Mac OSX" ./build/macos/$CIRCLE_PROJECT_REPONAME.dmg
+      - run: godot -v --export-debug "Android Debug" ./build/android/$CIRCLE_PROJECT_REPONAME-debug.apk
       - run:
           name: Github release
           command: bash .circleci/release.sh
