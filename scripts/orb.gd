@@ -44,6 +44,7 @@ var brightness = 1 setget set_brightness
 var is_colliding = false
 
 onready var circle = $circle
+onready var shape = $CollisionShape2D
 
 func _ready():
 	set_color(start_color)
@@ -64,6 +65,9 @@ func set_color(colorname: int):
 func set_brightness(b: float):
 	modulate = Color(b, b, b, 1)
 	brightness = b
+
+func get_size():
+	return shape.shape.radius
 
 
 func _on_Area2D_body_exited(body:Node):

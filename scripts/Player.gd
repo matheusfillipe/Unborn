@@ -34,18 +34,25 @@ func get_input():
 func _physics_process(delta):
 	# TODO add acceleration and friction
 
+	var input = Vector2.ZERO
+
 	# Mouse click / tap control
 	if has_target:
-		velocity = position.direction_to(target) * max_speed
-		if position.distance_to(target) < 5:
+		input = position.direction_to(target)
+		# Stop moving before so that can stop in time
+		# S = v_0 - at^2/2
+		var S = position.distance_to(target)
+		# Torricelli equation
+		if velocity.length_squared() / (2 * friction) > S - get_size():
 			has_target = false
 
 	# Arrow control
 	else:
-		var input = get_input()
-		if input != Vector2.ZERO:
-			velocity = velocity.move_toward(input * max_speed, acceleration * delta)
-		else:
-			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+		input = get_input()
+
+	if input != Vector2.ZERO:
+		velocity = velocity.move_toward(input * max_speed, acceleration * delta)
+	else:
+		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 
 	velocity = move_and_slide(velocity)
