@@ -26,6 +26,16 @@ environment = SubResource( 1 )
 [node name="orb" parent="." instance=ExtResource( 1 )]
 position = Vector2( 539, 257 )
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 325, 245 )
+current = true
+process_mode = 0
+smoothing_enabled = true
+smoothing_speed = 100.0
+
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 325, 245 )
 start_brightness = 4.0
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Player"]
+remote_path = NodePath("../../Camera2D")
