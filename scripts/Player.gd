@@ -10,18 +10,45 @@ var life_colors = [
 	COLOR.RED
 	]
 
+enum {
+	CONTROL
+	IDLE
+	}
+
 export (int) var max_speed = 400
 export (int) var acceleration = 800
 export (int) var friction = 800
+export (int) var noise_amplitude = 2
+export (float, 0, 5) var noise_speed = 10
 
 var velocity = Vector2()
 var target = Vector2()
 var has_target = false
+var state = IDLE setget set_state
+
+onready var rest_position = global_position
+
+
+# Moves to a certain target. Use stop to stop.
+func go_to(p_target: Vector2):
+		target = p_target
+		has_target = true
+
+
+func set_state(new_state):
+	match new_state:
+		IDLE:
+			rest_position = global_position
+	state = new_state
+
+func stop():
+	has_target = false
 
 func _input(event):
+	# Mouse click / tap control
 	if event.is_action_pressed("click"):
-		target = get_global_mouse_position()
-		has_target = true
+		go_to(get_global_mouse_position())
+		self.state = CONTROL
 
 func get_input():
 	var input = Vector2.ZERO
@@ -31,28 +58,53 @@ func get_input():
 	input = input.normalized() * max_speed
 	return input
 
-func _physics_process(delta):
-	# TODO add acceleration and friction
-
+func move(delta):
 	var input = Vector2.ZERO
 
-	# Mouse click / tap control
 	if has_target:
 		input = position.direction_to(target)
+
 		# Stop moving before so that can stop in time
 		# S = v_0 - at^2/2
 		var S = position.distance_to(target)
+
 		# Torricelli equation
-		if velocity.length_squared() / (2 * friction) > S - get_size():
+		if velocity.length_squared() / (2 * friction) > S - get_size() - noise_amplitude:
 			has_target = false
+			self.state = IDLE
 
 	# Arrow control
-	else:
-		input = get_input()
+	var arrow_input = get_input()
+	if arrow_input.length() > 0:
+		input = arrow_input
+		self.state = CONTROL
+	elif not has_target:
+		self.state = IDLE
 
 	if input != Vector2.ZERO:
 		velocity = velocity.move_toward(input * max_speed, acceleration * delta)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 
+# Move in random directions with random speeds
+func idle():
+	randomize()
+	var time = OS.get_ticks_msec() / 1000.0
+
+	# directions
+	var t = Vector2(cos(time * noise_speed), sin(time * noise_speed))
+
+	# Random length
+	var l = randi() % noise_amplitude + noise_amplitude
+	go_to(rest_position + t * l)
+
+
+func _physics_process(delta):
+	match state:
+		CONTROL:
+			pass
+		IDLE:
+			idle()
+
+	move(delta)
 	velocity = move_and_slide(velocity)

@@ -1,8 +1,5 @@
 extends KinematicBody2D
 
-
-
-
 class OrbColor:
 	var shader1: Color
 	var shader2: Color
