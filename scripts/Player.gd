@@ -15,11 +15,11 @@ enum {
 	IDLE
 	}
 
-export (int) var max_speed = 400
+export (int) var max_speed = 200
 export (int) var acceleration = 800
 export (int) var friction = 800
-export (int) var noise_amplitude = 2
-export (float, 0, 5) var noise_speed = 10
+export (float) var noise_amplitude = 0.5
+export (float, 0, 5) var noise_speed = 5
 
 var velocity = Vector2()
 var target = Vector2()
@@ -95,7 +95,7 @@ func idle():
 	var t = Vector2(cos(time * noise_speed), sin(time * noise_speed))
 
 	# Random length
-	var l = randi() % noise_amplitude + noise_amplitude
+	var l = (1 + randf()) * noise_amplitude
 	go_to(rest_position + t * l)
 
 
