@@ -1,6 +1,8 @@
 extends KinematicBody2D
 
 
+
+
 class OrbColor:
 	var shader1: Color
 	var shader2: Color
@@ -33,11 +35,13 @@ var colormap = {
 
 export(COLOR) var start_color = COLOR.BLUE
 export(int) var start_size = 1
-export(float) var start_brightness = 1
+export(float, 0, 100) var start_brightness = 1
+export(float, 1, 100) var collision_brightness_multiplier = 1.5
 
 var size = 1 setget set_size
 var color = "blue" setget set_color
 var brightness = 1 setget set_brightness
+var is_colliding = false
 
 onready var circle = $circle
 
@@ -59,3 +63,14 @@ func set_color(colorname: int):
 
 func set_brightness(b: float):
 	modulate = Color(b, b, b, 1)
+	brightness = b
+
+
+func _on_Area2D_body_exited(body:Node):
+	is_colliding = false
+	set_brightness(brightness / collision_brightness_multiplier)
+
+
+func _on_Area2D_body_entered(body:Node):
+	is_colliding = true
+	set_brightness(brightness * collision_brightness_multiplier)
