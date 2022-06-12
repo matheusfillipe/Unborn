@@ -29,6 +29,8 @@ var state = IDLE setget set_state
 
 onready var rest_position = global_position
 
+var Explosion = preload("res://effects/Explosion.tscn")
+
 var Spirit = preload("res://scripts/Spirit.gd")
 
 
@@ -59,6 +61,22 @@ func _input(event):
 	if event.is_action_pressed("click"):
 		go_to(get_global_mouse_position())
 		self.state = CONTROL
+
+	# Mana attack (Spirit)
+	if event.is_action_pressed("attack"):
+		# TODO Make the effect has an actual collision for enemies and damage level
+		if get_mana() <= 0:
+			# not enough mana
+			return
+
+		var explosion = Explosion.instance()
+		get_parent().add_child(explosion)
+		explosion.global_position = global_position
+		explosion.scale = scale
+		explosion.timer.wait_time = 3
+
+		self.size = initial_size
+
 
 func get_input():
 	var input = Vector2.ZERO
@@ -127,7 +145,6 @@ func _on_collide(body:Node):
 	if body is Spirit and not body.dying:
 		# Get health and grow with spirit
 		var idx = health_colors.find(body.color)
-		print(idx)
 		if idx > -1:
 			# Set color of received spirit
 			# TODO maybe is better to average things out? or not even have this. idk
