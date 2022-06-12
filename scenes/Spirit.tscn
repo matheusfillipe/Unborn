@@ -68,7 +68,6 @@ tracks/0/keys = {
 
 [node name="Spirit" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
-collision_brightness_multiplier = 1.0
 
 [node name="circle" parent="." index="0"]
 material = SubResource( 5 )
