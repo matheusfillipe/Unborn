@@ -1,14 +1,14 @@
 extends "res://scripts/orb.gd"
 
 
-var life: int
-var life_colors = [
-	COLOR.BLUE,
+var health: int
+var health_colors = [
 	COLOR.GREEN,
 	COLOR.YELLOW,
 	COLOR.ORANGE,
 	COLOR.RED
 	]
+
 
 enum {
 	CONTROL
@@ -18,8 +18,9 @@ enum {
 export (int) var max_speed = 600
 export (int) var acceleration = 800
 export (int) var friction = 800
-export (float) var noise_amplitude = 0.5
-export (float, 0, 5) var noise_speed = 5
+export (float) var noise_amplitude = 0.2
+export (float, 0, 5) var noise_speed = 8
+export (float, 0, 25) var size_limit = 20
 
 var velocity = Vector2()
 var target = Vector2()
@@ -28,6 +29,13 @@ var state = IDLE setget set_state
 
 onready var rest_position = global_position
 
+var Spirit = preload("res://scripts/Spirit.gd")
+
+
+var initial_size
+
+func _on_ready():
+	initial_size = size
 
 # Moves to a certain target. Use stop to stop.
 func go_to(p_target: Vector2):
@@ -101,6 +109,8 @@ func idle():
 	var l = (1 + randf()) * noise_amplitude
 	go_to(rest_position + t * l)
 
+func get_mana() -> float:
+	return size / initial_size - 1
 
 func _physics_process(delta):
 	if state == IDLE:
@@ -109,5 +119,31 @@ func _physics_process(delta):
 	move(delta)
 	velocity = move_and_slide(velocity)
 
-	if is_colliding:
-		self.state = IDLE
+
+func _on_color_change():
+	health = health_colors.find(color)
+
+func _on_collide(body:Node):
+	if body is Spirit and not body.dying:
+		# Get health and grow with spirit
+		var idx = health_colors.find(body.color)
+		print(idx)
+		if idx > -1:
+			# Set color of received spirit
+			# TODO maybe is better to average things out? or not even have this. idk
+			# TODO maybe blue ones give full health?
+			# TODO and black ones insta kill?
+			self.color = body.color
+
+		# Increase
+		var new_size = size + body.size/2
+		if new_size > size_limit:
+			new_size = size_limit
+		set_size(new_size)
+		body.die()
+
+	# TODO if enemy
+	# if health == 0:
+	#    die()
+	# health = health_colors[health - 1]
+	# color =  health_colors[health]

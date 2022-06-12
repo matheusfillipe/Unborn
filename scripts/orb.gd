@@ -1,5 +1,6 @@
 extends KinematicBody2D
 
+
 class OrbColor:
 	var shader1: Color
 	var shader2: Color
@@ -36,27 +37,40 @@ export(float, 0, 100) var start_brightness = 1
 export(float, 1, 100) var collision_brightness_multiplier = 1.5
 
 var size:float = 1.0 setget set_size
-var color = "blue" setget set_color
+var color = COLOR.GREEN setget set_color
 var brightness: float = 1.0 setget set_brightness
 var is_colliding = false
 
+# Children Nodes
 onready var circle = $circle
 onready var shape = $CollisionShape2D
 onready var areashape = $Area2D/CollisionShape2D
+onready var btimer = $BrightTimer
 
 onready var start_circle_scale: float = $circle.scale.x
 onready var start_shape_size: float = $CollisionShape2D.shape.radius
 onready var start_areashape_size: float = $Area2D/CollisionShape2D.shape.radius
+
 
 func _ready():
 	set_color(start_color)
 	set_size(start_size * scale.x)
 	set_brightness(start_brightness)
 
+	# This is so children classes can overwrite the ready function doing stuff before it
+	_on_ready()
+
+func _on_ready():
+	pass
+
 func set_size(_size: float):
 	shape.shape.radius = _size * start_shape_size
-	areashape.shape.radius = _size * start_areashape_size + 1
+	areashape.shape.radius = _size * start_areashape_size + 3
 	circle.scale = Vector2.ONE * _size * start_circle_scale
+	size = _size
+
+func _on_color_change():
+	pass
 
 func set_color(colorname: int):
 	assert(colorname in colormap, "Invalid color: " + str(colorname))
@@ -65,6 +79,7 @@ func set_color(colorname: int):
 	circle.material.set_shader_param("main_color", c.shader1)
 	circle.material.set_shader_param("second_color", c.shader2)
 	circle.material.set_shader_param("third_color", c.shader3)
+	_on_color_change()
 
 func set_brightness(b: float):
 	circle.modulate = Color(b, b, b, 1)
@@ -74,11 +89,25 @@ func get_size():
 	return shape.shape.radius
 
 
-func _on_Area2D_body_exited(body:Node):
-	is_colliding = false
-	set_brightness(brightness / collision_brightness_multiplier)
+func _on_BrightTimer_timeout():
+	if is_colliding:
+		return
+	set_brightness(brightness)
 
+func _on_Area2D_body_exited(body:Node):
+	if body == self:
+		return
+	is_colliding = false
+	btimer.start()
+
+func _on_collide(_body):
+	pass
 
 func _on_Area2D_body_entered(body:Node):
+	if body == self or is_colliding:
+		return
 	is_colliding = true
-	set_brightness(brightness * collision_brightness_multiplier)
+	btimer.stop()
+	var b = brightness * collision_brightness_multiplier
+	circle.modulate = Color(b, b, b, 1)
+	_on_collide(body)

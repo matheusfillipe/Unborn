@@ -14,7 +14,7 @@ noise = SubResource( 3 )
 resource_local_to_scene = true
 shader = ExtResource( 3 )
 shader_param/aspect_ratio = 4.919
-shader_param/velocity = Vector2( 0.11, 0.1 )
+shader_param/velocity = Vector2( 0.02, 0.2 )
 shader_param/radius = 0.932
 shader_param/starting_frequency = 0.818
 shader_param/starting_amplitude = 0.5
@@ -50,5 +50,10 @@ visible = false
 visible = false
 shape = SubResource( 5 )
 
+[node name="BrightTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
+[connection signal="timeout" from="BrightTimer" to="." method="_on_BrightTimer_timeout"]

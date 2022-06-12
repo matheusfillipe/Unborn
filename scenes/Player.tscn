@@ -1,16 +1,17 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://assets/filled_circle.png" type="Texture" id=2]
+[ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=2]
 [ext_resource path="res://shaders/orb.shader" type="Shader" id=3]
 
-[sub_resource type="OpenSimplexNoise" id=5]
+[sub_resource type="OpenSimplexNoise" id=3]
 
 [sub_resource type="NoiseTexture" id=4]
 seamless = true
-noise = SubResource( 5 )
+noise = SubResource( 3 )
 
-[sub_resource type="ShaderMaterial" id=6]
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
 shader = ExtResource( 3 )
 shader_param/aspect_ratio = 4.919
 shader_param/velocity = Vector2( 0.11, 0.1 )
@@ -23,25 +24,27 @@ shader_param/second_color = Color( 0.211765, 0.14902, 0.14902, 1 )
 shader_param/third_color = Color( 0, 0, 0, 1 )
 shader_param/noise = SubResource( 4 )
 
+[sub_resource type="StreamTexture" id=6]
+resource_local_to_scene = true
+flags = 4
+load_path = "res://.import/filled_circle.png-23900622835b39380366986e41840c2d.stex"
+
 [sub_resource type="CircleShape2D" id=7]
+resource_local_to_scene = true
 
 [sub_resource type="CircleShape2D" id=8]
+resource_local_to_scene = true
 
-[node name="KinematicBody2D" type="KinematicBody2D"]
+[node name="Player" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
+start_color = 3
 
-[node name="circle" type="Sprite" parent="."]
-material = SubResource( 6 )
-scale = Vector2( 0.021, 0.021 )
-texture = ExtResource( 2 )
+[node name="circle" parent="." index="0"]
+material = SubResource( 5 )
+texture = SubResource( 6 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
+[node name="CollisionShape2D" parent="." index="1"]
 shape = SubResource( 7 )
 
-[node name="Area2D" type="Area2D" parent="."]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-visible = false
+[node name="CollisionShape2D" parent="Area2D" index="0"]
 shape = SubResource( 8 )
