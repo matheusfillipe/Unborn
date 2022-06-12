@@ -21,9 +21,9 @@ autowrap = true
 [node name="Game" type="Label" parent="."]
 anchor_right = 1.0
 margin_left = 10.0
-margin_top = 200.0
+margin_top = 423.0
 margin_right = -10.0
-margin_bottom = 544.0
+margin_bottom = 767.0
 text = "Now you are a spirit orb floating around with other spirits seeking for a way to reincarnate
 
 Press any key to begin"
