@@ -43,7 +43,6 @@ start_color = 0
 [node name="Spirit2" parent="." instance=ExtResource( 5 )]
 position = Vector2( 219, 80 )
 start_color = 0
-collision_brightness_multiplier = 1.0
 
 [node name="Spirit3" parent="." instance=ExtResource( 5 )]
 position = Vector2( 342, 71 )
