@@ -15,5 +15,5 @@ func _ready():
 	death_label.text = deaths[randi() % len(deaths)]
 
 func _input(event):
-	if event is InputEventKey and event.pressed:
+	if (event is InputEventKey and event.pressed) or event.is_action_pressed("click"):
 		get_tree().change_scene("res://scenes/main.tscn")

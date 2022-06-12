@@ -22,7 +22,7 @@ seamless = true
 noise = SubResource( 3 )
 
 [sub_resource type="Curve" id=8]
-_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.12532, 0.0071888 ), 0.0, 0.0576549, 0, 0, Vector2( 0.309524, 0.0591058 ), 0.360428, 1.98502, 0, 0, Vector2( 0.404518, 1 ), -0.109547, -0.109547, 0, 0, Vector2( 0.522366, 0.0990418 ), 0.00797105, -1.36751, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.100299, 0 ), 0.0, 0.0576549, 0, 0, Vector2( 0.403443, 0.0147762 ), 16.6704, 1.98502, 0, 0, Vector2( 0.429641, 1 ), -0.109547, -0.109547, 0, 0, Vector2( 0.459581, 0.0387379 ), 0.727563, -0.869483, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=9]
 curve = SubResource( 8 )
@@ -35,7 +35,7 @@ shader_param/starting_amplitude = 0.5
 shader_param/starting_frequency = 1.0
 shader_param/shift = 0.0
 shader_param/velocity = Vector2( 0.1, 0.1 )
-shader_param/fog_color = Color( 1, 2, 2, 1 )
+shader_param/fog_color = Color( 0.917647, 1, 0, 1 )
 shader_param/dissolve_value = 1.0
 shader_param/dissolve_cut = false
 shader_param/dissolve_rotate = true

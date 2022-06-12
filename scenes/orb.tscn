@@ -19,8 +19,8 @@ shader_param/radius = 0.932
 shader_param/starting_frequency = 0.818
 shader_param/starting_amplitude = 0.5
 shader_param/octaves = 4
-shader_param/main_color = Color( 0, 0.568627, 1, 1 )
-shader_param/second_color = Color( 0.211765, 0.14902, 0.14902, 1 )
+shader_param/main_color = Color( 0, 0.57, 2, 1 )
+shader_param/second_color = Color( 1, 1, 1, 1 )
 shader_param/third_color = Color( 0, 0, 0, 1 )
 shader_param/noise = SubResource( 4 )
 
