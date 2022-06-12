@@ -24,10 +24,11 @@ script = ExtResource( 2 )
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
-[node name="Orbs" type="Node" parent="."]
+[node name="Orbs" type="Node2D" parent="."]
 
 [node name="orb" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 658, 157 )
+start_color = 6
 start_size = 4
 
 [node name="orb5" parent="Orbs" instance=ExtResource( 1 )]
@@ -40,7 +41,6 @@ start_size = 4
 
 [node name="orb2" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 504, 439 )
-start_size = 4
 
 [node name="orb3" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 392, 735 )

@@ -35,21 +35,28 @@ export(int) var start_size = 1
 export(float, 0, 100) var start_brightness = 1
 export(float, 1, 100) var collision_brightness_multiplier = 1.5
 
-var size = 1 setget set_size
+var size:float = 1.0 setget set_size
 var color = "blue" setget set_color
-var brightness = 1 setget set_brightness
+var brightness: float = 1.0 setget set_brightness
 var is_colliding = false
 
 onready var circle = $circle
 onready var shape = $CollisionShape2D
+onready var areashape = $Area2D/CollisionShape2D
+
+onready var start_circle_scale: float = $circle.scale.x
+onready var start_shape_size: float = $CollisionShape2D.shape.radius
+onready var start_areashape_size: float = $Area2D/CollisionShape2D.shape.radius
 
 func _ready():
 	set_color(start_color)
-	set_size(start_size)
+	set_size(start_size * scale.x)
 	set_brightness(start_brightness)
 
-func set_size(_size: int):
-	scale = Vector2(_size, _size)
+func set_size(_size: float):
+	shape.shape.radius = _size * start_shape_size
+	areashape.shape.radius = _size * start_areashape_size + 1
+	circle.scale = Vector2.ONE * _size * start_circle_scale
 
 func set_color(colorname: int):
 	assert(colorname in colormap, "Invalid color: " + str(colorname))
@@ -57,10 +64,10 @@ func set_color(colorname: int):
 	var c: OrbColor = colormap[color]
 	circle.material.set_shader_param("main_color", c.shader1)
 	circle.material.set_shader_param("second_color", c.shader2)
-	circle.material.set_shader_param("third_color", c.shader2)
+	circle.material.set_shader_param("third_color", c.shader3)
 
 func set_brightness(b: float):
-	modulate = Color(b, b, b, 1)
+	circle.modulate = Color(b, b, b, 1)
 	brightness = b
 
 func get_size():

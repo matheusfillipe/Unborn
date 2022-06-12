@@ -15,7 +15,7 @@ enum {
 	IDLE
 	}
 
-export (int) var max_speed = 200
+export (int) var max_speed = 600
 export (int) var acceleration = 800
 export (int) var friction = 800
 export (float) var noise_amplitude = 0.5
@@ -38,11 +38,13 @@ func go_to(p_target: Vector2):
 func set_state(new_state):
 	match new_state:
 		IDLE:
-			rest_position = global_position
+			stop()
 	state = new_state
 
 func stop():
 	has_target = false
+	rest_position = global_position
+	target = global_position
 
 func _input(event):
 	# Mouse click / tap control
@@ -54,9 +56,7 @@ func get_input():
 	var input = Vector2.ZERO
 	input.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	input.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-	input.normalized()
-	input = input.normalized() * max_speed
-	return input
+	return input.normalized()
 
 func move(delta):
 	var input = Vector2.ZERO
@@ -76,8 +76,11 @@ func move(delta):
 	# Arrow control
 	var arrow_input = get_input()
 	if arrow_input.length() > 0:
+		stop()
 		input = arrow_input
 		self.state = CONTROL
+
+	# Not clicked, no arrow input and not idling
 	elif not has_target:
 		self.state = IDLE
 
@@ -86,7 +89,7 @@ func move(delta):
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 
-# Move in random directions with random speeds
+# Idle movement
 func idle():
 	randomize()
 	var time = OS.get_ticks_msec() / 1000.0
@@ -100,11 +103,11 @@ func idle():
 
 
 func _physics_process(delta):
-	match state:
-		CONTROL:
-			pass
-		IDLE:
-			idle()
+	if state == IDLE:
+		idle()
 
 	move(delta)
 	velocity = move_and_slide(velocity)
+
+	if is_colliding:
+		self.state = IDLE

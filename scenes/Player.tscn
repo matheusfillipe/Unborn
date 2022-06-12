@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/filled_circle.png" type="Texture" id=2]
@@ -25,6 +25,8 @@ shader_param/noise = SubResource( 4 )
 
 [sub_resource type="CircleShape2D" id=7]
 
+[sub_resource type="CircleShape2D" id=8]
+
 [node name="KinematicBody2D" type="KinematicBody2D"]
 script = ExtResource( 1 )
 
@@ -36,3 +38,10 @@ texture = ExtResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 shape = SubResource( 7 )
+
+[node name="Area2D" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
+shape = SubResource( 8 )
