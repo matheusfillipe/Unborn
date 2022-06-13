@@ -29,3 +29,5 @@ Explore an infinite generated world, open portals and remember that you cannot r
 - [ ] walls
 - [ ] Random generation of walls and spawn of enemies
 - [ ] Score counter
+- [ ] Sound effects
+- [ ] Music
