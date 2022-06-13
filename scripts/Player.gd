@@ -25,6 +25,7 @@ var velocity = Vector2()
 var target = Vector2()
 var has_target = false
 var state = IDLE setget set_state
+var can_attack = false
 
 onready var rest_position = global_position
 
@@ -55,6 +56,16 @@ func stop():
 	rest_position = global_position
 	target = global_position
 
+func attack():
+	if can_attack:
+		var explosion = Explosion.instance()
+		get_parent().add_child(explosion)
+		explosion.global_position = global_position
+		explosion.scale = scale
+		explosion.timer.wait_time = 3
+
+		self.size = initial_size
+
 func _input(event):
 	# Mouse click / tap control
 	if event.is_action_pressed("click"):
@@ -67,14 +78,8 @@ func _input(event):
 		if get_mana() <= 0:
 			# not enough mana
 			return
+		attack()
 
-		var explosion = Explosion.instance()
-		get_parent().add_child(explosion)
-		explosion.global_position = global_position
-		explosion.scale = scale
-		explosion.timer.wait_time = 3
-
-		self.size = initial_size
 
 
 func get_input():
@@ -142,19 +147,29 @@ func _on_color_change():
 
 func _on_collide(body:Node):
 	if body is Spirit and not body.dying:
+		# Only if a smaller one
+		if body.size > size:
+			return
+
 		# Get health and grow with spirit
 		var idx = health_colors.find(body.color)
 		if idx > -1:
-			# Set color of received spirit
 			# TODO maybe is better to average things out? or not even have this. idk
-			# TODO maybe blue ones give full health?
-			# TODO and black ones insta kill?
+			# Set color of received spirit
 			self.color = body.color
+
+		elif body.color == COLOR.black:
+		   # black ones insta kill
+			attack()
+			queue_free()
 
 		# Increase
 		var new_size = size + body.size/2
 		if new_size > size_limit:
 			new_size = size_limit
+			self.color = COLOR.BLUE
+			can_attack = true
+
 		set_size(new_size)
 		body.die()
 

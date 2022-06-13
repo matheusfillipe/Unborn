@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/main.gd" type="Script" id=2]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/Camera.gd" type="Script" id=4]
-[ext_resource path="res://scenes/Spirit.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/clouds.png" type="Texture" id=6]
 
 [sub_resource type="Environment" id=1]
@@ -41,29 +40,6 @@ environment = SubResource( 1 )
 
 [node name="Spirits" type="Node2D" parent="."]
 
-[node name="Spirit" parent="Spirits" instance=ExtResource( 5 )]
-position = Vector2( 303, -67 )
-scale = Vector2( 1.01501, 1 )
-start_color = 0
-
-[node name="Spirit2" parent="Spirits" instance=ExtResource( 5 )]
-position = Vector2( 219, 80 )
-
-[node name="Spirit3" parent="Spirits" instance=ExtResource( 5 )]
-position = Vector2( 342, 71 )
-start_color = 4
-
-[node name="Spirit4" parent="Spirits" instance=ExtResource( 5 )]
-position = Vector2( 82, 114 )
-
-[node name="Spirit5" parent="Spirits" instance=ExtResource( 5 )]
-position = Vector2( 528, 103 )
-start_color = 4
-
-[node name="Spirit6" parent="Spirits" instance=ExtResource( 5 )]
-position = Vector2( -142, 239 )
-start_color = 5
-
 [node name="Orbs" type="Node2D" parent="."]
 
 [node name="orb" parent="Orbs" instance=ExtResource( 1 )]
@@ -82,15 +58,16 @@ start_size = 4
 
 [node name="orb2" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 504, 439 )
-start_color = 3
+start_color = 4
 
 [node name="orb3" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 392, 735 )
+start_color = 5
 start_size = 4
 
 [node name="orb4" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( -184, 1054 )
-start_color = 5
+start_color = 1
 start_size = 10
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -105,6 +82,7 @@ target_path = NodePath("../Player")
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 325, 245 )
 collision_brightness_multiplier = 1.2
+size_limit = 15.0
 
 [node name="FadeInHack" type="Sprite" parent="."]
 visible = false

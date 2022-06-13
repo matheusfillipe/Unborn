@@ -19,7 +19,6 @@ enum COLOR {
 	RED
 	}
 
-# TODO improve those colors
 var colormap = {
 	COLOR.WHITE: OrbColor.new([1,1,1], [1,1,1], [1, 1, 1]),
 	COLOR.BLACK: OrbColor.new([0,0,0], [0,0,0], [0, 0, 0]),

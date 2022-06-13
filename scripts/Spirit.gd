@@ -1,20 +1,23 @@
 extends "res://scripts/orb.gd"
 
 export var velocity: Vector2 = Vector2(0, 100)
-var noise_amplitude = 5
-var noise_speed = 5
+var noise_amplitude = 5.0
+var noise_speed = 5.0
 
 onready var aplayer = $AnimationPlayer
 
 var ShockWave = preload("res://effects/ShockWave.tscn")
 var dying = false
 
+var wall_free = true
+
 
 func _on_ready():
-	randomize()
-	noise_amplitude = 5 + randf() * 15
-	randomize()
-	noise_speed = 0.2 + randf() * 5
+	yield(get_tree().create_timer(0.1, false), "timeout")
+	# TODO not spawn if this is detected close to wall and delete this print
+	if not wall_free:
+		print("Not spawning near wall")
+		queue_free()
 
 
 func _physics_process(_delta):
@@ -24,7 +27,9 @@ func _physics_process(_delta):
 
 	# direction
 	var t = Vector2(cos(time * noise_speed), sin(time * noise_speed))
-	velocity += t
+	var l = (1.0 + randf()) * noise_amplitude
+
+	velocity += l * t
 	velocity = move_and_slide(velocity)
 
 func die():
@@ -39,3 +44,6 @@ func _on_AnimationPlayer_animation_finished(anim_name:String):
 	match anim_name:
 		"fade":
 			queue_free()
+
+func _on_WallDetection_area_entered(_area:Area2D):
+	wall_free = false

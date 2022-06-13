@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://shaders/orb.shader" type="Shader" id=2]
@@ -66,6 +66,9 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=11]
+radius = 200.0
+
 [node name="Spirit" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 
@@ -83,4 +86,14 @@ shape = SubResource( 8 )
 anims/RESET = SubResource( 9 )
 anims/fade = SubResource( 10 )
 
+[node name="WallDetection" type="Area2D" parent="." index="5"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallDetection" index="0"]
+visible = false
+shape = SubResource( 11 )
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="area_entered" from="WallDetection" to="." method="_on_WallDetection_area_entered"]
