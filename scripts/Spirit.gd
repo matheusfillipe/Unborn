@@ -5,7 +5,7 @@ var noise_amplitude = 5
 var noise_speed = 5
 
 onready var aplayer = $AnimationPlayer
-
+var bubble = preload("res://scenes/TextBubble.tscn")
 var ShockWave = preload("res://effects/ShockWave.tscn")
 var dying = false
 
@@ -15,7 +15,6 @@ func _on_ready():
 	noise_amplitude = 5 + randf() * 15
 	randomize()
 	noise_speed = 0.2 + randf() * 5
-
 
 func _physics_process(_delta):
 	if dying:
