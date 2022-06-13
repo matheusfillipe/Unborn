@@ -4,7 +4,8 @@
 [ext_resource path="res://resources/TiffanyLaurenceRegular-MVlpP.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=2]
-size = 32
+size = 22
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=1]
@@ -13,5 +14,5 @@ font_data = ExtResource( 1 )
 
 [resource]
 default_font = SubResource( 1 )
-Label/colors/font_color = Color( 0.945098, 0.988235, 1, 1 )
+Label/colors/font_color = Color( 0.247059, 0.247059, 0.247059, 1 )
 Label/fonts/font = SubResource( 2 )

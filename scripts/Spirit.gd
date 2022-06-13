@@ -5,7 +5,7 @@ var noise_amplitude = 5.0
 var noise_speed = 5.0
 
 onready var aplayer = $AnimationPlayer
-
+var bubble = preload("res://scenes/TextBubble.tscn")
 var ShockWave = preload("res://effects/ShockWave.tscn")
 var dying = false
 
@@ -18,7 +18,6 @@ func _on_ready():
 	if not wall_free:
 		print("Not spawning near wall")
 		queue_free()
-
 
 func _physics_process(_delta):
 	if dying:
