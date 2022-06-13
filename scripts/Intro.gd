@@ -19,7 +19,8 @@ var texts = [
 	"Well, cool death.",
 	"So, here's the thing",
 	"You need to reincarnate, otherwise you'll just be kinda stuck in the orb form of your sṕpirit.",
-	"You are now tasked with the objective of floating around with other spirits like you, in a task for enlightenment, or something..."
+	"You are now tasked with the objective of floating around with other spirits like you, in a task for enlightenment, or something...",
+	"Press any key to start!"
 ]
 
 var ready = true
@@ -36,7 +37,10 @@ func _ready():
 func _input(event):
 	if (event is InputEventKey and event.pressed) or event.is_action_pressed("click"):
 		if ready == true:
-			nextlabel()
+			if textnumber == 8:
+				get_tree().change_scene("res://scenes/main.tscn")
+			else:
+				nextlabel()
 func nextlabel():
 	ready = false
 	textnumber += 1
