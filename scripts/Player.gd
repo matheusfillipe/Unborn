@@ -5,7 +5,6 @@ var health: int
 var health_colors = [
 	COLOR.GREEN,
 	COLOR.YELLOW,
-	COLOR.ORANGE,
 	COLOR.RED
 	]
 
