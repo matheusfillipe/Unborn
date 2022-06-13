@@ -16,7 +16,6 @@ enum COLOR {
 	BLUE
 	GREEN
 	YELLOW
-	ORANGE
 	RED
 	}
 
@@ -24,17 +23,16 @@ enum COLOR {
 var colormap = {
 	COLOR.WHITE: OrbColor.new([1,1,1], [1,1,1], [1, 1, 1]),
 	COLOR.BLACK: OrbColor.new([0,0,0], [0,0,0], [0, 0, 0]),
-	COLOR.BLUE: OrbColor.new([0,0.56,1], [1,1,1], [0, 0, 0]),
-	COLOR.GREEN: OrbColor.new([0,1,0.56], [1,1,1], [0, 0, 0]),
-	COLOR.YELLOW: OrbColor.new([1,0.56,0], [1,1,1], [0, 0, 0]),
-	COLOR.ORANGE: OrbColor.new([1,1,0], [1,1,1], [0, 0, 0]),
-	COLOR.RED: OrbColor.new([1,0.56,1], [1,1,1], [0, 0, 0]),
+	COLOR.BLUE: OrbColor.new([0,0.2,1], [1,1,1], [0, 0, 0]),
+	COLOR.GREEN: OrbColor.new([0,1,0], [1,1,1], [0, 0, 0]),
+	COLOR.YELLOW: OrbColor.new([1,1,0], [1,1,1], [0, 0, 0]),
+	COLOR.RED: OrbColor.new([1,0,0], [1,1,1], [0, 0, 0]),
 	}
 
 export(COLOR) var start_color = COLOR.BLUE
 export(int) var start_size = 1
 export(float, 0, 100) var start_brightness = 5
-export(float, 1, 100) var collision_brightness_multiplier = 1.0
+export(float, 1, 100) var collision_brightness_multiplier = 2.0
 
 var size:float = 1.0 setget set_size
 var color = COLOR.GREEN setget set_color
@@ -73,7 +71,7 @@ func _on_color_change():
 	pass
 
 func set_color(colorname: int):
-	assert(colorname in colormap, "Invalid color: " + str(colorname))
+	assert(colorname in colormap, "Invalid color: " + str(colorname) + ". For: " + self.name)
 	color = colorname
 	var c: OrbColor = colormap[color]
 	circle.material.set_shader_param("main_color", c.shader1)
@@ -114,5 +112,5 @@ func _on_Area2D_body_entered(body:Node):
 	is_colliding = true
 	btimer.stop()
 	var b = brightness * collision_brightness_multiplier
-	circle.modulate = Color(b, b, b, 1)
+	_set_brightness(b)
 	_on_collide(body)
