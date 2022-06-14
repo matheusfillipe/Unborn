@@ -62,6 +62,7 @@ func attack():
 		explosion.global_position = global_position
 		explosion.scale = scale
 		explosion.timer.wait_time = 3
+		Global.play(Global.SFX.boom)
 
 		self.size = initial_size
 		self.color = COLOR.GREEN

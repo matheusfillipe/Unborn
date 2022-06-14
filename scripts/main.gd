@@ -14,14 +14,27 @@ var has_left_safe_area = false
 export(float, 1, 10000) var spirit_spawn_radius = 1000.0
 export(float, 0, 2) var spirit_spaw_density = 2
 
+enum Scenery {
+	hell,
+	heaven
+}
+
+# Current scenery
+var scenery = Scenery.hell
+
 func _ready():
 
+	Global.play_music_once(Global.Music.entrance)
 	player.connect("size_changed", self, "adjust_zoom")
 
 	# Pause and create transition effect on the beginning
 	overlay.visible = true
 	yield(get_tree().create_timer(1, false), "timeout")
 	overlay.visible = false
+
+	yield(get_tree().create_timer(7, false), "timeout")
+	if not has_left_safe_area:
+		Global.play_music(Global.Music.welcome)
 
 
 func adjust_zoom(size: float):
@@ -94,12 +107,29 @@ func spawn_spirit():
 	spirit.noise_speed = rand_range(2, 20)
 	spirit.size = 0.5 + 4.5 * pow(10, rand_range(0, 2)) / 100
 
+func check_scenery():
+	var y = player.global_position.y
+	if y > 0:
+		if scenery == Scenery.heaven:
+			# TODO emit a signal or smt on change
+			Global.play_music(Global.Music.hell)
+		scenery = Scenery.hell
+	else:
+		if scenery == Scenery.hell:
+			# TODO emit a signal or smt on change
+			Global.play_music(Global.Music.heaven)
+		scenery = Scenery.heaven
+
+
 func _process(delta):
 	if Input.is_action_just_pressed("reset"):
 		fade_to_black("restart")
 
 	if not has_left_safe_area:
 		return
+
+	# TODO dont call this in loop
+	check_scenery()
 
 	# Spawn spirits
 	randomize()

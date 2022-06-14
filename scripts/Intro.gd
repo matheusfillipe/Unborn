@@ -26,6 +26,7 @@ onready var tween = $Text/Tween
 
 
 func _ready():
+	Global.play_music_once(Global.Music.intro)
 	randomize()
 	texts[1] = deaths[randi() % len(deaths)]
 	initiallabel()

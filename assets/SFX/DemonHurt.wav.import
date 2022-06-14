@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/DemonHurt.wav-a6bf7de3decee8a017e2b61a928084e8.sample"
+
+[deps]
+
+source_file="res://assets/SFX/DemonHurt.wav"
+dest_files=[ "res://.import/DemonHurt.wav-a6bf7de3decee8a017e2b61a928084e8.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
