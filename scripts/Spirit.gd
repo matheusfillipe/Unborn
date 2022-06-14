@@ -52,3 +52,7 @@ func _on_Area2D_body_exited(body:Node):
 		return
 	is_colliding = false
 	btimer.start()
+
+# Die with one hit
+func hit():
+	die()

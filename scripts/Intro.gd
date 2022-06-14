@@ -40,21 +40,49 @@ func _input(event):
 func nextlabel():
 	ready = false
 	textnumber += 1
-	tween.interpolate_property(label, "modulate:a", 1, 0, 0.7, Tween.TRANS_SINE)
+	tween.interpolate_property(
+		label,
+		"modulate",
+		Color(1, 1, 1, 1),
+		Color(1, 1, 1, 0),
+		0.7,
+		Tween.TRANS_SINE
+	)
 	tween.start()
 	yield(tween, "tween_all_completed")
 	label.text = texts[textnumber]
-	tween.interpolate_property(label, "modulate:a", 0, 1, 0.7, Tween.TRANS_SINE)
+	tween.interpolate_property(
+		label,
+		"modulate",
+		Color(1, 1, 1, 0),
+		Color(1, 1, 1, 1),
+		0.7,
+		Tween.TRANS_SINE
+	)
 	tween.start()
 	ready = true
 
 
 func initiallabel():
 	ready = false
-	tween.interpolate_property(label, "modulate:a", 1, 0, 0.7, Tween.TRANS_SINE)
+	tween.interpolate_property(
+		label,
+		"modulate",
+		Color(1, 1, 1, 1),
+		Color(1, 1, 1, 0),
+		0.7,
+		Tween.TRANS_SINE
+	)
 	tween.start()
 	yield(tween, "tween_all_completed")
 	label.text = texts[0]
-	tween.interpolate_property(label, "modulate:a", 0, 1, 0.7, Tween.TRANS_SINE)
+	tween.interpolate_property(
+		label,
+		"modulate",
+		Color(1, 1, 1, 0),
+		Color(1, 1, 1, 1),
+		0.7,
+		Tween.TRANS_SINE
+	)
 	tween.start()
 	ready = true

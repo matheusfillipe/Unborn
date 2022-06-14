@@ -33,7 +33,6 @@ var Explosion = preload("res://effects/Explosion.tscn")
 
 var Spirit = preload("res://scripts/Spirit.gd")
 
-
 var initial_size
 
 func _on_ready():
@@ -60,7 +59,6 @@ func attack():
 	if can_attack:
 		var explosion = Explosion.instance()
 		get_parent().add_child(explosion)
-		explosion.connect("body_entered", self, "hit")
 		explosion.global_position = global_position
 		explosion.scale = scale
 		explosion.timer.wait_time = 3
@@ -69,7 +67,6 @@ func attack():
 		self.color = COLOR.GREEN
 
 func hit(body):
-	print("hit: ", body)
 	if body.is_in_group("spirit"):
 		body.die()
 
@@ -83,9 +80,9 @@ func _input(event):
 	# Mana attack (Spirit)
 	if event.is_action_pressed("attack"):
 		# TODO Make the effect has an actual collision for enemies and damage level
-		# if get_mana() <= 0:
-		# 	# not enough mana
-		# 	return
+		if get_mana() <= 0:
+			# not enough mana
+			return
 		attack()
 
 

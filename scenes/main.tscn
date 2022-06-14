@@ -50,41 +50,41 @@ texture = ExtResource( 6 )
 
 [node name="Orbs" type="Node2D" parent="."]
 
-[node name="orb" parent="Orbs" instance=ExtResource( 1 )]
+[node name="green" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 658, 157 )
 start_color = 3
 start_size = 4
 tutorial_message = "Hi, Im a green spirit. I am very healthy."
 tutorial_message_time = 5
 
-[node name="orb5" parent="Orbs" instance=ExtResource( 1 )]
+[node name="blue" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 696, -117 )
 start_size = 4
-tutorial_message = "When you become blue, hit space to release your attack!"
+tutorial_message = "OH! So you are another one like me! When you become blue, hit space to release your attack!"
 tutorial_message_time = 5
 
-[node name="orb6" parent="Orbs" instance=ExtResource( 1 )]
+[node name="white" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 776, -312 )
 start_color = 0
 start_size = 4
 tutorial_message = "Oh take care! you can only absorb smaller spirits. But don't think you can use your cheap tricks with me"
 tutorial_message_time = 5
 
-[node name="orb2" parent="Orbs" instance=ExtResource( 1 )]
+[node name="yellow" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 504, 439 )
 start_color = 4
 start_size = 3
 tutorial_message = "I am yellow... So i am a bit cursed."
 tutorial_message_time = 5
 
-[node name="orb3" parent="Orbs" instance=ExtResource( 1 )]
+[node name="red" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 392, 735 )
 start_color = 5
 start_size = 4
 tutorial_message = "I can't take this anymore... Just take my to hell already"
 tutorial_message_time = 5
 
-[node name="orb4" parent="Orbs" instance=ExtResource( 1 )]
+[node name="black" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( -184, 1054 )
 start_color = 1
 start_size = 10
@@ -95,9 +95,7 @@ tutorial_message_time = 5
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
 position = Vector2( 325, 245 )
-start_size = 10
 collision_brightness_multiplier = 1.2
-can_attack = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 325, 245 )

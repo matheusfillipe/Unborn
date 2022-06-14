@@ -7,6 +7,7 @@ onready var player = $Player
 onready var overlay = $FadeInHack
 onready var tween = $Tween
 onready var spirits = $Spirits
+onready var camera = $Camera2D
 
 var has_left_safe_area = false
 
@@ -15,11 +16,30 @@ export(float, 0, 2) var spirit_spaw_density = 2
 
 func _ready():
 
+	player.connect("size_changed", self, "adjust_zoom")
+
 	# Pause and create transition effect on the beginning
 	overlay.visible = true
 	yield(get_tree().create_timer(1, false), "timeout")
 	overlay.visible = false
 
+
+func adjust_zoom(size: float):
+	var delay = 0.0
+	if size == player.initial_size:
+		delay = 2
+
+	var zoom = 1.0 + size / player.initial_size / 10.0
+
+	tween.interpolate_property(camera, "zoom",
+		camera.zoom,
+		Vector2.ONE * zoom,
+		2,
+		tween.TRANS_LINEAR,
+		tween.EASE_IN_OUT,
+		delay
+	)
+	tween.start()
 
 # Nice metallica song btw
 func fade_to_black(callback: String):

@@ -7,7 +7,14 @@ onready var label = $Label
 var showing = false
 
 func _ready():
-	tween.interpolate_property(self, "modulate:a", 0, 1, 0.3, Tween.TRANS_SINE)
+	tween.interpolate_property(
+		label,
+		"modulate",
+		Color(1, 1, 1, 0),
+		Color(1, 1, 1, 1),
+		0.3,
+		Tween.TRANS_SINE
+	)
 	tween.start()
 
 func set_text(message: String):

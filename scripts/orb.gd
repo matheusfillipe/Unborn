@@ -23,7 +23,7 @@ var colormap = {
 	COLOR.BLACK: OrbColor.new([0,0,0], [0,0,0], [0, 0, 0]),
 	COLOR.BLUE: OrbColor.new([0,0.2,1], [1,1,1], [0, 0, 0]),
 	COLOR.GREEN: OrbColor.new([0,1,0], [1,1,1], [0, 0, 0]),
-	COLOR.YELLOW: OrbColor.new([1,1,0], [1,1,1], [0, 0, 0]),
+	COLOR.YELLOW: OrbColor.new([1,1,0.1], [1,1,1], [0, 0, 0]),
 	COLOR.RED: OrbColor.new([1,0,0], [1,1,1], [0, 0, 0]),
 	}
 
@@ -50,6 +50,8 @@ onready var start_areashape_size: float = $Area2D/CollisionShape2D.shape.radius
 export var tutorial_message: String = ""
 export var tutorial_message_time: int = 0
 
+signal size_changed
+
 
 func _ready():
 	set_color(start_color)
@@ -67,6 +69,7 @@ func set_size(_size: float):
 	areashape.shape.radius = _size * start_areashape_size + 3
 	circle.scale = Vector2.ONE * _size * start_circle_scale
 	size = _size
+	emit_signal("size_changed", _size)
 
 func _on_color_change():
 	pass
