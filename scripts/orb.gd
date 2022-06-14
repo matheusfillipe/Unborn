@@ -1,6 +1,5 @@
 extends KinematicBody2D
 
-
 class OrbColor:
 	var shader1: Color
 	var shader2: Color
@@ -47,6 +46,9 @@ onready var btimer = $BrightTimer
 onready var start_circle_scale: float = $circle.scale.x
 onready var start_shape_size: float = $CollisionShape2D.shape.radius
 onready var start_areashape_size: float = $Area2D/CollisionShape2D.shape.radius
+
+export var tutorial_message: String = ""
+export var tutorial_message_time: int = 0
 
 
 func _ready():
@@ -102,8 +104,9 @@ func _on_Area2D_body_exited(body:Node):
 	is_colliding = false
 	btimer.start()
 
-func _on_collide(_body):
-	pass
+func _on_collide(body):
+	if body.is_in_group("player") and tutorial_message != "":
+		Global.popup(tutorial_message, tutorial_message_time)
 
 func _on_Area2D_body_entered(body:Node):
 	if body == self or is_colliding:

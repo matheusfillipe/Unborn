@@ -68,7 +68,6 @@ func spawn_spirit():
 	spirit.noise_amplitude = rand_range(1, 10)
 	spirit.noise_speed = rand_range(2, 20)
 	spirit.size = 0.5 + 4.5 * pow(10, rand_range(0, 2)) / 100
-	print(spirit.size)
 
 func _process(delta):
 	if Input.is_action_just_pressed("reset"):

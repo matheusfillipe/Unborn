@@ -46,6 +46,8 @@ environment = SubResource( 1 )
 position = Vector2( 658, 157 )
 start_color = 3
 start_size = 4
+tutorial_message = "Hi, Im a green spirit"
+tutorial_message_time = 2
 
 [node name="orb5" parent="Orbs" instance=ExtResource( 1 )]
 position = Vector2( 696, -117 )
@@ -79,7 +81,7 @@ smoothing_speed = 100.0
 script = ExtResource( 4 )
 target_path = NodePath("../Player")
 
-[node name="Player" parent="." instance=ExtResource( 3 )]
+[node name="Player" parent="." groups=["player"] instance=ExtResource( 3 )]
 position = Vector2( 325, 245 )
 collision_brightness_multiplier = 1.2
 size_limit = 15.0
