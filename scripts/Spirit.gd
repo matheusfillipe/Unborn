@@ -46,3 +46,9 @@ func _on_AnimationPlayer_animation_finished(anim_name:String):
 
 func _on_WallDetection_area_entered(_area:Area2D):
 	wall_free = false
+
+func _on_Area2D_body_exited(body:Node):
+	if body == self or dying:
+		return
+	is_colliding = false
+	btimer.start()

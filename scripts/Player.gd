@@ -19,13 +19,13 @@ export (int) var acceleration = 800
 export (int) var friction = 800
 export (float) var noise_amplitude = 0.2
 export (float, 0, 5) var noise_speed = 8
-export (float, 0, 25) var size_limit = 20
+export (float, 0, 25) var size_limit = 10
 
 var velocity = Vector2()
 var target = Vector2()
 var has_target = false
 var state = IDLE setget set_state
-var can_attack = false
+export var can_attack = false
 
 onready var rest_position = global_position
 
@@ -60,11 +60,19 @@ func attack():
 	if can_attack:
 		var explosion = Explosion.instance()
 		get_parent().add_child(explosion)
+		explosion.connect("body_entered", self, "hit")
 		explosion.global_position = global_position
 		explosion.scale = scale
 		explosion.timer.wait_time = 3
 
 		self.size = initial_size
+		self.color = COLOR.GREEN
+
+func hit(body):
+	print("hit: ", body)
+	if body.is_in_group("spirit"):
+		body.die()
+
 
 func _input(event):
 	# Mouse click / tap control
@@ -75,9 +83,9 @@ func _input(event):
 	# Mana attack (Spirit)
 	if event.is_action_pressed("attack"):
 		# TODO Make the effect has an actual collision for enemies and damage level
-		if get_mana() <= 0:
-			# not enough mana
-			return
+		# if get_mana() <= 0:
+		# 	# not enough mana
+		# 	return
 		attack()
 
 
@@ -157,11 +165,6 @@ func _on_collide(body:Node):
 			# TODO maybe is better to average things out? or not even have this. idk
 			# Set color of received spirit
 			self.color = body.color
-
-		elif body.color == COLOR.black:
-		   # black ones insta kill
-			attack()
-			queue_free()
 
 		# Increase
 		var new_size = size + body.size/2

@@ -19,7 +19,7 @@ func popup(message: String, timeonscreen: int):
 	show(message)
 	timer.start(timeonscreen)
 	yield(timer, "timeout")
-	tween.interpolate_property(label, "modulate:a", 1.5, 0, 0.3, Tween.EASE_OUT)
+	tween.interpolate_property(label, "modulate", Color(1, 1, 1, 1), Color(1, 1, 1, 0), 0.3, Tween.EASE_OUT)
 	tween.start()
 	yield(tween, "tween_all_completed")
 	queue_free()

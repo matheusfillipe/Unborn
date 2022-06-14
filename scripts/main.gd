@@ -8,6 +8,8 @@ onready var overlay = $FadeInHack
 onready var tween = $Tween
 onready var spirits = $Spirits
 
+var has_left_safe_area = false
+
 export(float, 1, 10000) var spirit_spawn_radius = 1000.0
 export(float, 0, 2) var spirit_spaw_density = 2
 
@@ -39,12 +41,9 @@ func restart():
 
 # Spawn spirits randomly
 func spawn_spirit():
-	var dir = Global.random_vec2()
-	var spirit = Spirit.instance()
-
 	var color_chances = [
 		0.5,  # WHITE
-		0.05,  # BLACK
+		0.0,  # BLACK
 		0.0,  # BLUE
 		0.05,  # GREEN
 		0.3,  # YELLOW
@@ -61,6 +60,12 @@ func spawn_spirit():
 			break
 		i += 1
 
+	if i >= len(color_chances):
+		return
+
+	var dir = Global.random_vec2()
+	var spirit = Spirit.instance()
+
 	spirit.start_color = i
 	spirits.add_child(spirit)
 	spirit.global_position = dir * spirit_spawn_radius + player.global_position
@@ -73,6 +78,8 @@ func _process(delta):
 	if Input.is_action_just_pressed("reset"):
 		fade_to_black("restart")
 
+	if not has_left_safe_area:
+		return
 
 	# Spawn spirits
 	randomize()
@@ -83,3 +90,8 @@ func _process(delta):
 	for spirit in spirits.get_children():
 		if spirit.global_position.distance_squared_to(player.global_position) > spirit_spawn_radius * spirit_spawn_radius * 2:
 			spirit.queue_free()
+
+
+func _on_SafeArea_body_exited(body:Node):
+	if body.is_in_group("player"):
+		has_left_safe_area = true
