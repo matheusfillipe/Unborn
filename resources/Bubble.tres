@@ -9,7 +9,7 @@ outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=1]
-size = 90
+size = 120
 font_data = ExtResource( 1 )
 
 [resource]

@@ -1,6 +1,7 @@
 extends Node2D
 
 var Spirit = preload("res://scenes/Spirit.tscn")
+var Bubble = preload("res://scenes/TextBubble.tscn")
 
 onready var player = $Player
 onready var overlay = $FadeInHack
@@ -11,6 +12,7 @@ export(float, 1, 10000) var spirit_spawn_radius = 1000.0
 export(float, 0, 2) var spirit_spaw_density = 2
 
 func _ready():
+
 	# Pause and create transition effect on the beginning
 	overlay.visible = true
 	yield(get_tree().create_timer(1, false), "timeout")
@@ -70,10 +72,6 @@ func spawn_spirit():
 func _process(delta):
 	if Input.is_action_just_pressed("reset"):
 		fade_to_black("restart")
-
-	if Input.is_action_just_pressed("pause"):
-		get_tree().paused = not get_tree().paused
-		# TODO show paused text
 
 
 	# Spawn spirits

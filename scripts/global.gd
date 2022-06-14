@@ -1,5 +1,24 @@
 extends Node
 
+var Bubble = preload("res://scenes/TextBubble.tscn")
+
+func _ready():
+	pause_mode = Node.PAUSE_MODE_PROCESS
+
+
+func _input(event):
+	if event.is_action_pressed("pause"):
+		var bubble = Bubble.instance()
+		get_tree().get_root().add_child(bubble)
+		bubble.textprocess("PAUSED", 10)
+		get_tree().paused = not get_tree().paused
+
+		# Pause shaders
+		if get_tree().paused:
+			Engine.time_scale = 0
+		else:
+			Engine.time_scale = 1
+
 # Safe disconnect
 func sdisconnect(node: Node, _signal: String, target: Object, method: String):
 	if node.is_connected(_signal, target, method):
