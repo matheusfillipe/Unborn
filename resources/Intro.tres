@@ -4,7 +4,7 @@
 [ext_resource path="res://resources/TiffanyLaurenceRegular-MVlpP.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=2]
-size = 32
+size = 48
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=1]

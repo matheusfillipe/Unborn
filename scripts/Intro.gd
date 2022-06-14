@@ -12,14 +12,11 @@ const deaths = [
 	"You danced too hard and passed away"
 	]
 var texts = [
-	"Well, hello there.",
-	"Seems as this is where your journey ends...",
-	"Now let's see here...",
+	"Well, hello there. Let's see here...",
 	"",
 	"Well, cool death.",
-	"So, here's the thing",
-	"You need to reincarnate, otherwise you'll just be kinda stuck in the orb form of your sṕpirit.",
-	"You are now tasked with the objective of floating around with other spirits like you, in a task for enlightenment, or something..."
+	"So, here's the thing, you now gotta wander about with some other souls if you want to get another chance at this wild ride called life.",
+	"Press any key to start!"
 ]
 
 var ready = true
@@ -30,13 +27,16 @@ onready var tween = $Text/Tween
 
 func _ready():
 	randomize()
-	texts[3] = deaths[randi() % len(deaths)]
+	texts[1] = deaths[randi() % len(deaths)]
 	initiallabel()
 
 func _input(event):
 	if (event is InputEventKey and event.pressed) or event.is_action_pressed("click"):
 		if ready == true:
-			nextlabel()
+			if textnumber == 4:
+				get_tree().change_scene("res://scenes/main.tscn")
+			else:
+				nextlabel()
 func nextlabel():
 	ready = false
 	textnumber += 1
