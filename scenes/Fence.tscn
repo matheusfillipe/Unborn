@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/Fence.gd" type="Script" id=1]
+
+[node name="Fence" type="Line2D"]
+show_behind_parent = true
+default_color = Color( 0.945098, 0, 1, 1 )
+script = ExtResource( 1 )
