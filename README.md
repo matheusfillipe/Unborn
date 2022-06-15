@@ -19,15 +19,15 @@ Explore an infinite generated world, open portals and remember that you cannot r
 
 # TODO
 
-- [ ] Icon
-- [ ] Death phrases
-- [ ] Spawn spirits from horizon if not wall in front
+- [x] Icon
+- [x] Death phrases
+- [x] Spawn spirits from horizon if not wall in front
 - [ ] Enemy base with walk animation and attack.
     - [ ] Angel
     - [ ] Demon
 - [ ] backgrounds for heaven hell ground
-- [ ] walls
+- [x] walls
 - [ ] Random generation of walls and spawn of enemies
 - [ ] Score counter
-- [ ] Sound effects
-- [ ] Music
+- [x] Sound effects
+- [x] Music

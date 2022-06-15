@@ -1,5 +1,7 @@
 extends Line2D
 
+export(bool) var breakable = false
+
 var Gates = preload("res://scenes/Gates.tscn")
 
 func _ready():

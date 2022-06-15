@@ -1,5 +1,12 @@
 extends Node2D
 
+# TODO
+# Breakable fence: if true apply modulate and make it hitable group and on hit particle break shader
+# Auto generation of scenery as player walks. Adding fences and disposing of them in a long radius. how to distrubute them? Repeat Preloaded pattern? Seed generation?
+# AI for spirits to not get stuck on walls and change direction
+# Same for enemy
+# Enemy freeze hit
+
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Bubble = preload("res://scenes/TextBubble.tscn")
 
