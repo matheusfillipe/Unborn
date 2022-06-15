@@ -112,4 +112,5 @@ position = Vector2( 0, 185.5 )
 scale = Vector2( 388, 2285 )
 texture = SubResource( 2 )
 
+[connection signal="body_entered" from="SafeArea" to="." method="_on_SafeArea_body_entered"]
 [connection signal="body_exited" from="SafeArea" to="." method="_on_SafeArea_body_exited"]

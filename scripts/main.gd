@@ -8,6 +8,7 @@ onready var overlay = $FadeInHack
 onready var tween = $Tween
 onready var spirits = $Spirits
 onready var camera = $Camera2D
+onready var safearea = $SafeArea
 
 var has_left_safe_area = false
 
@@ -15,15 +16,15 @@ export(float, 1, 10000) var spirit_spawn_radius = 1000.0
 export(float, 0, 2) var spirit_spaw_density = 2
 
 enum Scenery {
+	safezone,
 	hell,
 	heaven
 }
 
 # Current scenery
-var scenery = Scenery.hell
+var scenery = Scenery.safezone setget set_scenery
 
 func _ready():
-
 	Global.play_music_once(Global.Music.entrance)
 	player.connect("size_changed", self, "adjust_zoom")
 
@@ -33,7 +34,7 @@ func _ready():
 	overlay.visible = false
 
 	yield(get_tree().create_timer(7, false), "timeout")
-	if not has_left_safe_area:
+	if scenery == Scenery.safezone:
 		Global.play_music(Global.Music.welcome)
 
 
@@ -107,18 +108,29 @@ func spawn_spirit():
 	spirit.noise_speed = rand_range(2, 20)
 	spirit.size = 0.5 + 4.5 * pow(10, rand_range(0, 2)) / 100
 
+func set_scenery(new_scenery):
+	if scenery == new_scenery:
+		return
+
+	scenery = new_scenery
+	match scenery:
+		Scenery.hell:
+			Global.play_music(Global.Music.hell)
+		Scenery.heaven:
+			Global.play_music(Global.Music.heaven)
+		Scenery.safezone:
+			Global.play_music(Global.Music.welcome)
+
+
+
 func check_scenery():
 	var y = player.global_position.y
+	# Entered hell
 	if y > 0:
-		if scenery == Scenery.heaven:
-			# TODO emit a signal or smt on change
-			Global.play_music(Global.Music.hell)
-		scenery = Scenery.hell
+		self.scenery = Scenery.hell
+	# Heaven
 	else:
-		if scenery == Scenery.hell:
-			# TODO emit a signal or smt on change
-			Global.play_music(Global.Music.heaven)
-		scenery = Scenery.heaven
+		self.scenery = Scenery.heaven
 
 
 func _process(delta):
@@ -128,7 +140,7 @@ func _process(delta):
 	if not has_left_safe_area:
 		return
 
-	# TODO dont call this in loop
+	# TODO dont call this in loop maybe? find another way
 	check_scenery()
 
 	# Spawn spirits
@@ -145,3 +157,9 @@ func _process(delta):
 func _on_SafeArea_body_exited(body:Node):
 	if body.is_in_group("player"):
 		has_left_safe_area = true
+
+
+func _on_SafeArea_body_entered(body:Node):
+	if body.is_in_group("player"):
+		has_left_safe_area = false
+		self.scenery = Scenery.safezone

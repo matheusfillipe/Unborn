@@ -87,7 +87,6 @@ func _input(event):
 		attack()
 
 
-
 func get_input():
 	var input = Vector2.ZERO
 	input.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
