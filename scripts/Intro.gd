@@ -7,83 +7,88 @@ const deaths = [
 	"You weren't ever really fond of vaccinations",
 	"You were mauled to death by a mountain lion",
 	"Your heart just kinda stopped in your sleep",
-	"You died of the Exotic Bear Flu",
+	"You died from the Exotic Bear Flu",
 	"You died jumping off Mount Everest",
-	"You danced too hard and passed away"
+	"You danced too hard and passed away",
+	"You choke to death with caviar",
+	"You let your beard grow too much and when a small fire broke out you burned to death",
+	"You were killing by a Knife-Wielding Bird",
+	"You died during a game of chess... what...",
+	"You were slain in a battle due to being blind",
+	"You were slain in a battle due to being blind",
+	"Wow! You died from Pneumonia after surviving the sinkings of the RMS Titanic, the RMS Alcantara, the HMHS Britannic and the SS Donegal.",
+	"You were eaten by the tiger you were taunting",
+	"You died from a violent case of diarrhea",
+	"You died because you tried to swim under Niagara falls",
 	]
+
 var texts = [
-	"Well, hello there. Let's see here...",
-	"",
-	"Well, cool death.",
-	"So, here's the thing, you now gotta wander about with some other souls if you want to get another chance at this wild ride called life.",
-	"Press any key to start!"
+	"Hello there.\n Let's see what we got here...",
+	"I am sorry to say but...\n",
+	"Well, I am sorry for you.\nYou will now receive your final judgment.",
+	"Reincarnation? What a pityful idea! You see, that is no longer a possibility...",
+	"Wait! Where are you going? You think you can escape from the wrath of angels and demons?",
+	"You shall be taken to your destiny force then!",
 ]
 
 var ready = true
 var textnumber = 0
+var touched = false
+
 onready var label = $Text
-onready var tween = $Text/Tween
+onready var next_label = $Label
+onready var tween = $Tween
+onready var timer = $UserWakeUpTimer
 
 
 func _ready():
 	Global.play_music_once(Global.Music.intro)
 	randomize()
-	texts[1] = deaths[randi() % len(deaths)]
-	initiallabel()
+	texts[1] += deaths[randi() % len(deaths)]
+	nextlabel()
 
 func _input(event):
 	if (event is InputEventKey and event.pressed) or event.is_action_pressed("click"):
-		if ready == true:
-			if textnumber == 4:
+		if ready:
+			touched = true
+			if textnumber == len(texts):
 				get_tree().change_scene("res://scenes/main.tscn")
 			else:
 				nextlabel()
+
+# If 'in' is true will fade, in, if false will fade out
+func fadelabel(_label: Label, _in: bool = true):
+	var colors = [
+		Color(1, 1, 1, 1),
+		Color(1, 1, 1, 0),
+	]
+	if _in:
+		colors = [colors[1], colors[0]]
+
+	tween.interpolate_property(
+		_label,
+		"modulate",
+		colors[0],
+		colors[1],
+		0.7,
+		Tween.TRANS_SINE
+	)
+	tween.start()
+
 func nextlabel():
 	ready = false
-	textnumber += 1
-	tween.interpolate_property(
-		label,
-		"modulate",
-		Color(1, 1, 1, 1),
-		Color(1, 1, 1, 0),
-		0.7,
-		Tween.TRANS_SINE
-	)
-	tween.start()
+	if next_label.modulate.a == 1.0:
+		fadelabel(next_label, false)
+		touched = false
+		timer.start()
+
+	fadelabel(label, false)
 	yield(tween, "tween_all_completed")
 	label.text = texts[textnumber]
-	tween.interpolate_property(
-		label,
-		"modulate",
-		Color(1, 1, 1, 0),
-		Color(1, 1, 1, 1),
-		0.7,
-		Tween.TRANS_SINE
-	)
-	tween.start()
+	fadelabel(label)
+	textnumber += 1
 	ready = true
 
-
-func initiallabel():
-	ready = false
-	tween.interpolate_property(
-		label,
-		"modulate",
-		Color(1, 1, 1, 1),
-		Color(1, 1, 1, 0),
-		0.7,
-		Tween.TRANS_SINE
-	)
-	tween.start()
-	yield(tween, "tween_all_completed")
-	label.text = texts[0]
-	tween.interpolate_property(
-		label,
-		"modulate",
-		Color(1, 1, 1, 0),
-		Color(1, 1, 1, 1),
-		0.7,
-		Tween.TRANS_SINE
-	)
-	tween.start()
-	ready = true
+func _on_UserWakeUpTimer_timeout():
+	if not touched:
+		fadelabel(next_label)
