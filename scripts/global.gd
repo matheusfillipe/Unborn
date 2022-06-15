@@ -14,9 +14,11 @@ var current_scene_path = ""
 # Let's preload the audio effects
 enum SFX {
 	boom,
+	gatebreak,
 	}
 var sfx_list = [
     preload("res://assets/SFX/Boom.wav"),
+    preload("res://assets/SFX/gateBreak.wav"),
 ]
 
 enum Music {

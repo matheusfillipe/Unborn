@@ -2,7 +2,7 @@ tool
 extends StaticBody2D
 
 # This is the actual length you want it to tile into
-export(float, 0, 1000) var length = 41
+export(float) var length = 41
 
 # This is the texture length in godot units. Take care not to set wrong
 export(float) var texture_length = 20.5
@@ -15,6 +15,7 @@ onready var texture = $TextureRect
 onready var animation = $AnimationPlayer
 onready var particles = $Particles2D
 onready var initial_texture_width = $TextureRect.texture.get_width()
+onready var audio = $AudioStreamPlayer2D
 
 var break_particles = []
 
@@ -57,6 +58,7 @@ func _break():
 	for p in break_particles:
 		p.emitting = true
 	animation.play("break")
+	audio.play()
 	yield(animation, "animation_finished")
 	queue_free()
 

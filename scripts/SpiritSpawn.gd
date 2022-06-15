@@ -7,6 +7,18 @@ export(float, 0, 100) var duration = 1
 
 var used = false
 
+# TODO avoid having to repeat this from orb.gd
+enum COLOR {
+	WHITE
+	BLACK
+	BLUE
+	GREEN
+	YELLOW
+	RED
+	}
+
+export(COLOR) var orb_color = COLOR.WHITE
+
 func _ready():
 	add_to_group("actions")
 
@@ -23,9 +35,10 @@ func act(caller: Node):
 	for _i in range(ammount):
 		var dir = Global.random_vec2()
 		var spirit = Spirit.instance()
+
+		spirit.start_color = orb_color
 		add_child(spirit)
 
-		spirit.start_color = 0
 		spirit.global_position = global_position
 		spirit.velocity = - dir * rand_range(50, 500)
 		spirit.noise_amplitude = rand_range(1, 10)
