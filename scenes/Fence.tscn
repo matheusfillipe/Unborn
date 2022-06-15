@@ -4,5 +4,5 @@
 
 [node name="Fence" type="Line2D"]
 show_behind_parent = true
-default_color = Color( 0.945098, 0, 1, 1 )
+default_color = Color( 1, 0, 1, 1 )
 script = ExtResource( 1 )

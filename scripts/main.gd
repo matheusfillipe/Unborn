@@ -17,6 +17,7 @@ onready var spirits = $Spirits
 onready var camera = $Camera2D
 onready var safearea = $SafeArea
 
+
 var has_left_safe_area = false
 
 export(float, 1, 10000) var spirit_spawn_radius = 1000.0

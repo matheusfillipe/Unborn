@@ -38,11 +38,6 @@ resource_local_to_scene = true
 [node name="Player" groups=["player"] instance=ExtResource( 2 )]
 script = ExtResource( 1 )
 start_color = 3
-start_size = 1
-start_brightness = 5.0
-collision_brightness_multiplier = 2.0
-tutorial_message = ""
-tutorial_message_time = 0
 
 [node name="circle" parent="." index="0"]
 material = SubResource( 5 )

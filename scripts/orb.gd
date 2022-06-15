@@ -49,17 +49,34 @@ onready var start_areashape_size: float = $Area2D/CollisionShape2D.shape.radius
 
 export var tutorial_message: String = ""
 export var tutorial_message_time: int = 0
+export(bool) var is_present = true setget set_active
+export(NodePath) var activate_on_area
+export(NodePath) var hit_action
 
 signal size_changed
-
 
 func _ready():
 	set_color(start_color)
 	set_size(start_size * scale.x)
 	set_brightness(start_brightness)
+	set_active(is_present)
+
+	# Check for area activation
+	if activate_on_area and get_node(activate_on_area) is Area2D:
+		get_node(activate_on_area).connect("body_entered", self, "activate")
 
 	# This is so children classes can overwrite the ready function doing stuff before it
 	_on_ready()
+
+func activate(body):
+	if body == get_tree().get_current_scene().player:
+		self.is_present = true
+
+func set_active(_active):
+	is_present = _active
+	$CollisionShape2D.call_deferred("set", "disabled", not is_present)
+	$Area2D/CollisionShape2D.call_deferred("set", "disabled", not is_present)
+	visible = is_present
 
 func _on_ready():
 	pass
@@ -110,6 +127,10 @@ func _on_Area2D_body_exited(body:Node):
 func _on_collide(body):
 	if body.is_in_group("player") and tutorial_message != "":
 		Global.popup(tutorial_message, tutorial_message_time)
+
+		var action = get_node(hit_action)
+		if action and action.is_in_group("actions"):
+			action.act(self)
 
 func _on_Area2D_body_entered(body:Node):
 	if body == self or is_colliding:

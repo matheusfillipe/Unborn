@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/main.gd" type="Script" id=2]
@@ -6,9 +6,10 @@
 [ext_resource path="res://scripts/Camera.gd" type="Script" id=4]
 [ext_resource path="res://scenes/Fence.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/clouds.png" type="Texture" id=6]
+[ext_resource path="res://scripts/SpiritSpawn.gd" type="Script" id=7]
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 1046, 1007 )
+extents = Vector2( 1017, 987.5 )
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -28,6 +29,9 @@ glow_high_quality = true
 adjustment_brightness = 1.11
 adjustment_saturation = 1.21
 
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 148, 113 )
+
 [sub_resource type="GradientTexture" id=2]
 
 [node name="main" type="Node2D"]
@@ -39,7 +43,7 @@ script = ExtResource( 2 )
 position = Vector2( 607, 249 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SafeArea"]
-position = Vector2( -134, 7 )
+position = Vector2( -112, 26.5 )
 shape = SubResource( 3 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -52,27 +56,39 @@ texture = ExtResource( 6 )
 [node name="Orbs" type="Node2D" parent="."]
 
 [node name="green" parent="Orbs" instance=ExtResource( 1 )]
-position = Vector2( 658, 157 )
+position = Vector2( 551, 64 )
 start_color = 3
 start_size = 4
 tutorial_message = "Hi, Im a green spirit. I am very healthy."
 tutorial_message_time = 5
 
 [node name="blue" parent="Orbs" instance=ExtResource( 1 )]
-position = Vector2( 696, -117 )
+position = Vector2( 541, -116 )
 start_size = 4
 tutorial_message = "OH! So you are another one like me! When you become blue, hit space to release your attack!"
 tutorial_message_time = 5
 
 [node name="white" parent="Orbs" instance=ExtResource( 1 )]
-position = Vector2( 776, -312 )
+position = Vector2( 607, -311 )
 start_color = 0
 start_size = 4
+start_brightness = 4.0
 tutorial_message = "Oh take care! you can only absorb smaller spirits. But don't think you can use your cheap tricks with me"
 tutorial_message_time = 5
 
+[node name="TutorialSpirit" parent="Orbs" instance=ExtResource( 1 )]
+position = Vector2( 1192, -371 )
+start_color = 0
+start_size = 2
+start_brightness = 6.0
+tutorial_message = "Looks like the end is blocked. Let me give you a hand on that, collect some of these spirits and then hit space or right click to release the energy when you are blue."
+tutorial_message_time = 5
+is_present = false
+activate_on_area = NodePath("../../Spirits/SpawnTutorialSpirit")
+hit_action = NodePath("../../Spirits/SpiritSpawn")
+
 [node name="yellow" parent="Orbs" instance=ExtResource( 1 )]
-position = Vector2( 504, 439 )
+position = Vector2( 442, 558 )
 start_color = 4
 start_size = 3
 tutorial_message = "I am yellow... So i am a bit cursed."
@@ -86,7 +102,7 @@ tutorial_message = "I can't take this anymore... Just take my to hell already"
 tutorial_message_time = 5
 
 [node name="black" parent="Orbs" instance=ExtResource( 1 )]
-position = Vector2( -184, 1054 )
+position = Vector2( 995, 825 )
 start_color = 1
 start_size = 10
 tutorial_message = "????"
@@ -94,15 +110,37 @@ tutorial_message_time = 5
 
 [node name="Spirits" type="Node2D" parent="."]
 
+[node name="SpiritSpawn" type="Position2D" parent="Spirits" groups=["actions"]]
+position = Vector2( 1203, -105 )
+script = ExtResource( 7 )
+ammount = 20
+
+[node name="SpawnTutorialSpirit" type="Area2D" parent="Spirits"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Spirits/SpawnTutorialSpirit"]
+position = Vector2( 1359, 533 )
+shape = SubResource( 4 )
+
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( 1112, 725 )
+position = Vector2( -304, 970 )
 collision_brightness_multiplier = 1.2
 
 [node name="Fences" type="Node2D" parent="."]
 position = Vector2( 485, 229 )
 
 [node name="Fence" parent="Fences" instance=ExtResource( 5 )]
-points = PoolVector2Array( 651, -682, 612, -118, 1010, 1038, -1010, 1035, -1009, -417, 113, -685, 94, -833, 157, -890, 346, -937, 604, -890 )
+points = PoolVector2Array( 445, -550, 718, 208, 720, 420, 1010, 1038, -1010, 1035, -1009, -417, -59, -678, 94, -833, 157, -890, 346, -937, 604, -890, 820, -915, 1016, -905, 1023, 45, 1023, 545 )
+
+[node name="Fence2" parent="Fences" instance=ExtResource( 5 )]
+position = Vector2( 760, 664 )
+points = PoolVector2Array( 104, 37, 261, -119 )
+width = 40.0
+default_color = Color( 1, 0.5, 0, 1 )
+breakable = true
+invert = true
+
+[node name="Fence3" parent="Fences" instance=ExtResource( 5 )]
+points = PoolVector2Array( -1010, -420, -1016, -991, -114, -1011, 475, -1018, 1022, -1014, 1014, -898 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 325, 245 )
