@@ -26,6 +26,9 @@ func _physics_process(delta):
 			velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 			seek_player()
 			update_wander()
+			accelerate_towards_point(wandercontroller.target_position, delta)
+			if global_position.distance_to(wandercontroller.target_position) <= MAX_SPEED * delta:
+				update_wander()
 			
 		WANDER:
 			seek_player()
@@ -50,6 +53,7 @@ func update_wander():
 func seek_player():
 	if playerdetect.can_see_player():
 		state = CHASE
+		print("sexy player :0")
 		
 func pick_random_state(state_list):
 	state_list.shuffle()
