@@ -7,9 +7,10 @@ onready var sprite = $Sprite
 onready var animation = $AnimationPlayer
 onready var hitarea = $HitArea
 
-export var ACCELERATION = 100
-export var MAX_SPEED = 50
+export var ACCELERATION = 300
+export var MAX_SPEED = 300
 export var FRICTION = 200
+export var knockback_speed = 500
 
 export(float, 1, 100) var sleep_on_hit_time = 20
 export(int) var sleep_frame = 5
@@ -23,8 +24,8 @@ enum {
 }
 
 var velocity = Vector2.ZERO
-var state = WANDER
 var knockback = Vector2.ZERO
+var state = WANDER
 
 func _ready():
 	randomize()
@@ -52,8 +53,12 @@ func _physics_process(delta):
 				update_wander()
 		CHASE:
 			animation.play("hover")
-			var player = playerdetect.player
-			if player != null:
+			if playerdetect.can_see_player():
+				var player = playerdetect.player
+				if player.dying:
+					knockback = Vector2.ZERO
+					return
+
 				accelerate_towards_point(player.global_position, delta)
 			else:
 				state = IDLE
@@ -121,4 +126,4 @@ func _on_AudioStreamPlayer2D_finished():
 func _on_HitArea_body_entered(body):
 	if body != self and body.is_in_group("hitable"):
 		body.hit(self)
-		knockback = body.global_position.direction_to(global_position) * body.size * 100
+		knockback = body.global_position.direction_to(global_position) * body.size * knockback_speed

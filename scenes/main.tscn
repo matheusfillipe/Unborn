@@ -55,7 +55,7 @@ position = Vector2( 485, 229 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( 929, 0 )
+position = Vector2( 1243, 650 )
 collision_layer = 4
 collision_brightness_multiplier = 1.2
 can_attack = true

@@ -185,6 +185,9 @@ func _on_collide(body: Node):
 
 
 func hit(body: Node):
+	if dying:
+		return
+
 	health = health - 1
 	if health < 0:
 		die(body)
@@ -197,6 +200,9 @@ func hit(body: Node):
 
 
 func die(body: Node):
+	if dying:
+		return
+
 	dying = true
 
 	var message = "You were taken to the final judgment..."
@@ -224,3 +230,4 @@ func die(body: Node):
 
 func _on_RetreatTimer_timeout():
 	knockback = Vector2.ZERO
+	stop()
