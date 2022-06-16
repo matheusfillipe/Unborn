@@ -13,7 +13,6 @@ config_version=4
 config/name="Unborn"
 run/main_scene="res://scenes/Intro.tscn"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
-config/icon="res://icon.png"
 
 [autoload]
 
@@ -94,6 +93,7 @@ pointing/emulate_touch_from_mouse=true
 
 2d_physics/layer_1="player"
 2d_physics/layer_2="wall"
+2d_physics/layer_3="enemies"
 
 [physics]
 
