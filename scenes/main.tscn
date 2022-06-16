@@ -142,7 +142,7 @@ shape = SubResource( 4 )
 [node name="SpawnTutorialSpirit2" type="Area2D" parent="Spirits"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Spirits/SpawnTutorialSpirit2"]
-position = Vector2( 1739, -644 )
+position = Vector2( 1699, -644 )
 shape = SubResource( 5 )
 
 [node name="Fences" type="Node2D" parent="."]

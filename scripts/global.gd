@@ -26,15 +26,15 @@ enum SFX {
 	}
 
 var sfx_list = [
-    preload("res://assets/SFX/Boom.wav"),
-    preload("res://assets/SFX/gateBreak.wav"),
-    preload("res://assets/SFX/pop.wav"),
-    preload("res://assets/SFX/colide.wav"),
-    preload("res://assets/SFX/popup.wav"),
-    preload("res://assets/SFX/tick.wav"),
-    preload("res://assets/SFX/death.wav"),
-    preload("res://assets/SFX/AngelHurt.wav"),
-    preload("res://assets/SFX/playerHurt.wav"),
+	preload("res://assets/SFX/Boom.wav"),
+	preload("res://assets/SFX/gateBreak.wav"),
+	preload("res://assets/SFX/pop.wav"),
+	preload("res://assets/SFX/colide.wav"),
+	preload("res://assets/SFX/popup.wav"),
+	preload("res://assets/SFX/tick.wav"),
+	preload("res://assets/SFX/death.wav"),
+	preload("res://assets/SFX/AngelHurt.wav"),
+	preload("res://assets/SFX/playerHurt.wav"),
 ]
 
 enum Music {
@@ -46,11 +46,11 @@ enum Music {
 	}
 # and music
 var music_list = [
-    preload("res://assets/Music/Intro.mp3"),
-    preload("res://assets/Music/Entrance.mp3"),
-    preload("res://assets/Music/Welcome.mp3"),
-    preload("res://assets/Music/Heaven.mp3"),
-    preload("res://assets/Music/Hell.mp3"),
+	preload("res://assets/Music/Intro.mp3"),
+	preload("res://assets/Music/Entrance.mp3"),
+	preload("res://assets/Music/Welcome.mp3"),
+	preload("res://assets/Music/Heaven.mp3"),
+	preload("res://assets/Music/Hell.mp3"),
 ]
 
 
@@ -72,7 +72,7 @@ func show_text(message, time):
 	if is_instance_valid(bubble):
 		bubble.hide()
 	bubble = Bubble.instance()
-	bubble.show_text(message, time)
+	bubble.show(message, time)
 	return bubble
 
 func _input(event):
@@ -85,7 +85,7 @@ func _input(event):
 			music_player.playing = false
 			Engine.time_scale = 0
 			bubble = Bubble.instance()
-			bubble.show("PAUSED")
+			bubble.show("PAUSED", true)
 		else:
 			Engine.time_scale = 1
 			bubble.hide()

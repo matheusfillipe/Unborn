@@ -34,7 +34,6 @@ resource_local_to_scene = true
 
 [sub_resource type="CircleShape2D" id=8]
 resource_local_to_scene = true
-radius = 8.0
 
 [node name="Player" groups=["hitable", "player"] instance=ExtResource( 2 )]
 script = ExtResource( 1 )
@@ -46,9 +45,6 @@ texture = SubResource( 6 )
 
 [node name="CollisionShape2D" parent="." index="1"]
 shape = SubResource( 7 )
-
-[node name="Area2D" parent="." index="2"]
-visible = true
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 visible = true

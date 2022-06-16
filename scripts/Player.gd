@@ -160,15 +160,11 @@ func _physics_process(delta):
 
 
 func _on_collide(body: Node):
-	print("Collided with", body)
 	if body is Spirit and not body.dying:
-		print("Found a spirit: ", body)
 		# Only if a smaller one
 		if body.size > size:
-			print("But it is smaller", body)
 			return
 
-		print("Hit a spirit: ", body)
 		body.hit(self)
 
 		# Get health and grow with spirit
