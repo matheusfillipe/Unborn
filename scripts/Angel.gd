@@ -14,8 +14,6 @@ export(float, 1, 100) var sleep_on_hit_time = 20
 export(int) var sleep_frame = 5
 
 
-
-
 enum {
 	IDLE,
 	WANDER,
@@ -108,9 +106,10 @@ func hit(_body: Node):
 
 
 func _on_AudioStreamPlayer2D_finished():
-	randomize()
-	yield(get_tree().create_timer(rand_range(1, 6), false), "timeout")
-	audio.play()
+		randomize()
+		yield(get_tree().create_timer(rand_range(1, 6), false), "timeout")
+		if state != SLEEP:
+			audio.play()
 
 
 func _on_HurtArea_body_entered(body):
