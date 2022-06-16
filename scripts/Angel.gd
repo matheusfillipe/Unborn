@@ -5,6 +5,7 @@ onready var wandercontroller = $WanderController
 onready var audio = $AudioStreamPlayer2D
 onready var sprite = $Sprite
 onready var animation = $AnimationPlayer
+onready var hitarea = $HitArea
 
 export var ACCELERATION = 100
 export var MAX_SPEED = 50
@@ -84,7 +85,13 @@ func accelerate_towards_point(point, delta):
 	velocity = velocity.move_toward(direction * MAX_SPEED, ACCELERATION * delta)
 	sprite.flip_h = velocity.x < 0
 
+
+
+
 func hit(_body: Node):
+	if state == SLEEP:
+		return
+
 	Global.play2d(Global.SFX.angel_hurt, global_position)
 	var pre_modulate = modulate
 	var param = "bloomIntensity"
@@ -93,7 +100,7 @@ func hit(_body: Node):
 	audio.stop()
 	sprite.modulate = Color(0.6, 0.6, 0.6, 1)
 	sprite.material.set_shader_param(param, 0)
-	$HurtArea.monitoring = false
+	hitarea.monitoring = false
 	state = SLEEP
 
 	yield(get_tree().create_timer(sleep_on_hit_time, false), "timeout")
@@ -101,7 +108,7 @@ func hit(_body: Node):
 	state = WANDER
 	audio.play()
 	sprite.modulate = pre_modulate
-	$HurtArea.monitoring = true
+	hitarea.monitoring = true
 	sprite.material.set_shader_param(param, bloom)
 
 
@@ -111,7 +118,7 @@ func _on_AudioStreamPlayer2D_finished():
 		if state != SLEEP:
 			audio.play()
 
-
-func _on_HurtArea_body_entered(body):
+func _on_HitArea_body_entered(body):
 	if body != self and body.is_in_group("hitable"):
 		body.hit(self)
+		knockback = body.global_position.direction_to(global_position) * body.size * 100

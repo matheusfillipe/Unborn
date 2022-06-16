@@ -15,7 +15,7 @@ enum {
 	}
 
 export (int) var max_speed = 600
-export (int) var retreat_speed = 1200
+export (int) var knockback_speed = 1200
 export (int) var acceleration = 800
 export (int) var friction = 800
 export (float) var noise_amplitude = 0.2
@@ -40,7 +40,7 @@ signal died
 
 var initial_size
 var dying = false
-var inpulse = Vector2(0, 0)
+var knockback = Vector2(0, 0)
 
 func _on_ready():
 	initial_size = size
@@ -151,8 +151,8 @@ func _physics_process(delta):
 	if state == IDLE:
 		idle()
 
-	if inpulse.length() > 0:
-		velocity = move_and_slide(inpulse * retreat_speed)
+	if knockback.length() > 0:
+		velocity = move_and_slide(knockback * knockback_speed)
 		return
 
 	move(delta)
@@ -192,22 +192,20 @@ func hit(body: Node):
 
 	Global.play2d(Global.SFX.player_hurt, global_position)
 	set_color(health_colors[health])
-	inpulse = body.global_position.direction_to(global_position)
+	knockback = body.global_position.direction_to(global_position)
 	timer.start()
 
 
 func die(body: Node):
 	dying = true
 
+	var message = "You were taken to the final judgment..."
 	if body.is_in_group("angel"):
-		Global.popup("You were taken to heaven...", 3)
+		message = "You were taken to heaven..."
 	elif body.is_in_group("demon"):
-		Global.popup("You were taken to hell...", 3)
-	else:
-		Global.popup("You were taken to the final judgment...", 3)
+		message = "You were taken to hell..."
 
-	emit_signal("died")
-	Global.play(Global.SFX.death)
+	emit_signal("died", message)
 
 	# fade out
 	var fade = Tween.new()
@@ -225,4 +223,4 @@ func die(body: Node):
 
 
 func _on_RetreatTimer_timeout():
-	inpulse = Vector2.ZERO
+	knockback = Vector2.ZERO

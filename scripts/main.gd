@@ -122,8 +122,11 @@ func restart():
 	Global.sdisconnect(tween, "tween_all_completed", self, "restart")
 	get_tree().reload_current_scene()
 
-func player_died():
-	yield(get_tree().create_timer(3, false), "timeout")
+func player_died(message):
+	Global.play(Global.SFX.death)
+	yield(get_tree().create_timer(2, false), "timeout")
+	Global.popup(message, 3)
+	yield(get_tree().create_timer(2, false), "timeout")
 	restart()
 
 # Spawn spirits randomly
