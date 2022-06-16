@@ -45,4 +45,5 @@ func act(caller: Node):
 		spirit.noise_speed = rand_range(2, 20)
 		spirit.size = 0.5 + 2 * pow(10, rand_range(0, 2)) / 100
 
+		Global.play2d(Global.SFX.pop, global_position)
 		yield(get_tree().create_timer(spawn_by, false), "timeout")

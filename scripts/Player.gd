@@ -80,10 +80,10 @@ func _input(event):
 
 	# Mana attack (Spirit)
 	if event.is_action_pressed("attack"):
-		# TODO Make the effect has an actual collision for enemies and damage level
-		if get_mana() <= 0:
-			# not enough mana
-			return
+		# TODO maybe use this someday
+		# if get_mana() <= 0:
+		# 	# not enough mana
+		# 	return
 		attack()
 
 
@@ -172,6 +172,7 @@ func _on_collide(body:Node):
 
 		set_size(new_size)
 		body.die()
+
 
 	# TODO if enemy
 	# if health == 0:

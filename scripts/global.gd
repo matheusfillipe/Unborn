@@ -4,6 +4,7 @@ var Bubble = load("res://scenes/TextBubble.tscn")
 var bubble = Bubble.instance()
 
 var music_player = AudioStreamPlayer.new()
+var fade = Tween.new()
 var music_muted = false
 var came_from_menu = true
 
@@ -15,10 +16,18 @@ var current_scene_path = ""
 enum SFX {
 	boom,
 	gatebreak,
+	pop,
+	colide,
+	popup,
+	tick,
 	}
 var sfx_list = [
     preload("res://assets/SFX/Boom.wav"),
     preload("res://assets/SFX/gateBreak.wav"),
+    preload("res://assets/SFX/pop.wav"),
+    preload("res://assets/SFX/colide.wav"),
+    preload("res://assets/SFX/popup.wav"),
+    preload("res://assets/SFX/tick.wav"),
 ]
 
 enum Music {
@@ -41,6 +50,7 @@ var music_list = [
 func _ready():
 	pause_mode = Node.PAUSE_MODE_PROCESS
 	add_child(music_player)
+	add_child(fade)
 
 
 func popup(message, time):
@@ -48,6 +58,7 @@ func popup(message, time):
 		bubble.hide()
 	bubble = Bubble.instance()
 	bubble.popup(message, time)
+	play(SFX.popup)
 
 
 func show_text(message, time):
@@ -102,7 +113,15 @@ func menu_button():
 func play_music(m):
 	if music_muted:
 		return
-	music_player.stop()
+
+	if music_player.playing:
+		# fade out 1 second
+		fade.interpolate_property(music_player, "volume_db", 0, -80, 1, Tween.TRANS_LINEAR, Tween.EASE_IN, 0)
+		fade.start()
+		yield(fade, "tween_all_completed")
+		music_player.stop()
+		music_player.volume_db = 0
+
 	music_player.stream = music_list[m]
 	music_player.play()
 
@@ -121,6 +140,15 @@ func stop_music_player():
 # Play audio effect
 func play(m):
 	var streamplayer = AudioStreamPlayer.new()
+	streamplayer.connect("finished", streamplayer, "queue_free")
+	add_child(streamplayer)
+	streamplayer.stream = sfx_list[m]
+	streamplayer.play()
+
+# Play positioned audio effect
+func play2d(m, pos: Vector2):
+	var streamplayer = AudioStreamPlayer2D.new()
+	streamplayer.global_position = pos
 	streamplayer.connect("finished", streamplayer, "queue_free")
 	add_child(streamplayer)
 	streamplayer.stream = sfx_list[m]

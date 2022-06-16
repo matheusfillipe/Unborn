@@ -40,6 +40,7 @@ func die():
 	node.scale = scale
 	add_child(node)
 	aplayer.play("fade")
+	Global.play2d(Global.SFX.pop, global_position)
 
 
 func _on_AnimationPlayer_animation_finished(anim_name:String):

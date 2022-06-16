@@ -36,6 +36,7 @@ var size:float = 1.0 setget set_size
 var color = COLOR.GREEN setget set_color
 var brightness: float = 1.0 setget set_brightness
 var is_colliding = false
+var popup_lock = false
 
 # Children Nodes
 onready var circle = $circle
@@ -63,7 +64,7 @@ func _ready():
 	set_color(start_color)
 	set_size(start_size * scale.x)
 	set_brightness(start_brightness)
-	set_active(is_present)
+	# set_active(is_present)
 
 	# Check for area activation
 	if activate_on_area and get_node(activate_on_area) is Area2D:
@@ -73,16 +74,11 @@ func _ready():
 	_on_ready()
 
 func activate(body):
-	if body == get_tree().get_current_scene().player:
-		self.is_present = true
+	if body != get_tree().get_current_scene().player:
+		return
+	# Fade in
 
-func set_active(_active):
-	is_present = _active
-	$CollisionShape2D.call_deferred("set", "disabled", not is_present)
-	$Area2D/CollisionShape2D.call_deferred("set", "disabled", not is_present)
-	visible = is_present
-	if _active:
-		# Fade in
+	if not is_present:
 		var b = start_brightness
 		var mainc: Color = circle.material.get_shader_param("main_color")
 		var mainv = Vector3(mainc.r, mainc.g, mainc.b).normalized()
@@ -97,6 +93,17 @@ func set_active(_active):
 		)
 		fade_in_tween.connect("tween_all_completed", self, "reset_brightness")
 		fade_in_tween.start()
+
+	self.is_present = true
+
+func reset_brightness():
+	set_brightness(start_brightness)
+
+func set_active(_active):
+	is_present = _active
+	$CollisionShape2D.call_deferred("set", "disabled", not is_present)
+	$Area2D/CollisionShape2D.call_deferred("set", "disabled", not is_present)
+	visible = is_present
 
 
 func set_size(_size: float):
@@ -143,16 +150,26 @@ func _on_Area2D_body_exited(body:Node):
 	btimer.start()
 
 func _on_collide(body):
-	if body.is_in_group("player") and tutorial_message != "":
+	if body.is_in_group("player") and tutorial_message != "" and not popup_lock:
+		popup_lock = true
 		Global.popup(tutorial_message, tutorial_message_time)
 
-		var action = get_node(hit_action)
-		if action and action.is_in_group("actions"):
-			action.act(self)
+		if hit_action:
+			var action = get_node(hit_action)
+			if action and action.is_in_group("actions"):
+				action.act(self)
+
+		yield(get_tree().create_timer(tutorial_message_time, false), "timeout")
+		popup_lock = false
 
 func _on_Area2D_body_entered(body:Node):
 	if body == self or is_colliding:
 		return
+	if body.is_in_group("orb"):
+		Global.play2d(Global.SFX.tick, global_position)
+	else:
+		Global.play2d(Global.SFX.colide, global_position)
+
 	is_colliding = true
 	btimer.stop()
 	var b = brightness * collision_brightness_multiplier
