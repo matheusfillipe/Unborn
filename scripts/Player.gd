@@ -73,6 +73,7 @@ func attack():
 
 		call_deferred("set_size", initial_size)
 		call_deferred("set_color", COLOR.GREEN)
+		health = 2
 
 
 func _input(event):

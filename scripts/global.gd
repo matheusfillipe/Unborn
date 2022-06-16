@@ -24,6 +24,7 @@ enum SFX {
 	angel_hurt,
 	player_hurt,
 	}
+
 var sfx_list = [
     preload("res://assets/SFX/Boom.wav"),
     preload("res://assets/SFX/gateBreak.wav"),

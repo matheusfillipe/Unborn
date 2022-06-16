@@ -1,10 +1,9 @@
 extends Node2D
 
 # TODO
+# Make the angel follow the player
+# Make the angel pathfind
 # Auto generation of scenery as player walks. Adding fences and disposing of them in a long radius. how to distrubute them? Repeat Preloaded pattern? Seed generation?
-# AI for spirits to not get stuck on walls and change direction
-# Same for enemy
-# Enemy freeze hit
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Bubble = preload("res://scenes/TextBubble.tscn")
@@ -17,6 +16,7 @@ onready var tween = $Tween
 onready var spirits = $Spirits
 onready var camera = $Camera2D
 onready var safearea = $SafeArea
+onready var environment = $WorldEnvironment
 
 
 var has_left_safe_area = false
@@ -34,6 +34,33 @@ enum Scenery {
 var scenery = Scenery.safezone setget set_scenery
 
 func _ready():
+	# platform specific adjust
+	match OS.get_name():
+		"Android":
+			environment.auto_exposure_min_luma = 0.08
+		"BlackBerry":
+			pass
+		"10":
+			pass
+		"Flash":
+			pass
+		"Haiku":
+			pass
+		"iOS":
+			pass
+		"HTML5":
+			pass
+		"OSX":
+			pass
+		"Server":
+			pass
+		"Windows":
+			pass
+		"WinRT":
+			pass
+		"X11":
+			pass
+
 	Global.play_music_once(Global.Music.entrance)
 	player.connect("size_changed", self, "adjust_zoom")
 	player.connect("died", self, "player_died")
