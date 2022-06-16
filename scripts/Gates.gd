@@ -48,7 +48,7 @@ func _ready():
 	if not Engine.editor_hint :
 		extend(length)
 
-func hit():
+func hit(_body: Node):
 	if breakable:
 		_break()
 

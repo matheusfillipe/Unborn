@@ -61,9 +61,9 @@ func _on_ready():
 	pass
 
 func _ready():
+	set_brightness(start_brightness)
 	set_color(start_color)
 	set_size(start_size * scale.x)
-	set_brightness(start_brightness)
 	# set_active(is_present)
 
 	# Check for area activation
@@ -124,6 +124,8 @@ func set_color(colorname: int):
 	circle.material.set_shader_param("second_color", c.shader2)
 	circle.material.set_shader_param("third_color", c.shader3)
 	_on_color_change()
+
+	_set_brightness(brightness)
 
 func _set_brightness(b: float):
 	var mainc: Color = circle.material.get_shader_param("main_color")

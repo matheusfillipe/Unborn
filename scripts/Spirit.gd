@@ -31,7 +31,7 @@ func _physics_process(_delta):
 	velocity += l * t
 	velocity = move_and_slide(velocity)
 
-func die():
+func die(_body: Node):
 	if not is_present:
 		return
 
@@ -58,5 +58,5 @@ func _on_Area2D_body_exited(body:Node):
 	btimer.start()
 
 # Die with one hit
-func hit():
-	die()
+func hit(body: Node):
+	die(body)

@@ -1,11 +1,11 @@
 extends "res://scripts/orb.gd"
 
 
-var health: int
+var health: int = 2
 var health_colors = [
-	COLOR.GREEN,
+	COLOR.RED,
 	COLOR.YELLOW,
-	COLOR.RED
+	COLOR.GREEN,
 	]
 
 
@@ -15,6 +15,7 @@ enum {
 	}
 
 export (int) var max_speed = 600
+export (int) var retreat_speed = 1200
 export (int) var acceleration = 800
 export (int) var friction = 800
 export (float) var noise_amplitude = 0.2
@@ -28,12 +29,18 @@ var state = IDLE setget set_state
 export var can_attack = false
 
 onready var rest_position = global_position
+onready var timer = $RetreatTimer
 
 var Explosion = preload("res://effects/Explosion.tscn")
 
 var Spirit = preload("res://scripts/Spirit.gd")
 
+
+signal died
+
 var initial_size
+var dying = false
+var inpulse = Vector2(0, 0)
 
 func _on_ready():
 	initial_size = size
@@ -66,10 +73,6 @@ func attack():
 
 		call_deferred("set_size", initial_size)
 		call_deferred("set_color", COLOR.GREEN)
-
-func hit(body):
-	if body.is_in_group("spirit"):
-		body.die()
 
 
 func _input(event):
@@ -140,15 +143,19 @@ func get_mana() -> float:
 	return size / initial_size - 1
 
 func _physics_process(delta):
+	if dying:
+		return
+
 	if state == IDLE:
 		idle()
+
+	if inpulse.length() > 0:
+		velocity = move_and_slide(inpulse * retreat_speed)
+		return
 
 	move(delta)
 	velocity = move_and_slide(velocity)
 
-
-func _on_color_change():
-	health = health_colors.find(color)
 
 func _on_collide(body:Node):
 	if body is Spirit and not body.dying:
@@ -156,26 +163,64 @@ func _on_collide(body:Node):
 		if body.size > size:
 			return
 
+		body.hit(self)
+
 		# Get health and grow with spirit
 		var idx = health_colors.find(body.color)
 		if idx > -1:
 			# TODO maybe is better to average things out? or not even have this. idk
 			# Set color of received spirit
-			self.color = body.color
+			set_color(body.color)
 
 		# Increase
 		var new_size = size + body.size/2
 		if new_size > size_limit:
 			new_size = size_limit
-			self.color = COLOR.BLUE
+			set_color(COLOR.BLUE)
 			can_attack = true
 
 		set_size(new_size)
-		body.die()
 
 
-	# TODO if enemy
-	# if health == 0:
-	#    die()
-	# health = health_colors[health - 1]
-	# color =  health_colors[health]
+func hit(body: Node):
+	health = health - 1
+	if health < 0:
+		die(body)
+		return
+
+	Global.play2d(Global.SFX.player_hurt, global_position)
+	set_color(health_colors[health])
+	inpulse = body.global_position.direction_to(global_position)
+	timer.start()
+
+
+func die(body: Node):
+	dying = true
+
+	if body.is_in_group("angel"):
+		Global.popup("You were taken to heaven...", 3)
+	elif body.is_in_group("demon"):
+		Global.popup("You were taken to hell...", 3)
+	else:
+		Global.popup("You were taken to the final judgment...", 3)
+
+	emit_signal("died")
+	Global.play(Global.SFX.death)
+
+	# fade out
+	var fade = Tween.new()
+	add_child(fade)
+	fade.interpolate_property(
+		self,
+		"modulate",
+		Color(10, 10, 10, 1),
+		Color(1, 1, 1, 0),
+		2,
+		fade_in_tween.TRANS_LINEAR,
+		fade_in_tween.EASE_IN_OUT
+	)
+	fade.start()
+
+
+func _on_RetreatTimer_timeout():
+	inpulse = Vector2.ZERO

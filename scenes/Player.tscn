@@ -36,7 +36,7 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 radius = 8.0
 
-[node name="Player" groups=["player"] instance=ExtResource( 2 )]
+[node name="Player" groups=["hitable", "player"] instance=ExtResource( 2 )]
 script = ExtResource( 1 )
 start_color = 3
 
@@ -53,3 +53,9 @@ visible = true
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 visible = true
 shape = SubResource( 8 )
+
+[node name="RetreatTimer" type="Timer" parent="." index="5"]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="RetreatTimer" to="." method="_on_RetreatTimer_timeout"]

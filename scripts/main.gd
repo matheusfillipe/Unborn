@@ -36,6 +36,7 @@ var scenery = Scenery.safezone setget set_scenery
 func _ready():
 	Global.play_music_once(Global.Music.entrance)
 	player.connect("size_changed", self, "adjust_zoom")
+	player.connect("died", self, "player_died")
 	compile_shaders()
 
 	# Pause and create transition effect on the beginning
@@ -93,6 +94,10 @@ func fade_to_black(callback: String):
 func restart():
 	Global.sdisconnect(tween, "tween_all_completed", self, "restart")
 	get_tree().reload_current_scene()
+
+func player_died():
+	yield(get_tree().create_timer(3, false), "timeout")
+	restart()
 
 # Spawn spirits randomly
 func spawn_spirit():

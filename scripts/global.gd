@@ -20,6 +20,9 @@ enum SFX {
 	colide,
 	popup,
 	tick,
+	death,
+	angel_hurt,
+	player_hurt,
 	}
 var sfx_list = [
     preload("res://assets/SFX/Boom.wav"),
@@ -28,6 +31,9 @@ var sfx_list = [
     preload("res://assets/SFX/colide.wav"),
     preload("res://assets/SFX/popup.wav"),
     preload("res://assets/SFX/tick.wav"),
+    preload("res://assets/SFX/death.wav"),
+    preload("res://assets/SFX/AngelHurt.wav"),
+    preload("res://assets/SFX/playerHurt.wav"),
 ]
 
 enum Music {
@@ -56,9 +62,9 @@ func _ready():
 func popup(message, time):
 	if is_instance_valid(bubble):
 		bubble.hide()
+	play(SFX.popup)
 	bubble = Bubble.instance()
 	bubble.popup(message, time)
-	play(SFX.popup)
 
 
 func show_text(message, time):
@@ -74,12 +80,16 @@ func _input(event):
 
 		# Pause shaders
 		if get_tree().paused:
+			play(SFX.popup)
+			music_player.playing = false
 			Engine.time_scale = 0
 			bubble = Bubble.instance()
 			bubble.show("PAUSED")
 		else:
 			Engine.time_scale = 1
 			bubble.hide()
+			music_player.playing = true
+
 
 # Safe disconnect
 func sdisconnect(node: Node, _signal: String, target: Object, method: String):
