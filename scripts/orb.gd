@@ -42,6 +42,7 @@ onready var circle = $circle
 onready var shape = $CollisionShape2D
 onready var areashape = $Area2D/CollisionShape2D
 onready var btimer = $BrightTimer
+onready var fade_in_tween = $FadeInTween
 
 onready var start_circle_scale: float = $circle.scale.x
 onready var start_shape_size: float = $CollisionShape2D.shape.radius
@@ -54,6 +55,9 @@ export(NodePath) var activate_on_area
 export(NodePath) var hit_action
 
 signal size_changed
+
+func _on_ready():
+	pass
 
 func _ready():
 	set_color(start_color)
@@ -77,9 +81,23 @@ func set_active(_active):
 	$CollisionShape2D.call_deferred("set", "disabled", not is_present)
 	$Area2D/CollisionShape2D.call_deferred("set", "disabled", not is_present)
 	visible = is_present
+	if _active:
+		# Fade in
+		var b = start_brightness
+		var mainc: Color = circle.material.get_shader_param("main_color")
+		var mainv = Vector3(mainc.r, mainc.g, mainc.b).normalized()
+		fade_in_tween.interpolate_property(
+			circle,
+			"modulate",
+			Color(1, 1, 1, 0),
+			Color(b * mainv.x, b * mainv.y, b * mainv.z, 1),
+			1,
+			fade_in_tween.TRANS_LINEAR,
+			fade_in_tween.EASE_IN_OUT
+		)
+		fade_in_tween.connect("tween_all_completed", self, "reset_brightness")
+		fade_in_tween.start()
 
-func _on_ready():
-	pass
 
 func set_size(_size: float):
 	shape.shape.radius = _size * start_shape_size

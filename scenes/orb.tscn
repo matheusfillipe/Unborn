@@ -54,6 +54,8 @@ shape = SubResource( 5 )
 wait_time = 0.5
 one_shot = true
 
+[node name="FadeInTween" type="Tween" parent="."]
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
 [connection signal="timeout" from="BrightTimer" to="." method="_on_BrightTimer_timeout"]

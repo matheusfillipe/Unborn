@@ -1,7 +1,6 @@
 extends Node2D
 
 # TODO
-# Breakable fence: if true apply modulate and make it hitable group and on hit particle break shader
 # Auto generation of scenery as player walks. Adding fences and disposing of them in a long radius. how to distrubute them? Repeat Preloaded pattern? Seed generation?
 # AI for spirits to not get stuck on walls and change direction
 # Same for enemy
@@ -9,6 +8,8 @@ extends Node2D
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Bubble = preload("res://scenes/TextBubble.tscn")
+var Explosion = preload("res://effects/Explosion.tscn")
+var ShockWave = preload("res://effects/ShockWave.tscn")
 
 onready var player = $Player
 onready var overlay = $FadeInHack
@@ -35,6 +36,7 @@ var scenery = Scenery.safezone setget set_scenery
 func _ready():
 	Global.play_music_once(Global.Music.entrance)
 	player.connect("size_changed", self, "adjust_zoom")
+	compile_shaders()
 
 	# Pause and create transition effect on the beginning
 	overlay.visible = true
@@ -44,6 +46,17 @@ func _ready():
 	yield(get_tree().create_timer(7, false), "timeout")
 	if scenery == Scenery.safezone:
 		Global.play_music(Global.Music.welcome)
+
+
+# HACK Avoid hickup for when effects are used first time. godot 3.5 has something better for this
+func compile_shaders():
+	var explosion = Explosion.instance()
+	explosion.global_position = Vector2(10000, 10000)
+	add_child(explosion)
+
+	var node = ShockWave.instance()
+	node.global_position = Vector2(10000, 10000)
+	add_child(node)
 
 
 func adjust_zoom(size: float):

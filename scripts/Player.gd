@@ -64,8 +64,8 @@ func attack():
 		explosion.timer.wait_time = 3
 		Global.play(Global.SFX.boom)
 
-		self.size = initial_size
-		self.color = COLOR.GREEN
+		call_deferred("set_size", initial_size)
+		call_deferred("set_color", COLOR.GREEN)
 
 func hit(body):
 	if body.is_in_group("spirit"):

@@ -16,7 +16,7 @@ func _process(_delta):
 	if Engine.editor_hint :
 		if breakable:
 			default_color = Color(1, 0.5, 0, 1)
-			width = 40
+			width = 10
 		else:
 			default_color = initial_color
 			width = initial_width

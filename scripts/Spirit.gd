@@ -32,6 +32,9 @@ func _physics_process(_delta):
 	velocity = move_and_slide(velocity)
 
 func die():
+	if not is_present:
+		return
+
 	dying = true
 	var node = ShockWave.instance()
 	node.scale = scale
