@@ -142,6 +142,7 @@ shape = SubResource( 5 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
 position = Vector2( 1446, -622 )
+collision_layer = 4
 collision_brightness_multiplier = 1.2
 can_attack = true
 
