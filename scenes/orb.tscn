@@ -30,8 +30,7 @@ resource_local_to_scene = true
 [sub_resource type="CircleShape2D" id=5]
 resource_local_to_scene = true
 
-[node name="orb" type="KinematicBody2D"]
-collision_layer = 4
+[node name="orb" type="KinematicBody2D" groups=["orb"]]
 collision/safe_margin = 0.1
 script = ExtResource( 1 )
 
@@ -54,6 +53,8 @@ shape = SubResource( 5 )
 [node name="BrightTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="FadeInTween" type="Tween" parent="."]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

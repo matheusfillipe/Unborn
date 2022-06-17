@@ -69,7 +69,8 @@ tracks/0/keys = {
 [sub_resource type="CircleShape2D" id=11]
 radius = 200.0
 
-[node name="Spirit" instance=ExtResource( 1 )]
+[node name="Spirit" groups=["hitable", "spirit"] instance=ExtResource( 1 )]
+collision_layer = 3
 script = ExtResource( 3 )
 
 [node name="circle" parent="." index="0"]

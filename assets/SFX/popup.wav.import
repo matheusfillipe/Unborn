@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/popup.wav-88ac9e9fb7e9e789b4fac53b2c36b80b.sample"
+
+[deps]
+
+source_file="res://assets/SFX/popup.wav"
+dest_files=[ "res://.import/popup.wav-88ac9e9fb7e9e789b4fac53b2c36b80b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

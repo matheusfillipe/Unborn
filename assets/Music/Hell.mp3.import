@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Hell.mp3-08dd002353bc5c9ef62af6873468056d.mp3str"
+
+[deps]
+
+source_file="res://assets/Music/Hell.mp3"
+dest_files=[ "res://.import/Hell.mp3-08dd002353bc5c9ef62af6873468056d.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

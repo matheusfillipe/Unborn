@@ -31,12 +31,16 @@ func _physics_process(_delta):
 	velocity += l * t
 	velocity = move_and_slide(velocity)
 
-func die():
+func die(_body: Node):
+	if not is_present:
+		return
+
 	dying = true
 	var node = ShockWave.instance()
 	node.scale = scale
 	add_child(node)
 	aplayer.play("fade")
+	Global.play2d(Global.SFX.pop, global_position)
 
 
 func _on_AnimationPlayer_animation_finished(anim_name:String):
@@ -46,3 +50,13 @@ func _on_AnimationPlayer_animation_finished(anim_name:String):
 
 func _on_WallDetection_area_entered(_area:Area2D):
 	wall_free = false
+
+func _on_Area2D_body_exited(body:Node):
+	if body == self or dying:
+		return
+	is_colliding = false
+	btimer.start()
+
+# Die with one hit
+func hit(body: Node):
+	die(body)

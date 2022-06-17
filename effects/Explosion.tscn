@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://effects/Effect.tscn" type="PackedScene" id=1]
 [ext_resource path="res://shaders/fog.shader" type="Shader" id=2]
+[ext_resource path="res://scripts/Explosion.gd" type="Script" id=3]
 
 [sub_resource type="Gradient" id=5]
 offsets = PoolRealArray( 0, 0, 0.0420354, 0.424779, 0.50885, 0.957965, 1 )
@@ -43,7 +44,11 @@ shader_param/noise = SubResource( 4 )
 shader_param/dissolve_noise_img = SubResource( 6 )
 shader_param/radial_dissolve_curve = SubResource( 9 )
 
+[sub_resource type="CircleShape2D" id=11]
+radius = 1700.0
+
 [node name="Explosion" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
 
 [node name="Sprite" parent="." index="0"]
 material = SubResource( 10 )
@@ -51,3 +56,16 @@ material = SubResource( 10 )
 [node name="Timer" parent="." index="2"]
 one_shot = true
 autostart = true
+
+[node name="Position2D" type="Position2D" parent="." index="3"]
+__meta__ = {
+"_gizmo_extents_": 442.4
+}
+
+[node name="Area2D" type="Area2D" parent="." index="4"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+shape = SubResource( 11 )
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
