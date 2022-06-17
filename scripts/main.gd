@@ -40,8 +40,9 @@ enum Scenery {
 
 # Current scenery
 var scenery = Scenery.safezone setget set_scenery
-
+var spiritcounter = {}
 func _ready():
+	player.connect("orbcolor",self,"addorbcolor")
 	# platform specific adjust
 	match OS.get_name():
 		"Android":
@@ -273,3 +274,10 @@ func add_tutorial_barrier(body: Node):
 	Global.delete_children($Orbs)
 	Global.delete_children($Enemies)
 	$Clouds.queue_free()
+func addorbcolor(color):
+	if not scenery in spiritcounter: 
+		spiritcounter[scenery] = {}
+	if not color in spiritcounter[scenery]:
+		spiritcounter[scenery][color] = 0
+	spiritcounter[scenery][color] += 1
+	print(spiritcounter[scenery][color])

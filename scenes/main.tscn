@@ -73,8 +73,7 @@ position = Vector2( 484, 0 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( -347, 948 )
-collision_layer = 4
+position = Vector2( -592, 960 )
 collision_brightness_multiplier = 1.2
 
 [node name="Orbs" type="Node2D" parent="."]
@@ -221,7 +220,6 @@ points = PoolVector2Array( 3035, -1013, 3033, -1088 )
 position = Vector2( 485, 229 )
 points = PoolVector2Array( 2298, -1014, 2300, -738 )
 invert = true
-enabled = false
 
 [node name="Enemies" type="Node2D" parent="."]
 
