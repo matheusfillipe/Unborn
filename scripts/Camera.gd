@@ -5,6 +5,7 @@ export var speed = 5
 var target
 
 func _ready():
+	zoom = Vector2.ONE
 	if target_path:
 		target = get_node(target_path)
 

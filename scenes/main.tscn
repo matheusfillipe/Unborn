@@ -8,14 +8,12 @@
 [ext_resource path="res://assets/clouds.png" type="Texture" id=6]
 [ext_resource path="res://scripts/SpiritSpawn.gd" type="Script" id=7]
 [ext_resource path="res://scenes/Gates.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/Angel.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
 ambient_light_energy = 0.0
 auto_exposure_enabled = true
 auto_exposure_min_luma = 0.0
-auto_exposure_max_luma = 8.63
 glow_enabled = true
 glow_intensity = 8.0
 glow_strength = 1.04
@@ -35,32 +33,49 @@ extents = Vector2( 223.25, 132 )
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 46, 122.5 )
 
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 40.5, 133 )
+
 [sub_resource type="GradientTexture" id=2]
 
 [node name="main" type="Node2D"]
 script = ExtResource( 2 )
+enemy_spawn_density = 0.05
+enemy_spawn_limit = 3
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 2048, 2048 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 2048, 2048 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 325, 245 )
+current = true
+zoom = Vector2( 5, 5 )
+process_mode = 0
+smoothing_enabled = true
+smoothing_speed = 100.0
+script = ExtResource( 4 )
+target_path = NodePath("../Player")
 
 [node name="Tween" type="Tween" parent="."]
-
-[node name="SafeArea" type="Area2D" parent="."]
-position = Vector2( 607, 249 )
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SafeArea"]
-position = Vector2( -112, -3.5 )
-polygon = PoolVector2Array( 1752, -1021.5, -1028, -1021.5, -1029, 1018.5, 1014, 1018.5, 1022, -761.5, 1745, -756.5 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
 [node name="Clouds" type="Sprite" parent="."]
-position = Vector2( 485, 229 )
+position = Vector2( 484, 0 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( 929, 0 )
+position = Vector2( -347, 948 )
 collision_layer = 4
 collision_brightness_multiplier = 1.2
-can_attack = true
 
 [node name="Orbs" type="Node2D" parent="."]
 
@@ -126,6 +141,13 @@ start_size = 10
 tutorial_message = "????"
 tutorial_message_time = 5
 
+[node name="orb" parent="Orbs" instance=ExtResource( 1 )]
+position = Vector2( -43, 70 )
+start_color = 3
+start_size = 3
+tutorial_message = "You can and should use big spirits to proctect yourself against those who will try to capture your soul"
+tutorial_message_time = 5
+
 [node name="Spirits" type="Node2D" parent="."]
 
 [node name="SpiritSpawn" type="Position2D" parent="Spirits" groups=["actions"]]
@@ -144,12 +166,8 @@ shape = SubResource( 4 )
 [node name="SpawnTutorialSpirit2" type="Area2D" parent="Spirits"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Spirits/SpawnTutorialSpirit2"]
-position = Vector2( 1739, -644 )
+position = Vector2( 1699, -644 )
 shape = SubResource( 5 )
-
-[node name="Enemies" type="Node2D" parent="."]
-
-[node name="Angel" parent="Enemies" instance=ExtResource( 9 )]
 
 [node name="Fences" type="Node2D" parent="."]
 position = Vector2( 485, 229 )
@@ -164,27 +182,54 @@ points = PoolVector2Array( 1031, -954, 1033, -794 )
 default_color = Color( 1, 0.5, 0, 1 )
 breakable = true
 
-[node name="Gates" parent="Fences" instance=ExtResource( 8 )]
-position = Vector2( 1030, -737 )
-length = 2000.0
-
 [node name="Gates3" parent="Fences" instance=ExtResource( 8 )]
 position = Vector2( -1014, 531 )
 length = 1600.0
 
-[node name="Gates2" parent="Fences" instance=ExtResource( 8 )]
-position = Vector2( 1040, -1008 )
+[node name="RemoveLater" type="Node2D" parent="."]
+
+[node name="SafeArea" type="Area2D" parent="RemoveLater"]
+position = Vector2( 607, 249 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RemoveLater/SafeArea"]
+visible = false
+position = Vector2( -112, -3.5 )
+polygon = PoolVector2Array( 3022, -1027.5, -1028, -1021.5, -1029, 1018.5, 1014, 1018.5, 1022, -761.5, 3017, -753.5, 3018, -236.5, 3350, -245.5, 3347, -1108.5, 3023, -1105.5 )
+
+[node name="Gates2" parent="RemoveLater" instance=ExtResource( 8 )]
+position = Vector2( 1525, -779 )
 scale = Vector2( 1, -1 )
 length = 2000.0
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 325, 245 )
-current = true
-process_mode = 0
-smoothing_enabled = true
-smoothing_speed = 100.0
-script = ExtResource( 4 )
-target_path = NodePath("../Player")
+[node name="Gates" parent="RemoveLater" instance=ExtResource( 8 )]
+position = Vector2( 1515, -508 )
+length = 2000.0
+
+[node name="Fence3" parent="RemoveLater" instance=ExtResource( 5 )]
+position = Vector2( 485, 229 )
+points = PoolVector2Array( 3026, -736, 3026, -217 )
+
+[node name="Fence4" parent="RemoveLater" instance=ExtResource( 5 )]
+position = Vector2( 485, 229 )
+points = PoolVector2Array( 3357, -219, 3354, -1124 )
+
+[node name="Fence5" parent="RemoveLater" instance=ExtResource( 5 )]
+position = Vector2( 485, 229 )
+points = PoolVector2Array( 3035, -1013, 3033, -1088 )
+
+[node name="Fence6" parent="RemoveLater" instance=ExtResource( 5 )]
+position = Vector2( 485, 229 )
+points = PoolVector2Array( 2298, -1014, 2300, -738 )
+invert = true
+enabled = false
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 3484, -644 )
+shape = SubResource( 6 )
 
 [node name="FadeInHack" type="Sprite" parent="."]
 visible = false
@@ -192,5 +237,11 @@ position = Vector2( 0, 185.5 )
 scale = Vector2( 388, 2285 )
 texture = SubResource( 2 )
 
-[connection signal="body_entered" from="SafeArea" to="." method="_on_SafeArea_body_entered"]
-[connection signal="body_exited" from="SafeArea" to="." method="_on_SafeArea_body_exited"]
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
+[connection signal="body_entered" from="RemoveLater/SafeArea" to="." method="_on_SafeArea_body_entered"]
+[connection signal="body_exited" from="RemoveLater/SafeArea" to="." method="_on_SafeArea_body_exited"]
+[connection signal="body_entered" from="Area2D" to="." method="add_tutorial_barrier"]
+[connection signal="timeout" from="Timer" to="." method="update_world"]

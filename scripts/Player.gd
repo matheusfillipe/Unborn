@@ -15,7 +15,7 @@ enum {
 	}
 
 export (int) var max_speed = 600
-export (int) var retreat_speed = 1200
+export (int) var knockback_speed = 1200
 export (int) var acceleration = 800
 export (int) var friction = 800
 export (float) var noise_amplitude = 0.2
@@ -40,7 +40,7 @@ signal died
 
 var initial_size
 var dying = false
-var inpulse = Vector2(0, 0)
+var knockback = Vector2(0, 0)
 
 func _on_ready():
 	initial_size = size
@@ -72,8 +72,10 @@ func attack():
 		Global.play(Global.SFX.boom)
 
 		call_deferred("set_size", initial_size)
-		call_deferred("set_color", COLOR.GREEN)
-
+		set_size(initial_size)
+		health = 2
+		set_color(health_colors[health])
+		can_attack = false
 
 func _input(event):
 	# Mouse click / tap control
@@ -149,15 +151,15 @@ func _physics_process(delta):
 	if state == IDLE:
 		idle()
 
-	if inpulse.length() > 0:
-		velocity = move_and_slide(inpulse * retreat_speed)
+	if knockback.length() > 0:
+		velocity = move_and_slide(knockback * knockback_speed)
 		return
 
 	move(delta)
 	velocity = move_and_slide(velocity)
 
 
-func _on_collide(body:Node):
+func _on_collide(body: Node):
 	if body is Spirit and not body.dying:
 		# Only if a smaller one
 		if body.size > size:
@@ -168,9 +170,10 @@ func _on_collide(body:Node):
 		# Get health and grow with spirit
 		var idx = health_colors.find(body.color)
 		if idx > -1:
-			# TODO maybe is better to average things out? or not even have this. idk
-			# Set color of received spirit
-			set_color(body.color)
+			# Set color of received spirit if it is bigger than half of the player
+			if body.size > size / 2:
+				set_color(body.color)
+				health = idx
 
 		# Increase
 		var new_size = size + body.size/2
@@ -183,6 +186,9 @@ func _on_collide(body:Node):
 
 
 func hit(body: Node):
+	if dying:
+		return
+
 	health = health - 1
 	if health < 0:
 		die(body)
@@ -190,22 +196,23 @@ func hit(body: Node):
 
 	Global.play2d(Global.SFX.player_hurt, global_position)
 	set_color(health_colors[health])
-	inpulse = body.global_position.direction_to(global_position)
+	knockback = body.global_position.direction_to(global_position)
 	timer.start()
 
 
 func die(body: Node):
+	if dying:
+		return
+
 	dying = true
 
-	if body.is_in_group("angel"):
-		Global.popup("You were taken to heaven...", 3)
-	elif body.is_in_group("demon"):
-		Global.popup("You were taken to hell...", 3)
-	else:
-		Global.popup("You were taken to the final judgment...", 3)
+	var message = "You were taken to the final judgment..."
+	if body.is_in_group("demon"):
+		message = "You were taken to hell..."
+	elif body.is_in_group("angel"):
+		message = "You were taken to heaven..."
 
-	emit_signal("died")
-	Global.play(Global.SFX.death)
+	emit_signal("died", message)
 
 	# fade out
 	var fade = Tween.new()
@@ -223,4 +230,5 @@ func die(body: Node):
 
 
 func _on_RetreatTimer_timeout():
-	inpulse = Vector2.ZERO
+	knockback = Vector2.ZERO
+	stop()

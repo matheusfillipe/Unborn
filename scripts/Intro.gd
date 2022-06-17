@@ -19,6 +19,7 @@ const deaths = [
 	"You were eaten by the tiger you were taunting",
 	"You died from a violent case of diarrhea",
 	"You died because you tried to swim under Niagara Falls",
+	"You had a stroke after trying to code a game for a jam"
 	]
 
 var texts = [

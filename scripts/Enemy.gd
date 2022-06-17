@@ -5,16 +5,16 @@ onready var wandercontroller = $WanderController
 onready var audio = $AudioStreamPlayer2D
 onready var sprite = $Sprite
 onready var animation = $AnimationPlayer
+onready var hitarea = $HitArea
 
-export var ACCELERATION = 100
-export var MAX_SPEED = 50
+export var ACCELERATION = 300
+export var MAX_SPEED = 300
 export var FRICTION = 200
-
+export var knockback_speed = 200
+export(Global.SFX) var on_hurt_audio = Global.SFX.angel_hurt
 export(float, 1, 100) var sleep_on_hit_time = 20
 export(int) var sleep_frame = 5
-
-
-
+export(bool) var use_bloom = true
 
 enum {
 	IDLE,
@@ -24,8 +24,10 @@ enum {
 }
 
 var velocity = Vector2.ZERO
-var state = WANDER
 var knockback = Vector2.ZERO
+var state = WANDER
+
+onready var scene = get_tree().get_current_scene()
 
 func _ready():
 	randomize()
@@ -53,8 +55,12 @@ func _physics_process(delta):
 				update_wander()
 		CHASE:
 			animation.play("hover")
-			var player = playerdetect.player
-			if player != null:
+			if playerdetect.can_see_player():
+				var player = playerdetect.player
+				if player.dying:
+					knockback = Vector2.ZERO
+					return
+
 				accelerate_towards_point(player.global_position, delta)
 			else:
 				state = IDLE
@@ -86,16 +92,24 @@ func accelerate_towards_point(point, delta):
 	velocity = velocity.move_toward(direction * MAX_SPEED, ACCELERATION * delta)
 	sprite.flip_h = velocity.x < 0
 
+
+
+
 func hit(_body: Node):
-	Global.play2d(Global.SFX.angel_hurt, global_position)
-	var pre_modulate = modulate
+	if state == SLEEP:
+		return
+
+	Global.play2d(on_hurt_audio, global_position)
+	var pre_modulate = sprite.modulate
 	var param = "bloomIntensity"
-	var bloom = sprite.material.get_shader_param(param)
+	var bloom
 
 	audio.stop()
 	sprite.modulate = Color(0.6, 0.6, 0.6, 1)
-	sprite.material.set_shader_param(param, 0)
-	$HurtArea.monitoring = false
+	if use_bloom:
+		bloom = sprite.material.get_shader_param(param)
+		sprite.material.set_shader_param(param, 0)
+	hitarea.monitoring = false
 	state = SLEEP
 
 	yield(get_tree().create_timer(sleep_on_hit_time, false), "timeout")
@@ -103,16 +117,30 @@ func hit(_body: Node):
 	state = WANDER
 	audio.play()
 	sprite.modulate = pre_modulate
-	$HurtArea.monitoring = true
-	sprite.material.set_shader_param(param, bloom)
+	hitarea.monitoring = true
+	if use_bloom:
+		sprite.material.set_shader_param(param, bloom)
 
 
 func _on_AudioStreamPlayer2D_finished():
-	randomize()
-	yield(get_tree().create_timer(rand_range(1, 6), false), "timeout")
-	audio.play()
+		randomize()
+		yield(get_tree().create_timer(rand_range(0.5, 2), false), "timeout")
+		if state != SLEEP:
+			audio.play()
 
+func _on_HitArea_body_entered(body):
+	if body == self or not body.is_in_group("hitable"):
+		return
 
-func _on_HurtArea_body_entered(body):
-	if body != self and body.is_in_group("hitable"):
-		body.hit(self)
+	# Should enemies hit each other? I think not... for now
+	# But angels should hit demons!
+	if body.is_in_group("enemy"):
+		if is_in_group("demon") != body.is_in_group("demon"):
+			body.hit(self)
+		else:
+			return
+
+	# Player hit or spirits
+	body.hit(self)
+	if "size" in body:
+		knockback = body.global_position.direction_to(global_position) * body.size * knockback_speed

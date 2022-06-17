@@ -22,18 +22,21 @@ enum SFX {
 	tick,
 	death,
 	angel_hurt,
+	demon_hurt,
 	player_hurt,
 	}
+
 var sfx_list = [
-    preload("res://assets/SFX/Boom.wav"),
-    preload("res://assets/SFX/gateBreak.wav"),
-    preload("res://assets/SFX/pop.wav"),
-    preload("res://assets/SFX/colide.wav"),
-    preload("res://assets/SFX/popup.wav"),
-    preload("res://assets/SFX/tick.wav"),
-    preload("res://assets/SFX/death.wav"),
-    preload("res://assets/SFX/AngelHurt.wav"),
-    preload("res://assets/SFX/playerHurt.wav"),
+	preload("res://assets/SFX/Boom.wav"),
+	preload("res://assets/SFX/gateBreak.wav"),
+	preload("res://assets/SFX/pop.wav"),
+	preload("res://assets/SFX/colide.wav"),
+	preload("res://assets/SFX/popup.wav"),
+	preload("res://assets/SFX/tick.wav"),
+	preload("res://assets/SFX/death.wav"),
+	preload("res://assets/SFX/AngelHurt.wav"),
+	preload("res://assets/SFX/DemonHurt.wav"),
+	preload("res://assets/SFX/playerHurt.wav"),
 ]
 
 enum Music {
@@ -45,11 +48,11 @@ enum Music {
 	}
 # and music
 var music_list = [
-    preload("res://assets/Music/Intro.mp3"),
-    preload("res://assets/Music/Entrance.mp3"),
-    preload("res://assets/Music/Welcome.mp3"),
-    preload("res://assets/Music/Heaven.mp3"),
-    preload("res://assets/Music/Hell.mp3"),
+	preload("res://assets/Music/Intro.mp3"),
+	preload("res://assets/Music/Entrance.mp3"),
+	preload("res://assets/Music/Welcome.mp3"),
+	preload("res://assets/Music/Heaven.mp3"),
+	preload("res://assets/Music/Hell.mp3"),
 ]
 
 
@@ -71,7 +74,7 @@ func show_text(message, time):
 	if is_instance_valid(bubble):
 		bubble.hide()
 	bubble = Bubble.instance()
-	bubble.show_text(message, time)
+	bubble.show(message, time)
 	return bubble
 
 func _input(event):
@@ -84,7 +87,7 @@ func _input(event):
 			music_player.playing = false
 			Engine.time_scale = 0
 			bubble = Bubble.instance()
-			bubble.show("PAUSED")
+			bubble.show("PAUSED", true)
 		else:
 			Engine.time_scale = 1
 			bubble.hide()
@@ -96,6 +99,7 @@ func sdisconnect(node: Node, _signal: String, target: Object, method: String):
 	if node.is_connected(_signal, target, method):
 		node.disconnect(_signal, target, method)
 
+# TODO this is no equiprobabilistic
 func random_vec2() -> Vector2:
    var new_dir: = Vector2()
    randomize()
@@ -163,3 +167,10 @@ func play2d(m, pos: Vector2):
 	add_child(streamplayer)
 	streamplayer.stream = sfx_list[m]
 	streamplayer.play()
+
+
+# Remove all children of a node
+static func delete_children(node):
+	for n in node.get_children():
+		node.remove_child(n)
+		n.queue_free()

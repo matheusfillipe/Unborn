@@ -6,6 +6,7 @@ var Gates = preload("res://scenes/Gates.tscn")
 
 export(bool) var breakable = false setget set_break
 export(bool) var invert = false
+export(bool) var enabled = true setget set_enable
 
 onready var initial_color = default_color
 onready var initial_width = width
@@ -58,9 +59,18 @@ func _ready():
 				i += 1
 
 	self.breakable = breakable
+	self.enabled = enabled
 
 
 func set_break(_breakable):
 	breakable = _breakable
 	for gate in parts:
 		gate.call_deferred("set_break", breakable)
+
+
+func set_enable(_enable: bool):
+	enabled = _enable
+
+	for gate in parts:
+		gate.call_deferred("set_enabled", enabled)
+		gate.visible = enabled

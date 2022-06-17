@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/clouds.png-a944dd817d74fea725de5db08cf2d1fe.stex"
+path="res://.import/demon_animation.png-e9c8b897ddf25aa7f15eba095f4a22e9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/clouds.png"
-dest_files=[ "res://.import/clouds.png-a944dd817d74fea725de5db08cf2d1fe.stex" ]
+source_file="res://assets/demon_animation.png"
+dest_files=[ "res://.import/demon_animation.png-e9c8b897ddf25aa7f15eba095f4a22e9.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=1
+flags/repeat=0
 flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false

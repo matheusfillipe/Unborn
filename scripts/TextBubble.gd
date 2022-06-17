@@ -2,11 +2,17 @@ extends CanvasLayer
 
 onready var tween = $Tween
 onready var timer = $Timer
-onready var label = $Label
+onready var labelc = $LabelCentered
+onready var labelb = $Label
+var label
 
 var showing = false
 
 func _ready():
+	label = labelb
+	labelc.modulate = Color(1, 1, 1, 0)
+	labelb.modulate = Color(1, 1, 1, 0)
+
 	tween.interpolate_property(
 		label,
 		"modulate",
@@ -31,10 +37,16 @@ func popup(message: String, timeonscreen: int):
 	yield(tween, "tween_all_completed")
 	queue_free()
 
-func show(message: String = ""):
+func show(message: String = "", middle=false):
 	if showing:
 		return
+
 	Global.get_tree().get_root().add_child(self)
+
+	if middle:
+		label = labelc
+
+	label.modulate = Color(1, 1, 1, 1)
 	set_text(message)
 	showing = true
 
