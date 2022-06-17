@@ -75,7 +75,7 @@ func attack():
 		set_size(initial_size)
 		health = 2
 		set_color(health_colors[health])
-
+		can_attack = false
 
 func _input(event):
 	# Mouse click / tap control

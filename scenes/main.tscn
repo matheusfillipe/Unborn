@@ -13,6 +13,7 @@
 background_mode = 4
 ambient_light_energy = 0.0
 auto_exposure_enabled = true
+auto_exposure_min_luma = 0.0
 glow_enabled = true
 glow_intensity = 8.0
 glow_strength = 1.04
@@ -42,20 +43,39 @@ script = ExtResource( 2 )
 enemy_spawn_density = 0.05
 enemy_spawn_limit = 3
 
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 2048, 2048 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 2048, 2048 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 325, 245 )
+current = true
+zoom = Vector2( 5, 5 )
+process_mode = 0
+smoothing_enabled = true
+smoothing_speed = 100.0
+script = ExtResource( 4 )
+target_path = NodePath("../Player")
+
 [node name="Tween" type="Tween" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
 [node name="Clouds" type="Sprite" parent="."]
-position = Vector2( 485, 229 )
+position = Vector2( 484, 0 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( 3495, -643 )
+position = Vector2( -347, 948 )
 collision_layer = 4
 collision_brightness_multiplier = 1.2
-can_attack = true
 
 [node name="Orbs" type="Node2D" parent="."]
 
@@ -121,6 +141,13 @@ start_size = 10
 tutorial_message = "????"
 tutorial_message_time = 5
 
+[node name="orb" parent="Orbs" instance=ExtResource( 1 )]
+position = Vector2( -43, 70 )
+start_color = 3
+start_size = 3
+tutorial_message = "You can and should use big spirits to proctect yourself against those who will try to capture your soul"
+tutorial_message_time = 5
+
 [node name="Spirits" type="Node2D" parent="."]
 
 [node name="SpiritSpawn" type="Position2D" parent="Spirits" groups=["actions"]]
@@ -165,6 +192,7 @@ length = 1600.0
 position = Vector2( 607, 249 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RemoveLater/SafeArea"]
+visible = false
 position = Vector2( -112, -3.5 )
 polygon = PoolVector2Array( 3022, -1027.5, -1028, -1021.5, -1029, 1018.5, 1014, 1018.5, 1022, -761.5, 3017, -753.5, 3018, -236.5, 3350, -245.5, 3347, -1108.5, 3023, -1105.5 )
 
@@ -202,16 +230,6 @@ enabled = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 3484, -644 )
 shape = SubResource( 6 )
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 325, 245 )
-current = true
-zoom = Vector2( 5, 5 )
-process_mode = 0
-smoothing_enabled = true
-smoothing_speed = 100.0
-script = ExtResource( 4 )
-target_path = NodePath("../Player")
 
 [node name="FadeInHack" type="Sprite" parent="."]
 visible = false

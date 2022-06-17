@@ -99,6 +99,7 @@ func sdisconnect(node: Node, _signal: String, target: Object, method: String):
 	if node.is_connected(_signal, target, method):
 		node.disconnect(_signal, target, method)
 
+# TODO this is no equiprobabilistic
 func random_vec2() -> Vector2:
    var new_dir: = Vector2()
    randomize()

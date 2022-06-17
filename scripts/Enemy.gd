@@ -124,7 +124,7 @@ func hit(_body: Node):
 
 func _on_AudioStreamPlayer2D_finished():
 		randomize()
-		yield(get_tree().create_timer(rand_range(1, 6), false), "timeout")
+		yield(get_tree().create_timer(rand_range(0.5, 2), false), "timeout")
 		if state != SLEEP:
 			audio.play()
 
