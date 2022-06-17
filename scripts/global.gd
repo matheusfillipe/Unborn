@@ -22,6 +22,7 @@ enum SFX {
 	tick,
 	death,
 	angel_hurt,
+	demon_hurt,
 	player_hurt,
 	}
 
@@ -34,6 +35,7 @@ var sfx_list = [
 	preload("res://assets/SFX/tick.wav"),
 	preload("res://assets/SFX/death.wav"),
 	preload("res://assets/SFX/AngelHurt.wav"),
+	preload("res://assets/SFX/DemonHurt.wav"),
 	preload("res://assets/SFX/playerHurt.wav"),
 ]
 

@@ -10,10 +10,11 @@ onready var hitarea = $HitArea
 export var ACCELERATION = 300
 export var MAX_SPEED = 300
 export var FRICTION = 200
-export var knockback_speed = 500
-
+export var knockback_speed = 200
+export(Global.SFX) var on_hurt_audio = Global.SFX.angel_hurt
 export(float, 1, 100) var sleep_on_hit_time = 20
 export(int) var sleep_frame = 5
+export(bool) var use_bloom = true
 
 enum {
 	IDLE,
@@ -98,14 +99,16 @@ func hit(_body: Node):
 	if state == SLEEP:
 		return
 
-	Global.play2d(Global.SFX.angel_hurt, global_position)
-	var pre_modulate = modulate
+	Global.play2d(on_hurt_audio, global_position)
+	var pre_modulate = sprite.modulate
 	var param = "bloomIntensity"
-	var bloom = sprite.material.get_shader_param(param)
+	var bloom
 
 	audio.stop()
 	sprite.modulate = Color(0.6, 0.6, 0.6, 1)
-	sprite.material.set_shader_param(param, 0)
+	if use_bloom:
+		bloom = sprite.material.get_shader_param(param)
+		sprite.material.set_shader_param(param, 0)
 	hitarea.monitoring = false
 	state = SLEEP
 
@@ -115,7 +118,8 @@ func hit(_body: Node):
 	audio.play()
 	sprite.modulate = pre_modulate
 	hitarea.monitoring = true
-	sprite.material.set_shader_param(param, bloom)
+	if use_bloom:
+		sprite.material.set_shader_param(param, bloom)
 
 
 func _on_AudioStreamPlayer2D_finished():
@@ -125,6 +129,18 @@ func _on_AudioStreamPlayer2D_finished():
 			audio.play()
 
 func _on_HitArea_body_entered(body):
-	if body != self and body.is_in_group("hitable"):
-		body.hit(self)
+	if body == self or not body.is_in_group("hitable"):
+		return
+
+	# Should enemies hit each other? I think not... for now
+	# But angels should hit demons!
+	if body.is_in_group("enemy"):
+		if is_in_group("demon") != body.is_in_group("demon"):
+			body.hit(self)
+		else:
+			return
+
+	# Player hit or spirits
+	body.hit(self)
+	if "size" in body:
 		knockback = body.global_position.direction_to(global_position) * body.size * knockback_speed

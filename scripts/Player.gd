@@ -170,9 +170,10 @@ func _on_collide(body: Node):
 		# Get health and grow with spirit
 		var idx = health_colors.find(body.color)
 		if idx > -1:
-			# TODO maybe is better to average things out? or not even have this. idk
-			# Set color of received spirit
-			set_color(body.color)
+			# Set color of received spirit if it is bigger than half of the player
+			if body.size > size / 2:
+				set_color(body.color)
+				health = idx
 
 		# Increase
 		var new_size = size + body.size/2
@@ -206,10 +207,10 @@ func die(body: Node):
 	dying = true
 
 	var message = "You were taken to the final judgment..."
-	if body.is_in_group("angel"):
-		message = "You were taken to heaven..."
-	elif body.is_in_group("demon"):
+	if body.is_in_group("demon"):
 		message = "You were taken to hell..."
+	elif body.is_in_group("angel"):
+		message = "You were taken to heaven..."
 
 	emit_signal("died", message)
 

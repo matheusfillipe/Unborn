@@ -6,6 +6,8 @@ extends Node2D
 # Auto generation of scenery as player walks. Adding fences and disposing of them in a long radius. how to distrubute them? Repeat Preloaded pattern? Seed generation?
 
 var Spirit = preload("res://scenes/Spirit.tscn")
+var Demon = preload("res://scenes/Demon.tscn")
+var Angel = preload("res://scenes/Angel.tscn")
 var Bubble = preload("res://scenes/TextBubble.tscn")
 var Explosion = preload("res://effects/Explosion.tscn")
 var ShockWave = preload("res://effects/ShockWave.tscn")
@@ -15,15 +17,20 @@ onready var player = $Player
 onready var overlay = $FadeInHack
 onready var tween = $Tween
 onready var spirits = $Spirits
+onready var enemies = $Enemies
 onready var camera = $Camera2D
 onready var safearea = $RemoveLater/SafeArea
 onready var environment = $WorldEnvironment
 
 
 var has_left_safe_area = false
+var last_world_update = 0.0
 
 export(float, 1, 10000) var spirit_spawn_radius = 1000.0
 export(float, 0, 2) var spirit_spaw_density = 2
+export(float, 1, 10000) var enemy_spawn_radius = 1000.0
+export(float, 0, 2) var enemy_spawn_density = 2
+export(int, 1, 100) var enemy_spawn_limit = 10
 
 enum Scenery {
 	safezone,
@@ -165,6 +172,20 @@ func spawn_spirit():
 	spirit.noise_speed = rand_range(2, 20)
 	spirit.size = 0.5 + 4.5 * pow(10, rand_range(0, 2)) / 100
 
+
+# Spawn enemies randomly according to scenery
+func spawn_enemy():
+	var enemy
+	match scenery:
+		Scenery.heaven:
+			enemy = Angel.instance()
+		Scenery.hell:
+			enemy = Demon.instance()
+
+	var dir = Global.random_vec2()
+	enemies.add_child(enemy)
+	enemy.global_position = dir * enemy_spawn_radius + player.global_position
+
 func set_scenery(new_scenery):
 	if scenery == new_scenery:
 		return
@@ -194,10 +215,14 @@ func _process(delta):
 	if Input.is_action_just_pressed("reset"):
 		fade_to_black("restart")
 
+
+func update_world():
 	if not has_left_safe_area:
 		return
 
-	# TODO dont call this in loop maybe? find another way
+	var delta = OS.get_ticks_msec() / 1000.0 - last_world_update
+	last_world_update += delta
+
 	check_scenery()
 
 	# Spawn spirits
@@ -205,10 +230,20 @@ func _process(delta):
 	if randf() < spirit_spaw_density * delta:
 		spawn_spirit()
 
+	# Spawn enemies
+	randomize()
+	if len(enemies.get_children()) < enemy_spawn_limit and randf() < enemy_spawn_density * delta:
+		spawn_enemy()
+
 	# Remove far away spirits
 	for spirit in spirits.get_children():
 		if spirit.global_position.distance_squared_to(player.global_position) > spirit_spawn_radius * spirit_spawn_radius * 2:
 			spirit.queue_free()
+
+	# Remove far away enemies
+	for enemy in enemies.get_children():
+		if enemy.global_position.distance_squared_to(player.global_position) > enemy_spawn_radius * enemy_spawn_radius * 2:
+			enemy.queue_free()
 
 
 func _on_SafeArea_body_exited(body:Node):

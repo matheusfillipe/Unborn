@@ -8,8 +8,9 @@
 [ext_resource path="res://assets/SFX/Angel.wav" type="AudioStream" id=6]
 
 [sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
 shader = ExtResource( 5 )
-shader_param/bloomRadius = 8.0
+shader_param/bloomRadius = 10.0
 shader_param/bloomThreshold = 0.5
 shader_param/bloomIntensity = 3.0
 
