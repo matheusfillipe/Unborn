@@ -2,13 +2,10 @@
 
 [ext_resource path="res://scenes/Angel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/SFX/Demon.wav" type="AudioStream" id=2]
+[ext_resource path="res://assets/demonroam.png" type="Texture" id=3]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
-
-[sub_resource type="StreamTexture" id=2]
-flags = 4
-load_path = "res://.import/demonroam.png-21c5516cfff9d63ae09d5ad56c89286f.stex"
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 49.0
@@ -23,11 +20,10 @@ stream = ExtResource( 2 )
 volume_db = 17.553
 
 [node name="Sprite" parent="." index="1"]
-modulate = Color( 0.411765, 0.141176, 0.141176, 1 )
 material = SubResource( 1 )
 position = Vector2( -4, 12 )
 scale = Vector2( 0.5, 0.5 )
-texture = SubResource( 2 )
+texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" parent="PlayerDetect" index="0"]
 visible = false

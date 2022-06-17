@@ -46,7 +46,8 @@ func _process(_delta):
 
 func _ready():
 	if not Engine.editor_hint :
-		extend(length)
+		if length > 0:
+			extend(length)
 
 func hit(_body: Node):
 	if breakable:
