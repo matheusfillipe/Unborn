@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/SceneryGenerator.gd" type="Script" id=1]
+[ext_resource path="res://scripts/MouseCam.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10.5, 10 )
@@ -11,7 +12,7 @@ border = 0.0
 ammount = 20.0
 keep_gap = 500.0
 line_spread = 45.0
-starting_points = PoolVector2Array( -10000, -5000 )
+starting_points = PoolVector2Array( -5000, 300 )
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -21,6 +22,7 @@ shape = SubResource( 1 )
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 zoom = Vector2( 20, 20 )
+script = ExtResource( 2 )
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

@@ -28,6 +28,7 @@ signal player_exited
 signal player_entered
 
 const MAX_GAP_CORRECTION_ATTEMPTS = 10
+const CENTER_DRAG_COUNT = 3
 const ANGLES = [0, PI/4, PI/2, 3*PI/4, PI, 5*PI/4, 3*PI/2, 7*PI/4]
 
 func rvec(l: float, from: Vector2, last: Vector2, drag_to_center: bool = false) -> Vector2:
@@ -35,7 +36,7 @@ func rvec(l: float, from: Vector2, last: Vector2, drag_to_center: bool = false) 
 		var dir = (from - global_position).normalized()
 		var angle = dir.angle_to(Vector2(1, 0))
 		for a in ANGLES:
-			if angle > a:
+			if angle < a:
 				angle = a
 				break
 		return Vector2(cos(angle), sin(angle)) * l
@@ -67,16 +68,22 @@ func random_points(from: Vector2, drag_to_center: bool = false) -> Array:
 	randomize()
 	var points = []
 	var last = from
+	var dccounter = 0
 	points.append(from)
 	astar.add_point(len(astar.get_points()), v3(from))
 
 	for _i in range(int(rand_range(size/max_len, size/min_len))):
+		if dccounter >= CENTER_DRAG_COUNT:
+			drag_to_center = false
+
 		var to = from + rvec(rand_range(min_len, max_len), from, last, drag_to_center)
 
 		var j = 0
 		while less_than_min_gap(to) and j < MAX_GAP_CORRECTION_ATTEMPTS:
 			to = from + rvec(rand_range(min_len, max_len), from, last, drag_to_center)
 			j+=1
+
+		dccounter += 1
 
 		# Clip if out of the rect
 		if Geometry.is_point_in_polygon(to, polygon):
@@ -86,8 +93,11 @@ func random_points(from: Vector2, drag_to_center: bool = false) -> Array:
 			var ip = Geometry.intersect_polyline_with_polygon_2d(
 				[from, to],
 				polygon)
+
 			if len(ip) > 0:
-				ip = ip[0][1]
+				for rpt in ip[0]:
+					if rpt != global_position:
+						ip = rpt
 				points.append(ip)
 				end_points.append(ip)
 				astar.add_point(len(astar.get_points()), v3(ip))
@@ -103,9 +113,17 @@ func add_fence(points: Array):
 	var relative_points = []
 	for gpt in points:
 		relative_points.append(gpt - global_position)
+
 	fence.points = relative_points
 	fence.global_position = global_position
 	add_child(fence)
+
+	for gate in fence.parts:
+		# Add a breakable fence in between
+		randomize()
+		if randf() < breakable_chance:
+			gate.call_deferred("set_break", true)
+
 	fences.append(fence)
 
 func _ready():
@@ -117,8 +135,9 @@ func _ready():
 	var _polygon = [Vector2(1, 1), Vector2(-1, 1), Vector2(-1, -1), Vector2(1, -1)]
 	for pt in _polygon:
 		polygon.append(global_position + pt * size)
-		# TODO remove
-		generate()
+
+	# TODO remove
+	generate()
 
 func generate():
 	var lines = []
@@ -134,15 +153,18 @@ func generate():
 	# Generate random fences from starting points
 	for pt in starting_points:
 		var addpt = pt
-		print(pt)
 		if not Geometry.is_point_in_polygon(pt, polygon):
-			var ip = Geometry.intersect_polyline_with_polygon_2d(
-				[pt, global_position],
-				polygon)
-			if len(ip) < 1:
-				print("NOT FOUND")
-				continue
-			addpt = ip[0][1]
+			continue
+			# var ip = Geometry.intersect_polyline_with_polygon_2d(
+			# 	[pt, global_position],
+			# 	polygon)
+
+			# if len(ip) < 1:
+			# 	continue
+
+			# for rpt in ip[0]:
+			# 	if rpt != global_position:
+			# 		addpt = rpt
 
 		debug_orb(addpt)
 		end_points.append(addpt)
@@ -175,6 +197,7 @@ func debug_orb(pos):
 	# TODO delete
 	var Orb = preload("res://scenes/orb.tscn")
 	var n = Orb.instance()
-	n.start_brightness = 100
+	n.start_brightness = 10000
+	n.start_size = 10
 	add_child(n)
 	n.global_position = pos
