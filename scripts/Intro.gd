@@ -23,12 +23,19 @@ const deaths = [
 	]
 
 var texts = [
+<<<<<<< HEAD
+	"Well, hello there. Let's see here...",
+	"",
+	"Well, cool death.",
+	"So, here's the thing, you now gotta wander about with some other souls if you want to get another chance at this wild ride called life.",
+=======
 	"Hello there.\n Let's see what we got here...",
 	"I am sorry to say but...\n",
 	"Well, I am sorry for you.\nYou will now receive your final judgment.",
 	"Reincarnation? What a pitiful idea! You see, that is no longer a possibility...",
 	"Wait! Where are you going? You think you can escape from the wrath of angels and demons?",
 	"You shall be taken to your destiny by force!",
+>>>>>>> f2a5058672ffc0d9d22b002e3a54f6d87b93f974
 ]
 
 var ready = true
