@@ -22,7 +22,7 @@ volume_db = 17.553
 [node name="Sprite" parent="." index="1"]
 material = SubResource( 1 )
 position = Vector2( -4, 12 )
-scale = Vector2( 0.5, 0.5 )
+scale = Vector2( -0.5, 0.5 )
 texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" parent="PlayerDetect" index="0"]

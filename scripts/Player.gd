@@ -37,7 +37,8 @@ var Spirit = preload("res://scripts/Spirit.gd")
 
 
 signal died
-signal orbcolor(color)
+signal spirit_kill(color, size)
+
 var initial_size
 var dying = false
 var knockback = Vector2(0, 0)
@@ -173,7 +174,6 @@ func _on_collide(body: Node):
 			# Set color of received spirit if it is bigger than half of the player
 			if body.size > size / 2:
 				set_color(body.color)
-				emit_signal("orbcolor",body.color)
 				health = idx
 
 		# Increase
@@ -184,6 +184,7 @@ func _on_collide(body: Node):
 			can_attack = true
 
 		set_size(new_size)
+		emit_signal("spirit_kill", body.color, body.size)
 
 
 func hit(body: Node):

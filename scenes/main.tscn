@@ -73,7 +73,7 @@ position = Vector2( 484, 0 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( -592, 960 )
+position = Vector2( 3393, -633 )
 collision_brightness_multiplier = 1.2
 
 [node name="Orbs" type="Node2D" parent="."]
