@@ -164,3 +164,10 @@ func play2d(m, pos: Vector2):
 	add_child(streamplayer)
 	streamplayer.stream = sfx_list[m]
 	streamplayer.play()
+
+
+# Remove all children of a node
+static func delete_children(node):
+	for n in node.get_children():
+		node.remove_child(n)
+		n.queue_free()

@@ -71,3 +71,6 @@ func set_break(_breakable):
 		texture.modulate = Color(1, 1, 1, 1)
 		if is_in_group("hitable"):
 			remove_from_group("hitable")
+
+func set_enabled(enabled):
+	$CollisionShape2D.disabled = not enabled

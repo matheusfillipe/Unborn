@@ -9,13 +9,14 @@ var Spirit = preload("res://scenes/Spirit.tscn")
 var Bubble = preload("res://scenes/TextBubble.tscn")
 var Explosion = preload("res://effects/Explosion.tscn")
 var ShockWave = preload("res://effects/ShockWave.tscn")
+var Fence = preload("res://scenes/Fence.tscn")
 
 onready var player = $Player
 onready var overlay = $FadeInHack
 onready var tween = $Tween
 onready var spirits = $Spirits
 onready var camera = $Camera2D
-onready var safearea = $SafeArea
+onready var safearea = $RemoveLater/SafeArea
 onready var environment = $WorldEnvironment
 
 
@@ -219,3 +220,21 @@ func _on_SafeArea_body_entered(body:Node):
 	if body.is_in_group("player"):
 		has_left_safe_area = false
 		self.scenery = Scenery.safezone
+
+
+# Game begins
+func add_tutorial_barrier(body: Node):
+	if not body == player:
+		return
+
+	# Add barrier to prevent player going back
+	var barrier = $RemoveLater/Fence6
+	barrier.enabled = true
+
+	# Dispose of tutorial
+	$Area2D.queue_free()
+	Global.delete_children($Fences)
+	Global.delete_children($Spirits)
+	Global.delete_children($Orbs)
+	Global.delete_children($Enemies)
+	$Clouds.queue_free()

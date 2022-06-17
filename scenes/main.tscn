@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/main.gd" type="Script" id=2]
@@ -33,19 +33,15 @@ extents = Vector2( 223.25, 132 )
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 46, 122.5 )
 
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 40.5, 133 )
+
 [sub_resource type="GradientTexture" id=2]
 
 [node name="main" type="Node2D"]
 script = ExtResource( 2 )
 
 [node name="Tween" type="Tween" parent="."]
-
-[node name="SafeArea" type="Area2D" parent="."]
-position = Vector2( 607, 249 )
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SafeArea"]
-position = Vector2( -112, -3.5 )
-polygon = PoolVector2Array( 1752, -1021.5, -1028, -1021.5, -1029, 1018.5, 1014, 1018.5, 1022, -761.5, 1745, -756.5 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
@@ -55,7 +51,7 @@ position = Vector2( 485, 229 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( -205, 871 )
+position = Vector2( 3495, -643 )
 collision_layer = 4
 collision_brightness_multiplier = 1.2
 can_attack = true
@@ -158,23 +154,56 @@ points = PoolVector2Array( 1031, -954, 1033, -794 )
 default_color = Color( 1, 0.5, 0, 1 )
 breakable = true
 
-[node name="Gates" parent="Fences" instance=ExtResource( 8 )]
-position = Vector2( 1030, -737 )
-length = 2000.0
-
 [node name="Gates3" parent="Fences" instance=ExtResource( 8 )]
 position = Vector2( -1014, 531 )
 length = 1600.0
 
-[node name="Gates2" parent="Fences" instance=ExtResource( 8 )]
-position = Vector2( 1040, -1008 )
+[node name="RemoveLater" type="Node2D" parent="."]
+
+[node name="SafeArea" type="Area2D" parent="RemoveLater"]
+position = Vector2( 607, 249 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RemoveLater/SafeArea"]
+position = Vector2( -112, -3.5 )
+polygon = PoolVector2Array( 3022, -1027.5, -1028, -1021.5, -1029, 1018.5, 1014, 1018.5, 1022, -761.5, 3017, -753.5, 3018, -236.5, 3350, -245.5, 3347, -1108.5, 3023, -1105.5 )
+
+[node name="Gates2" parent="RemoveLater" instance=ExtResource( 8 )]
+position = Vector2( 1525, -779 )
 scale = Vector2( 1, -1 )
 length = 2000.0
+
+[node name="Gates" parent="RemoveLater" instance=ExtResource( 8 )]
+position = Vector2( 1515, -508 )
+length = 2000.0
+
+[node name="Fence3" parent="RemoveLater" instance=ExtResource( 5 )]
+position = Vector2( 485, 229 )
+points = PoolVector2Array( 3026, -736, 3026, -217 )
+
+[node name="Fence4" parent="RemoveLater" instance=ExtResource( 5 )]
+position = Vector2( 485, 229 )
+points = PoolVector2Array( 3357, -219, 3354, -1124 )
+
+[node name="Fence5" parent="RemoveLater" instance=ExtResource( 5 )]
+position = Vector2( 485, 229 )
+points = PoolVector2Array( 3035, -1013, 3033, -1088 )
+
+[node name="Fence6" parent="RemoveLater" instance=ExtResource( 5 )]
+position = Vector2( 485, 229 )
+points = PoolVector2Array( 2298, -1014, 2300, -738 )
+invert = true
+enabled = false
 
 [node name="Enemies" type="Node2D" parent="."]
 
 [node name="Angel" parent="Enemies" instance=ExtResource( 9 )]
 position = Vector2( 666, -115 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 3484, -644 )
+shape = SubResource( 6 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 325, 245 )
@@ -192,5 +221,6 @@ position = Vector2( 0, 185.5 )
 scale = Vector2( 388, 2285 )
 texture = SubResource( 2 )
 
-[connection signal="body_entered" from="SafeArea" to="." method="_on_SafeArea_body_entered"]
-[connection signal="body_exited" from="SafeArea" to="." method="_on_SafeArea_body_exited"]
+[connection signal="body_entered" from="RemoveLater/SafeArea" to="." method="_on_SafeArea_body_entered"]
+[connection signal="body_exited" from="RemoveLater/SafeArea" to="." method="_on_SafeArea_body_exited"]
+[connection signal="body_entered" from="Area2D" to="." method="add_tutorial_barrier"]
