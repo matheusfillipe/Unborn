@@ -15,10 +15,6 @@ export var knockback_speed = 500
 export(float, 1, 100) var sleep_on_hit_time = 20
 export(int) var sleep_frame = 5
 
-var Nav = preload("res://scenes/Navigation.tscn")
-
-onready var navigation = Nav.instance()
-
 enum {
 	IDLE,
 	WANDER,
@@ -35,9 +31,6 @@ onready var scene = get_tree().get_current_scene()
 func _ready():
 	randomize()
 	audio.pitch_scale = rand_range(0.8, 1.4)
-	navigation.detection_shape = $PlayerDetect/CollisionShape2D
-	navigation.global_position = global_position
-	owner.call_deferred("add_child", navigation)
 
 func _physics_process(delta):
 	knockback = knockback.move_toward(Vector2.ZERO, FRICTION * delta)
@@ -135,10 +128,3 @@ func _on_HitArea_body_entered(body):
 	if body != self and body.is_in_group("hitable"):
 		body.hit(self)
 		knockback = body.global_position.direction_to(global_position) * body.size * knockback_speed
-
-
-func _on_UpdateNav_timeout():
-	navigation.global_position = global_position
-
-	for wall in get_tree().get_nodes_in_group("wall"):
-		navigation.update_polygon(wall.get_node("CollisionShape2D").shape)

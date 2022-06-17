@@ -2,13 +2,15 @@ extends Navigation2D
 
 onready var navpolygon = $NavigationPolygonInstance
 var detection_shape: CollisionShape2D
+var init_polygon
 
 func _ready():
 	# Make it so it has the detection shape
 	var newpolygon = PoolVector2Array()
-	var polygon = navpolygon.get_navigation_polygon()
+	var polygon = NavigationPolygon.new()
 	var n_vertex = 32
-	var r = detection_shape.shape.radius
+	# HACK multiply by then to avoid concave polygons...
+	var r = detection_shape.shape.radius * 10
 	var c = detection_shape.global_position
 
 	# Create a n-gon
@@ -18,23 +20,28 @@ func _ready():
 		newpolygon.append(Vector2(cos(angle) * r, sin(angle) * r) + c)
 		i+=1
 
+	init_polygon = newpolygon
 	polygon.add_outline(newpolygon)
 	polygon.make_polygons_from_outlines()
 	navpolygon.set_navigation_polygon(polygon)
 
 	updt()
 
-func update_polygon(shape: Shape2D):
+func update_polygon(collision: CollisionShape2D):
 	var newpolygon = PoolVector2Array()
-	var polygon = navpolygon.get_navigation_polygon()
-	var polygon_bp = shape.get_polygon()
+	var shape = collision.shape
+	var polygon = NavigationPolygon.new()
+	var rec = shape.extents
 
-	var polygon_transform = shape.get_global_transform()
-	for vertex in polygon_bp:
-		newpolygon.append(polygon_transform.xform(vertex))
+	newpolygon.append(Vector2(rec.x/2, rec.y/2) + collision.global_position)
+	newpolygon.append(Vector2(-rec.x/2, rec.y/2) + collision.global_position)
+	newpolygon.append(Vector2(-rec.x/2, -rec.y/2) + collision.global_position)
+	newpolygon.append(Vector2(rec.x/2, -rec.y/2) + collision.global_position)
 
+
+	polygon.add_outline(init_polygon)
 	polygon.add_outline(newpolygon)
-	polygon.make_polygons_from_outlines(polygon)
+	polygon.make_polygons_from_outlines()
 	navpolygon.set_navigation_polygon(polygon)
 
 	updt()

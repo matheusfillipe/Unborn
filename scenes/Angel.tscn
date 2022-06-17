@@ -97,13 +97,8 @@ anims/hover = SubResource( 3 )
 position = Vector2( 0, 34 )
 shape = SubResource( 4 )
 
-[node name="UpdateNav" type="Timer" parent="."]
-wait_time = 5.0
-autostart = true
-
 [connection signal="finished" from="AudioStreamPlayer2D" to="." method="_on_AudioStreamPlayer2D_finished"]
 [connection signal="body_entered" from="PlayerDetect" to="PlayerDetect" method="_on_PlayerDetect_body_entered"]
 [connection signal="body_exited" from="PlayerDetect" to="PlayerDetect" method="_on_PlayerDetect_body_exited"]
 [connection signal="body_entered" from="HitArea" to="." method="_on_HitArea_body_entered"]
 [connection signal="timeout" from="WanderController/Timer" to="WanderController" method="_on_Timer_timeout"]
-[connection signal="timeout" from="UpdateNav" to="." method="_on_UpdateNav_timeout"]

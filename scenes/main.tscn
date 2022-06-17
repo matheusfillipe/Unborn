@@ -175,16 +175,11 @@ length = 2000.0
 
 [node name="Angel" parent="Enemies" instance=ExtResource( 9 )]
 position = Vector2( 666, -115 )
-ACCELERATION = 300
-MAX_SPEED = 300
-FRICTION = 200
-knockback_speed = 500
-sleep_on_hit_time = 20.0
-sleep_frame = 5
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 325, 245 )
 current = true
+zoom = Vector2( 5, 5 )
 process_mode = 0
 smoothing_enabled = true
 smoothing_speed = 100.0
