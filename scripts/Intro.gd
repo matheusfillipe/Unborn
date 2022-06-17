@@ -16,7 +16,6 @@ var texts = [
 	"",
 	"Well, cool death.",
 	"So, here's the thing, you now gotta wander about with some other souls if you want to get another chance at this wild ride called life.",
-	"Press any key to start!"
 ]
 
 var ready = true
