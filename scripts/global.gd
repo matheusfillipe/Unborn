@@ -10,6 +10,7 @@ var came_from_menu = true
 
 var last_level_for_mode = {}
 var current_scene_path = ""
+var checkpoints = PoolVector2Array()
 
 
 # Let's preload the audio effects
@@ -189,4 +190,3 @@ static func get_children_with_type(node, type):
 		if N.get_child_count() > 0:
 			matches += get_children_with_type(N, type)
 	return matches
-

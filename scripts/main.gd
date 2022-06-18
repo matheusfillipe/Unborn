@@ -22,7 +22,7 @@ onready var tween = $Tween
 onready var spirits = $Spirits
 onready var enemies = $Enemies
 onready var camera = $Camera2D
-onready var safearea = $RemoveLater/SafeArea
+onready var safearea = $Bridge/SafeArea
 onready var environment = $WorldEnvironment
 onready var scenery_gen = $SceneryGen
 onready var hell_map = $SceneryGen/SceneryGenerator
@@ -53,12 +53,18 @@ enum Scenery {
 # Current scenery
 var scenery = Scenery.safezone setget set_scenery
 var grid = {}
+var actions = {0: false}
 var spirit_counter = {}
 
 
 func _ready():
 	player.connect("spirit_kill", self, "on_player_spirit_kill")
 	bind_sceneries()
+
+	# Load checkpoint if any
+	if len(Global.checkpoints) > 0:
+		print("Loading checkpoint")
+		player.global_position = Global.checkpoints[-1]
 
 	# platform specific adjust
 	match OS.get_name():
@@ -281,8 +287,11 @@ func add_tutorial_barrier(body: Node):
 		return
 
 	# Add barrier to prevent player going back
-	var barrier = $RemoveLater/Fence6
+	var barrier = $Bridge/TutorialBarrier
 	barrier.enabled = true
+
+	# Add checkpoint
+	Global.checkpoints.append($Area2D.global_position)
 
 	# Dispose of tutorial
 	$Area2D.queue_free()
@@ -291,6 +300,8 @@ func add_tutorial_barrier(body: Node):
 	Global.delete_children($Orbs)
 	Global.delete_children($Enemies)
 	$Clouds.queue_free()
+
+	Global.popup("Checkpoint!", 3)
 
 
 func on_player_spirit_kill(color, _size):
@@ -391,3 +402,15 @@ func bind_sceneries():
 		Global.sdisconnect(sgen, "player_exited", self, "player_exited_scenery_border")
 		sgen.connect("player_entered", self, "player_entered_scenery_border")
 		sgen.connect("player_exited", self, "player_exited_scenery_border")
+
+
+func act(b: Node):
+	var t3 = get_node("Orbs/TutorialSpirit3")
+	match b:
+		t3:
+			if actions[0]:
+				return
+			$Orbs/TutorialSpirit2.is_present = false
+			b.tutorial_message = "There is no way back after this..."
+			$Spirits/SpawnTutorialSpirit2.queue_free()
+			actions[0] = true
