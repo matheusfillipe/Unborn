@@ -78,7 +78,7 @@ func show_text(message, time):
 	return bubble
 
 func _input(event):
-	if event.is_action_pressed("pause"):
+	if event.is_action_pressed("pause") and not get_tree().get_current_scene().get_node("Camera2D").use_mouse:
 		get_tree().paused = not get_tree().paused
 
 		# Pause shaders
@@ -98,6 +98,12 @@ func _input(event):
 func sdisconnect(node: Node, _signal: String, target: Object, method: String):
 	if node.is_connected(_signal, target, method):
 		node.disconnect(_signal, target, method)
+
+# Safe bind
+func sconnect(node: Node, _signal: String, target: Object, method: String):
+	if not node.is_connected(_signal, target, method):
+		return node.connect(_signal, target, method)
+
 
 # TODO this is no equiprobabilistic
 func random_vec2() -> Vector2:
@@ -174,3 +180,13 @@ static func delete_children(node):
 	for n in node.get_children():
 		node.remove_child(n)
 		n.queue_free()
+
+static func get_children_with_type(node, type):
+	var matches = []
+	for N in node.get_children():
+		if N is type:
+			matches.append(N)
+		if N.get_child_count() > 0:
+			matches += get_children_with_type(N, type)
+	return matches
+

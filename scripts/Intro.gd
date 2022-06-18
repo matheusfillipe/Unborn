@@ -19,14 +19,10 @@ const deaths = [
 	"You were eaten by the tiger you were taunting",
 	"You died from a violent case of diarrhea",
 	"You died because you tried to swim under Niagara Falls",
-	"You had a stroke after trying to code a game for a jam"
+	"You had a stroke after too much effort coding a game for a jam"
 	]
 
 var texts = [
-	"Well, hello there. Let's see here...",
-	"",
-	"Well, cool death.",
-	"So, here's the thing, you now gotta wander about with some other souls if you want to get another chance at this wild ride called life.",
 	"Hello there.\n Let's see what we got here...",
 	"I am sorry to say but...\n",
 	"Well, I am sorry for you.\nYou will now receive your final judgment.",

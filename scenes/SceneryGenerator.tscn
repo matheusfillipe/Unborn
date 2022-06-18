@@ -1,26 +1,129 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/SceneryGenerator.gd" type="Script" id=1]
+[ext_resource path="res://scenes/FenceSquare.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=3]
+
+[sub_resource type="GDScript" id=2]
+script/source = "tool
+extends Line2D
+
+# TODO also export this when there are multiple types of walls
+var Gates = preload(\"res://scenes/Gates.tscn\")
+
+export(bool) var breakable = false setget set_break
+export(bool) var invert = false
+export(bool) var enabled = true setget set_enable
+
+onready var initial_color = default_color
+onready var initial_width = width
+
+var parts = []
+
+func _process(_delta):
+	if Engine.editor_hint :
+		if breakable:
+			default_color = Color(1, 0.5, 0, 1)
+			width = 10
+		else:
+			default_color = initial_color
+			width = initial_width
+
+
+# Spawn a gate with correct length and rotation
+# i is the start index of points
+# j is the end index of points
+func add_gate(i: int, j: int):
+	var p1: Vector2 = points[i]
+	var p2: Vector2 = points[j]
+
+	var angle = p1.angle_to_point(p2) + PI
+	var length = p1.distance_to(p2)
+	var gate = Gates.instance()
+
+	get_node(\"../\").call_deferred(\"add_child\", gate)
+	gate.length = length
+	gate.global_rotation = angle
+	gate.global_position = p1 + position
+
+	parts.append(gate)
+
+
+func _ready():
+	if not Engine.editor_hint :
+		visible = false
+
+		var i = 0
+		if invert:
+			i = len(points) - 1
+			while i > 0:
+				add_gate(i, i-1)
+				i -= 1
+
+		else:
+			while i < len(points) - 1:
+				add_gate(i, i+1)
+				i += 1
+
+	self.breakable = breakable
+	self.enabled = enabled
+
+
+func set_break(_breakable):
+	breakable = _breakable
+	for gate in parts:
+		gate.call_deferred(\"set_break\", breakable)
+
+
+func set_enable(_enable: bool):
+	enabled = _enable
+
+	for gate in parts:
+		gate.call_deferred(\"set_enabled\", enabled)
+		gate.visible = enabled
+"
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 10.5, 10 )
+extents = Vector2( 2400, 2400 )
 
 [node name="SceneryGenerator" type="Node2D"]
 script = ExtResource( 1 )
-border = 0.0
-ammount = 20.0
+size = 2000.0
+border = 400.0
 keep_gap = 500.0
+breakable_chance = 0.2
 line_spread = 45.0
-starting_points = PoolVector2Array( -10000, -5000 )
+starting_points = PoolVector2Array( -5000, 300 )
+
+[node name="orb" parent="." instance=ExtResource( 3 )]
+position = Vector2( 2081, -2047 )
+start_size = 10
+start_brightness = 8.0
+
+[node name="Hack" type="Node2D" parent="."]
+rotation = -1.5708
+
+[node name="FenceSquare" parent="Hack" instance=ExtResource( 2 )]
+points = PoolVector2Array( -800, 0, -800, 800, 0, 800 )
+script = SubResource( 2 )
+
+[node name="FenceSquare2" parent="Hack" instance=ExtResource( 2 )]
+position = Vector2( 2398, 1597 )
+scale = Vector2( 1.00724, 1.00724 )
+points = PoolVector2Array( -800, 800, -800, 0, 0, 0 )
+
+[node name="FenceSquare3" parent="Hack" instance=ExtResource( 2 )]
+position = Vector2( -1609, -2394 )
+points = PoolVector2Array( -800, 800, 0, 800, 0, 0 )
+
+[node name="FenceSquare4" parent="Hack" instance=ExtResource( 2 )]
+position = Vector2( -1602, 1610 )
+points = PoolVector2Array( -800, 0, 0, 0, 0, 800 )
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 1 )
-
-[node name="Camera2D" type="Camera2D" parent="."]
-current = true
-zoom = Vector2( 20, 20 )
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
