@@ -1,34 +1,26 @@
 extends Control
 
-const deaths = [
-	"You were run over by a whoopie-cushion truck",
-	"You jumped in front of a train",
-	"Your airplane fell and you were the only one who died",
-	"You weren't ever really fond of vaccinations",
-	"You were mauled to death by a mountain lion",
-	"Your heart just kind of stopped in your sleep",
-	"You died from the Exotic Bear Flu",
-	"You died jumping off Mount Everest",
-	"You danced too hard and passed away",
-	"You choked to death on caviar",
-	"You let your beard grow too much and when a small fire broke out you burned to death",
-	"You were killed by a Knife-Wielding Bird",
-	"You died during a game of chess... what....",
-	"You were slain in a battle due to being blind",
-	"Wow! You died from Pneumonia after surviving the sinkings of the RMS Titanic, the RMS Alcantara, the HMHS Britannic and the SS Donegal.",
-	"You were eaten by the tiger you were taunting",
-	"You died from a violent case of diarrhea",
-	"You died because you tried to swim under Niagara Falls",
-	"You had a stroke after trying to code a game for a jam"
+const lives = [
+	"You were born into a wealthy family in Canada.",
+	"You were born into a poor family in Botswana.",
+	"You were born into a middle class family in Switzerland.",
+	"You were born into a very wealthy family in Brazil.",
+	"You were born into a poor family in the United States.",
+	"You were born into a middle class family in Taiwan.",
+	"You were born into a poor family in Japan.",
+	"You were born into a middle class family in South Africa.",
+	"You were born into a middle class family in Nigeria.",
+	"You were born into a wealthy family in India."
 	]
 
 var texts = [
 	"Odds were agains't you, and yet...",
 	"You were successfull in your quest for reincarnation.",
-	"Damn!",
-	"Well, I do have this little thing called a future log",
+	"I am surprised, which is rare.",
+	'Well, I do have this little thing called a "future log", and it says here...',
 	"",
-	"bla bla bla add filler as per mattf wish"
+	"Well, I hope that this was all worth it.",
+	"Anyways, thanks for participating in this.",
 ]
 
 var ready = true
@@ -44,7 +36,7 @@ onready var timer = $UserWakeUpTimer
 func _ready():
 	Global.play_music_once(Global.Music.intro)
 	randomize()
-	texts[4] += deaths[randi() % len(deaths)]
+	texts[4] += lives[randi() % len(lives)]
 	nextlabel()
 
 func _input(event):
