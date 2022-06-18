@@ -61,11 +61,6 @@ func _ready():
 	player.connect("spirit_kill", self, "on_player_spirit_kill")
 	bind_sceneries()
 
-	# Load checkpoint if any
-	if len(Global.checkpoints) > 0:
-		print("Loading checkpoint")
-		player.global_position = Global.checkpoints[-1]
-
 	# platform specific adjust
 	match OS.get_name():
 		"Android":
@@ -93,6 +88,14 @@ func _ready():
 		"X11":
 			pass
 
+	# Load checkpoint if any
+	print(Global.checkpoint)
+	if Global.checkpoint != null:
+		print("Loading checkpoint")
+		player.global_position = Global.checkpoint
+
+	# Start
+	player.alive = true
 	Global.play_music_once(Global.Music.entrance)
 	player.connect("size_changed", self, "adjust_zoom")
 	player.connect("died", self, "player_died")
@@ -291,7 +294,7 @@ func add_tutorial_barrier(body: Node):
 	barrier.enabled = true
 
 	# Add checkpoint
-	Global.checkpoints.append($Area2D.global_position)
+	Global.checkpoint = player.global_position
 
 	# Dispose of tutorial
 	$Area2D.queue_free()
@@ -302,6 +305,7 @@ func add_tutorial_barrier(body: Node):
 	$Clouds.queue_free()
 
 	Global.popup("Checkpoint!", 3)
+	print("after append ", Global.checkpoint)
 
 
 func on_player_spirit_kill(color, _size):

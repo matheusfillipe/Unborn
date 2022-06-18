@@ -10,7 +10,7 @@ var came_from_menu = true
 
 var last_level_for_mode = {}
 var current_scene_path = ""
-var checkpoints = PoolVector2Array()
+var checkpoint = null
 
 
 # Let's preload the audio effects

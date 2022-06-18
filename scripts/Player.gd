@@ -35,6 +35,8 @@ var Explosion = preload("res://effects/Explosion.tscn")
 
 var Spirit = preload("res://scripts/Spirit.gd")
 
+var alive = false
+
 
 signal died
 signal spirit_kill(color, size)
@@ -146,6 +148,9 @@ func get_mana() -> float:
 	return size / initial_size - 1
 
 func _physics_process(delta):
+	if not alive:
+		return
+
 	if dying:
 		return
 

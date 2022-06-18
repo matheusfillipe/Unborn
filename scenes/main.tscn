@@ -44,7 +44,6 @@ extents = Vector2( 40.5, 133 )
 
 [node name="main" type="Node2D" groups=["actions"]]
 script = ExtResource( 2 )
-spirit_spaw_density = 1.0
 enemy_spawn_density = 0.1
 enemy_spawn_limit = 3
 
@@ -68,9 +67,8 @@ position = Vector2( 484, 0 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( 1596, -632 )
+position = Vector2( 3408, -610 )
 collision_brightness_multiplier = 1.2
-can_attack = true
 
 [node name="Orbs" type="Node2D" parent="."]
 
@@ -110,7 +108,7 @@ hit_action = NodePath("../../Spirits/SpiritSpawn")
 position = Vector2( 1729, -644 )
 start_size = 5
 start_brightness = 6.0
-tutorial_message = "Welcome to the world of free spirits. You can choose to go down to hell or up to heaven. But remember that you might not ever be able to go back from where you came. The world of spirits is endless and interdimensional."
+tutorial_message = "Welcome to the world of free spirits. You can choose to go down to hell or up to heaven. But remember that you might not ever be able to go back from where you came. The world of spirits is endless and interdimensional. "
 tutorial_message_time = 10
 is_present = false
 activate_on_area = NodePath("../../Spirits/SpawnTutorialSpirit2")
@@ -214,6 +212,7 @@ breakable_chance = 0.3
 [node name="Bridge" type="Node2D" parent="."]
 
 [node name="SafeArea" type="Area2D" parent="Bridge"]
+visible = false
 position = Vector2( 607, 249 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bridge/SafeArea"]

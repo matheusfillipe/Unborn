@@ -1,8 +1,13 @@
 extends "res://scripts/Effect.gd"
 
 var bodies: Array
+export var speed = 1.2
 
 onready var marker = $Position2D
+
+
+func _ready():
+	$AnimationPlayer.playback_speed = speed
 
 # Keep track of bodies in range
 func _on_Area2D_body_exited(body:Node):
