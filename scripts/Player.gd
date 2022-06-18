@@ -171,8 +171,8 @@ func _on_collide(body: Node):
 		# Get health and grow with spirit
 		var idx = health_colors.find(body.color)
 		if idx > -1:
-			# Set color of received spirit if it is bigger than half of the player
-			if body.size > size / 2:
+			# Set color of received spirit if it is bigger than third of the player
+			if body.size > size / 3:
 				set_color(body.color)
 				health = idx
 

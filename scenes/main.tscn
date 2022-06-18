@@ -182,6 +182,7 @@ length = 1600.0
 position = Vector2( 4632, 1973 )
 y_limit = -100.0
 x_limit = 2800.0
+breakable_chance = 1.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SceneryGen/SceneryGenerator"]
 polygon = PoolVector2Array( -1082, -2045, -1228, -1954, -1719, -1982, -1744, -1426, -441, -1443, -388, -1965, -771, -1970, -785, -2071 )

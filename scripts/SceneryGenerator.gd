@@ -142,9 +142,12 @@ func add_fence(points: Array):
 	fence.points = relative_points
 	fence.global_position = global_position
 	call_deferred("add_child", fence)
+	# add_child(fence)
+	call_deferred("_add_fence", fence)
 
+func _add_fence(fence):
 	for gate in fence.parts:
-		if abs(gate.global_position.x - x_limit) < 10 or abs(gate.global_position.y - y_limit) < 10:
+		if abs(gate.global_position.x - x_limit) < 1 or abs(gate.global_position.y - y_limit) < 1:
 			break
 		# Add a breakable fence in between
 		randomize()
@@ -172,6 +175,7 @@ func generate():
 		return
 	generate_thread = Thread.new()
 	generate_thread.start(self, "_thread_function")
+	# _thread_function(1)
 
 func _thread_function(_a):
 	var lines = []

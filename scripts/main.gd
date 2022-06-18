@@ -29,9 +29,10 @@ var last_world_update = 0.0
 
 export(float, 1, 10000) var spirit_spawn_radius = 1000.0
 export(float, 0, 2) var spirit_spaw_density = 2
+export(int, 1, 1000) var spirit_spawn_limit = 20
 export(float, 1, 10000) var enemy_spawn_radius = 1000.0
 export(float, 0, 2) var enemy_spawn_density = 2
-export(int, 1, 100) var enemy_spawn_limit = 10
+export(int, 1, 100) var enemy_spawn_limit = 4
 
 enum Scenery {
 	safezone,
@@ -232,7 +233,7 @@ func update_world():
 
 	# Spawn spirits
 	randomize()
-	if randf() < spirit_spaw_density * delta:
+	if len(spirits.get_children()) < spirit_spawn_limit and randf() < spirit_spaw_density * delta:
 		spawn_spirit()
 
 	# Spawn enemies
