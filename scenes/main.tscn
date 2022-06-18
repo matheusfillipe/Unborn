@@ -46,8 +46,8 @@ extents = Vector2( 40.5, 133 )
 script = ExtResource( 2 )
 spirit_spaw_density = 3.0
 spirit_spawn_limit = 40
-spirit_limit_per_map = 15
-enemy_spawn_density = 0.07
+spirit_limit_per_map = 10
+enemy_spawn_density = 0.05
 enemy_spawn_limit = 3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]

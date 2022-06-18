@@ -12,8 +12,21 @@ var last_level_for_mode = {}
 var current_scene_path = ""
 var checkpoint = null
 
+var has_timer_started = false
+var start_time
+
 # TODO have a proper state management
 var spirit_counter = {}
+
+
+
+func start_timer():
+	if not has_timer_started:
+		start_time = OS.get_unix_time()
+		has_timer_started = true
+
+func get_game_time() -> int:
+	return OS.get_unix_time() - start_time
 
 
 # Let's preload the audio effects

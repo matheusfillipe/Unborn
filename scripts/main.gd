@@ -4,7 +4,6 @@ extends Node2D
 #  --  Make the angel pathfind
 # Tilable background
 # Script plot story goals
-# Limit spirits per map
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Demon = preload("res://scenes/Demon.tscn")
@@ -30,6 +29,7 @@ onready var scenery_gen = $SceneryGen
 onready var hell_map = $SceneryGen/SceneryGenerator
 onready var heaven_map = $SceneryGen/SceneryGenerator2
 onready var checkpoints = $Checkpoints
+onready var plot = Plot.new()
 
 onready var initial_hell_map_pos = hell_map.global_position
 onready var initial_heaven_map_pos = heaven_map.global_position
@@ -45,6 +45,9 @@ export(int, 1, 1000) var spirit_limit_per_map = 3
 export(float, 1, 10000) var enemy_spawn_radius = 1000.0
 export(float, 0, 2) var enemy_spawn_density = 2
 export(int, 1, 100) var enemy_spawn_limit = 4
+export(float, 0, 1) var show_progress_chance = 0.2
+export(float, 0, 1) var spirit_random_message_chance = 0.05
+
 export(float) var heaven_y_limit = -1200
 export(float) var hell_y_limit = 0
 
@@ -62,6 +65,7 @@ var checkpoint_locked = false
 
 func _ready():
 	player.connect("spirit_kill", self, "on_player_spirit_kill")
+	Global.start_timer()
 	bind_sceneries()
 	bind_checkpoints()
 
@@ -165,23 +169,44 @@ func player_died(message):
 	yield(get_tree().create_timer(time, false), "timeout")
 	restart()
 
-# Spawn spirits randomly
-func spawn_spirit():
-	# Don't spawn if player kill reached map limit
+# Total spirits in the current map
+func count_map_spirits():
 	var map = initialize_counter()
 	var sum = 0
 	for c in Global.spirit_counter[map][scenery]:
 		sum += Global.spirit_counter[map][scenery][c]
-	if sum >= spirit_limit_per_map:
-		return
+	return sum
 
+# Total spirits for the passed in scenery and color
+func count_spirits(scn, col):
+	var sum = 0
+	for map in Global.spirit_counter:
+		if scn in Global.spirit_counter[map]:
+			if col in Global.spirit_counter[map][scn]:
+				sum += Global.spirit_counter[map][scn][col]
+	return sum
+
+# Bare total
+func count_total_spirits():
+	var sum = 0
+	for map in Global.spirit_counter:
+		for scn in Global.spirit_counter[map]:
+			for c in Global.spirit_counter[map][scn]:
+				sum += Global.spirit_counter[map][scn][c]
+	return sum
+
+# Spawn spirits randomly
+func spawn_spirit():
+	# Don't spawn if player kill reached map limit
+	if count_map_spirits() >= spirit_limit_per_map:
+		return
 
 	var color_chances = [
 		0.5,  # WHITE
 		0.0,  # BLACK
 		0.0,  # BLUE
-		0.05,  # GREEN
-		0.3,  # YELLOW
+		0.08,  # GREEN
+		0.27,  # YELLOW
 		0.1,  # RED
 	]
 
@@ -208,11 +233,6 @@ func spawn_spirit():
 	spirit.noise_amplitude = rand_range(1, 10)
 	spirit.noise_speed = rand_range(2, 20)
 	spirit.size = 0.5 + 4.5 * pow(10, rand_range(0, 2)) / 100
-
-	# PLOT Game progress messages
-	var message = "Hello guy"
-	spirit.tutorial_message = message
-	spirit.tutorial_message_time = Global.read_time(message)*2 + 3
 
 
 # Spawn enemies randomly according to scenery
@@ -349,6 +369,67 @@ func on_player_spirit_kill(color, _size):
 	var map = initialize_counter(color)
 	Global.spirit_counter[map][scenery][color] += 1
 
+	var total = count_total_spirits()
+
+	# PLOT Game progress messages
+	var n = plot.next_message()
+	if n != -1 and total > n:
+		var message = plot.pop_message(n)
+		Global.popup(message, Global.read_time(message) + 3)
+		return
+
+	randomize()
+	if randf() < spirit_random_message_chance and total > 5:
+		var message = plot.random_messages[randi() % len(plot.random_messages)]
+		Global.popup(message, Global.read_time(message) + 3)
+		return
+
+	# If not random spirits messages then we print progress randomly and check for win condition
+	randomize()
+	if randf() < show_progress_chance and total > 5:
+		show_progress()
+
+func show_progress():
+	var goal = plot.goal
+	var message = ""
+
+	var place = scenery
+	var col
+	var count = 0
+
+	for _col in goal[place]:
+		var captured = count_spirits(place, _col)
+		if captured < goal[place][_col]:
+			col = plot.COLOR.keys()[_col]
+			count = goal[place][_col] - captured
+
+	if count <= 0:
+		if check_completed(Scenery.hell) and check_completed(Scenery.heaven):
+			win()
+
+		var goto = ""
+		match place:
+			Scenery.heaven:
+				goto = "go down to hell"
+			Scenery.hell:
+				goto = "go up to heaven"
+
+		message = "Your job here is done. You can now " + goto + ". I hope you find the way back..."
+	else:
+		message += "You still need " + str(count) + " "
+		message += col + " spirits from "
+		message += Plot.Scenery.keys()[place] + " to reincarnate"
+
+	Global.popup(message, Global.read_time(message) + 3)
+
+
+func check_completed(place):
+	var goal = plot.goal
+	for col in goal[place]:
+		var captured = count_spirits(place, col)
+		if captured < goal[place][col]:
+			return false
+	return true
 
 
 #####
