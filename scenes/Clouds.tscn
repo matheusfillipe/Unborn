@@ -1,0 +1,49 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://whitesquare.png" type="Texture" id=1]
+[ext_resource path="res://shaders/fog.shader" type="Shader" id=2]
+
+[sub_resource type="Gradient" id=8]
+offsets = PoolRealArray( 0.331719, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 8 )
+
+[sub_resource type="OpenSimplexNoise" id=4]
+seed = 1
+octaves = 4
+
+[sub_resource type="NoiseTexture" id=5]
+seamless = true
+noise = SubResource( 4 )
+
+[sub_resource type="Gradient" id=6]
+offsets = PoolRealArray( 0, 0.0193705, 0.31477 )
+colors = PoolColorArray( 0.0705882, 0.0666667, 0.0666667, 1, 0.935656, 0.935385, 0.935385, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 2 )
+shader_param/hdr_threshold = 0.788
+shader_param/octaves = 2
+shader_param/starting_amplitude = 0.5
+shader_param/starting_frequency = 0.6
+shader_param/shift = -0.5
+shader_param/velocity = Vector2( 0.3, 0 )
+shader_param/fog_color = Color( 1.8, 2, 2, 1 )
+shader_param/dissolve_value = 1.0
+shader_param/dissolve_cut = true
+shader_param/dissolve_rotate = false
+shader_param/noise = SubResource( 5 )
+shader_param/dissolve_noise_img = SubResource( 3 )
+shader_param/radial_dissolve_curve = SubResource( 7 )
+
+[node name="Clouds" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 2, 2, 2, 1 )
+material = SubResource( 1 )
+scale = Vector2( 5, 5 )
+texture = ExtResource( 1 )
