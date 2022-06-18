@@ -278,6 +278,7 @@ func _process(_delta):
 		fade_to_black("restart")
 
 
+
 func update_world():
 	if not has_left_safe_area:
 		return

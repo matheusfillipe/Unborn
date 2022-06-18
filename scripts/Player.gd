@@ -30,6 +30,8 @@ export var can_attack = false
 
 onready var rest_position = global_position
 onready var timer = $RetreatTimer
+onready var scenery_timer = $Timer
+onready var fog = $Clouds
 
 var Explosion = preload("res://effects/Explosion.tscn")
 
@@ -241,3 +243,14 @@ func die(body: Node):
 func _on_RetreatTimer_timeout():
 	knockback = Vector2.ZERO
 	stop()
+
+
+# Update scenery effects
+# TODO fix magic numbers mess
+func _on_Timer_timeout():
+	var y = global_position.y
+	if y < -500:
+		# -0.5 is nothing, 1 is max
+		var value = lerp(-0.5, 1, min(abs(y+500)/40000, 1))
+		print(value)
+		fog.get_node("Sprite").material.set_shader_param("shift", value)

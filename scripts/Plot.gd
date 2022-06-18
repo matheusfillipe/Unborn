@@ -30,8 +30,18 @@ var spirit_messages = {
 }
 
 var random_messages = [
-	"I've been here... forever",
+	"I've been here since... forever",
 	"Thanks for taking me in",
+	"Come with me to the next life.",
+	"You cannot escape fate.",
+	"You will learn to enjoy your new afterlife.",
+	"Ggaaaaaaaaa.",
+	"Do not run.",
+	"Do not fear.",
+	"You will be educated in the new ways.",
+	"You will be brought for final judgment.",
+	"Come with me to your final destination.",
+	"All must go with me.",
 	]
 
 # scenery: {color: count}
