@@ -4,6 +4,7 @@ extends Node2D
 # Make the angel pathfind
 # Auto generation of scenery as player walks. Adding fences and disposing of them in a long radius. how to distrubute them? Repeat Preloaded pattern? Seed generation?
 # Tilable background
+# Script plot story goals
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Demon = preload("res://scenes/Demon.tscn")
@@ -32,6 +33,7 @@ onready var initial_heaven_map_pos = heaven_map.global_position
 
 var has_left_safe_area = false
 var last_world_update = 0.0
+var current_map
 
 export(float, 1, 10000) var spirit_spawn_radius = 1000.0
 export(float, 0, 2) var spirit_spaw_density = 2
@@ -39,7 +41,7 @@ export(int, 1, 1000) var spirit_spawn_limit = 20
 export(float, 1, 10000) var enemy_spawn_radius = 1000.0
 export(float, 0, 2) var enemy_spawn_density = 2
 export(int, 1, 100) var enemy_spawn_limit = 4
-export(float) var heaven_y_limit = -1000
+export(float) var heaven_y_limit = -1200
 export(float) var hell_y_limit = 0
 
 enum Scenery {
@@ -306,23 +308,23 @@ func on_player_spirit_kill(color, _size):
 # When you leave there is a delay and then it is removed
 #####
 
-# TODO refactor all those hell variables intoa  single class
+# TODO refactor all those map variables into a single class
 # TODO get rid of magical numbers
-func add_map(pos: Vector2):
 
-	for other in Global.get_children_with_type(scenery_gen, SceneryGeneratorClass):
-		if other.global_position == pos:
-			if not other.has_player:
-				other.call_deferred("queue_free")
-			else:
-				return
+# Only adds if it is at a different position
+func add_map(pos: Vector2, maps, freeing =  null):
+	for other in maps:
+		if other.global_position == pos and other != freeing:
+			return
 
 	var sgen = SceneryGenerator.instance()
+	if is_instance_valid(current_map):
+		sgen.starting_points = current_map.end_points
 
 	var y = player.global_position.y
 	if  y < -500:
 		if pos.y > heaven_y_limit or pos.x < heaven_map.x_limit:
-			sgen.free()
+			sgen.queue_free()
 			return
 
 		sgen.from(heaven_map)
@@ -337,8 +339,9 @@ func add_map(pos: Vector2):
 
 	else:
 		if pos.y < hell_y_limit or pos.x < hell_map.x_limit:
-			sgen.free()
+			sgen.queue_free()
 			return
+
 		sgen.from(hell_map)
 		sgen.x_limit = hell_map.x_limit
 
@@ -347,7 +350,6 @@ func add_map(pos: Vector2):
 			sgen.y_limit = -100
 		else:
 			sgen.y_limit = hell_y_limit
-		sgen.y_limit = hell_map.y_limit
 		hell_map = sgen
 
 
@@ -358,26 +360,30 @@ func add_map(pos: Vector2):
 	sgen.connect("player_exited", self, "player_exited_scenery_border")
 
 
+
 func player_entered_scenery_border(sgen):
 	# Populated entered map
 	sgen.generate()
+	current_map = sgen
 
 	# Generate 8 waiting placeholders around
 	if not scenery in grid:
 		grid[scenery] = []
 
 	var pos = sgen.global_position
+	var maps = Global.get_children_with_type(scenery_gen, SceneryGeneratorClass)
 	for d in [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]]:
 		var npos = pos + Vector2(d[0], d[1]) * sgen.size * 2
-		add_map(npos)
+		add_map(npos, maps)
 
 
 func player_exited_scenery_border(sgen):
-	# Wait a bit and then free this
-	# yield(get_tree().create_timer(rand_range(5, 15), false), "timeout")
-	if not sgen.has_player:
-		add_map(sgen.global_position)
+	if sgen != current_map:
+		var pos = sgen.global_position
 		sgen.queue_free()
+		var maps = Global.get_children_with_type(scenery_gen, SceneryGeneratorClass)
+		add_map(pos, maps, sgen)
+
 
 func bind_sceneries():
 	for sgen in Global.get_children_with_type(scenery_gen, SceneryGeneratorClass):

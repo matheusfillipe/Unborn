@@ -250,13 +250,13 @@ func _thread_function(_a):
 
 func _on_Area2D_body_exited(body:Node):
 	if body.is_in_group("player"):
-		has_player = false
 		emit_signal("player_exited", self)
+		has_player = false
 
 func _on_Area2D_body_entered(body:Node):
 	if body.is_in_group("player"):
-		has_player = true
 		emit_signal("player_entered", self)
+		has_player = true
 
 func _exit_tree():
 	if is_instance_valid(generate_thread):

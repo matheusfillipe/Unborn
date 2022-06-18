@@ -64,7 +64,7 @@ position = Vector2( 484, 0 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( 3393, -633 )
+position = Vector2( 3693, -632 )
 collision_brightness_multiplier = 1.2
 can_attack = true
 
@@ -187,6 +187,7 @@ breakable_chance = 0.3
 
 [node name="SceneryGenerator2" parent="SceneryGen" instance=ExtResource( 9 )]
 position = Vector2( 5420, -3171 )
+y_limit = -1000.0
 x_limit = 3510.0
 breakable_chance = 0.3
 
@@ -203,30 +204,30 @@ polygon = PoolVector2Array( 3022, -1027.5, -1028, -1021.5, -1029, 1018.5, 1014, 
 [node name="Gates2" parent="RemoveLater" instance=ExtResource( 8 )]
 position = Vector2( 1525, -779 )
 scale = Vector2( 1, -1 )
-length = 2000.0
+length = 2300.0
 
 [node name="Gates" parent="RemoveLater" instance=ExtResource( 8 )]
 position = Vector2( 1515, -508 )
-length = 2000.0
+length = 2300.0
 
 [node name="Fence3" parent="RemoveLater" instance=ExtResource( 5 )]
 position = Vector2( 485, 229 )
-points = PoolVector2Array( 3026, -736, 3026, -217 )
+points = PoolVector2Array( 3330, -730, 3330, -226 )
 
 [node name="Fence4" parent="RemoveLater" instance=ExtResource( 5 )]
 position = Vector2( 485, 229 )
-points = PoolVector2Array( 3358, -219, 3358, -1210, 7015, -1202 )
+points = PoolVector2Array( 3800, -239, 3800, -1400, 7015, -1400 )
 
 [node name="Fence5" parent="RemoveLater" instance=ExtResource( 5 )]
 position = Vector2( 485, 229 )
 points = PoolVector2Array( 3035, -1013, 3034, -1507 )
 
 [node name="Fence" parent="RemoveLater" instance=ExtResource( 5 )]
-points = PoolVector2Array( 3850, 0, 6800, 0 )
+points = PoolVector2Array( 4279, -2, 6800, 0 )
 
 [node name="Fence6" parent="RemoveLater" instance=ExtResource( 5 )]
 position = Vector2( 485, 229 )
-points = PoolVector2Array( 2300, -1014, 2301, -219, 3017, -221 )
+points = PoolVector2Array( 2300, -1014, 2301, -219, 3336, -223 )
 invert = true
 
 [node name="Enemies" type="Node2D" parent="."]
@@ -234,7 +235,7 @@ invert = true
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( 3484, -644 )
+position = Vector2( 3784, -643 )
 shape = SubResource( 6 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
