@@ -1,0 +1,12 @@
+[gd_scene format=2]
+
+[node name="Credits" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="."]
+margin_left = 344.0
+margin_top = 200.0
+margin_right = 561.0
+margin_bottom = 214.0
+text = "add some credits here hjackasses"
