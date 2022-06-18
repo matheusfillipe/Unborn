@@ -1,10 +1,10 @@
 extends Node2D
 
 # TODO
-# Make the angel pathfind
-# Auto generation of scenery as player walks. Adding fences and disposing of them in a long radius. how to distrubute them? Repeat Preloaded pattern? Seed generation?
+#  --  Make the angel pathfind
 # Tilable background
 # Script plot story goals
+# checkpoint after tutorial
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Demon = preload("res://scenes/Demon.tscn")

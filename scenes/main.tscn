@@ -13,6 +13,7 @@
 [sub_resource type="Environment" id=1]
 background_mode = 4
 ambient_light_energy = 0.0
+auto_exposure_enabled = true
 auto_exposure_min_luma = 0.0
 glow_enabled = true
 glow_intensity = 8.0
@@ -40,8 +41,8 @@ extents = Vector2( 40.5, 133 )
 
 [node name="main" type="Node2D"]
 script = ExtResource( 2 )
-spirit_spaw_density = 0.0
-enemy_spawn_density = 0.0
+spirit_spaw_density = 1.0
+enemy_spawn_density = 0.1
 enemy_spawn_limit = 3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
@@ -66,7 +67,6 @@ texture = ExtResource( 6 )
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
 position = Vector2( 3693, -632 )
 collision_brightness_multiplier = 1.2
-can_attack = true
 
 [node name="Orbs" type="Node2D" parent="."]
 
