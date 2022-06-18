@@ -193,3 +193,8 @@ static func get_children_with_type(node, type):
 		if N.get_child_count() > 0:
 			matches += get_children_with_type(N, type)
 	return matches
+
+# Based on average reading time
+const WPM = 200
+static func read_time(t: String):
+	return len(t.split(" ")) * 60 / WPM

@@ -4,6 +4,7 @@ extends Node2D
 #  --  Make the angel pathfind
 # Tilable background
 # Script plot story goals
+# Limit spirits per map
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Demon = preload("res://scenes/Demon.tscn")
@@ -15,6 +16,7 @@ var Fence = preload("res://scenes/Fence.tscn")
 var SceneryGenerator = preload("res://scenes/SceneryGenerator.tscn")
 var Deaths = preload("res://scripts/Deaths.gd")
 var SceneryGeneratorClass = preload("res://scripts/SceneryGenerator.gd")
+var Plot = preload("res://scripts/Plot.gd")
 
 onready var player = $Player
 onready var overlay = $FadeInHack
@@ -39,6 +41,7 @@ var current_map
 export(float, 1, 10000) var spirit_spawn_radius = 1000.0
 export(float, 0, 5) var spirit_spaw_density = 2
 export(int, 1, 1000) var spirit_spawn_limit = 20
+export(int, 1, 1000) var spirit_limit_per_map = 3
 export(float, 1, 10000) var enemy_spawn_radius = 1000.0
 export(float, 0, 2) var enemy_spawn_density = 2
 export(int, 1, 100) var enemy_spawn_limit = 4
@@ -156,13 +159,23 @@ func player_died(message):
 	yield(get_tree().create_timer(2, false), "timeout")
 	randomize()
 	var deaths = Deaths.new()
-	message += "\n" + deaths.messages[scenery][randi() % len(deaths.messages[scenery])]
-	Global.popup(message, 10)
-	yield(get_tree().create_timer(8, false), "timeout")
+	message += "\n\n" + deaths.messages[scenery][randi() % len(deaths.messages[scenery])]
+	var time = max(Global.read_time(message) + 1, 3)
+	Global.popup(message, time)
+	yield(get_tree().create_timer(time, false), "timeout")
 	restart()
 
 # Spawn spirits randomly
 func spawn_spirit():
+	# Don't spawn if player kill reached map limit
+	var map = initialize_counter()
+	var sum = 0
+	for c in Global.spirit_counter[map][scenery]:
+		sum += Global.spirit_counter[map][scenery][c]
+	if sum >= spirit_limit_per_map:
+		return
+
+
 	var color_chances = [
 		0.5,  # WHITE
 		0.0,  # BLACK
@@ -195,6 +208,11 @@ func spawn_spirit():
 	spirit.noise_amplitude = rand_range(1, 10)
 	spirit.noise_speed = rand_range(2, 20)
 	spirit.size = 0.5 + 4.5 * pow(10, rand_range(0, 2)) / 100
+
+	# PLOT Game progress messages
+	var message = "Hello guy"
+	spirit.tutorial_message = message
+	spirit.tutorial_message_time = Global.read_time(message)*2 + 3
 
 
 # Spawn enemies randomly according to scenery
@@ -314,15 +332,23 @@ func on_checkpoint(body: Node):
 	yield(get_tree().create_timer(10, false), "timeout")
 	checkpoint_locked = false
 
+func initialize_counter(color=null):
+	var map = current_map.global_position
+	if not map in Global.spirit_counter:
+		Global.spirit_counter[map] = {}
+	if not scenery in Global.spirit_counter[map]:
+		Global.spirit_counter[map][scenery] = {}
+
+	if color != null and not color in Global.spirit_counter[map][scenery]:
+		Global.spirit_counter[map][scenery][color] = 0
+
+	return map
+
 
 func on_player_spirit_kill(color, _size):
-	if not scenery in Global.spirit_counter:
-		Global.spirit_counter[scenery] = {}
+	var map = initialize_counter(color)
+	Global.spirit_counter[map][scenery][color] += 1
 
-	if not color in Global.spirit_counter[scenery]:
-		Global.spirit_counter[scenery][color] = 0
-
-	Global.spirit_counter[scenery][color] += 1
 
 
 #####
@@ -429,3 +455,7 @@ func act(b: Node):
 			b.tutorial_message = "There is no way back after this..."
 			$Spirits/SpawnTutorialSpirit2.queue_free()
 			actions[0] = true
+
+# TODO call outro from here
+func win():
+	print("win")

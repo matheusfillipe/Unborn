@@ -44,7 +44,9 @@ extents = Vector2( 40.5, 133 )
 
 [node name="main" type="Node2D" groups=["actions"]]
 script = ExtResource( 2 )
+spirit_spaw_density = 3.0
 spirit_spawn_limit = 40
+spirit_limit_per_map = 15
 enemy_spawn_density = 0.07
 enemy_spawn_limit = 3
 

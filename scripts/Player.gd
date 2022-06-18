@@ -220,6 +220,7 @@ func die(body: Node):
 	elif body.is_in_group("angel"):
 		message = "You were taken to heaven..."
 
+	self.is_present = false
 	emit_signal("died", message)
 
 	# fade out
