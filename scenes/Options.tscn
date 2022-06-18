@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://resources/Backslash-RpJol.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://scenes/CheckBox.gd" type="Script" id=2]
+[ext_resource path="res://scripts/OptionButton.gd" type="Script" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 1 )
+
+[node name="Options" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="CheckBox" type="CheckBox" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -192.0
+margin_top = -148.0
+margin_right = 8.0
+margin_bottom = -105.0
+custom_fonts/font = SubResource( 1 )
+text = "Music"
+script = ExtResource( 2 )
+
+[node name="OptionButton" type="OptionButton" parent="."]
+margin_left = 320.0
+margin_top = 208.0
+margin_right = 592.0
+margin_bottom = 228.0
+script = ExtResource( 3 )
+
+[connection signal="toggled" from="CheckBox" to="CheckBox" method="_on_CheckBox_toggled"]
+[connection signal="item_selected" from="OptionButton" to="OptionButton" method="_on_OptionButton_item_selected"]
