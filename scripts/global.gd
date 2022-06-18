@@ -99,6 +99,12 @@ func sdisconnect(node: Node, _signal: String, target: Object, method: String):
 	if node.is_connected(_signal, target, method):
 		node.disconnect(_signal, target, method)
 
+# Safe bind
+func sconnect(node: Node, _signal: String, target: Object, method: String):
+	if not node.is_connected(_signal, target, method):
+		return node.connect(_signal, target, method)
+
+
 # TODO this is no equiprobabilistic
 func random_vec2() -> Vector2:
    var new_dir: = Vector2()
@@ -183,3 +189,4 @@ static func get_children_with_type(node, type):
 		if N.get_child_count() > 0:
 			matches += get_children_with_type(N, type)
 	return matches
+

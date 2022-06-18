@@ -15,6 +15,7 @@ var cut_shapes = []
 var astar = AStar.new()
 var generated = false
 var generate_thread
+var has_player = false
 
 export(float) var size = 5000
 export(float) var border = 500
@@ -35,7 +36,20 @@ signal player_entered
 
 const MAX_GAP_CORRECTION_ATTEMPTS = 10
 const CENTER_DRAG_COUNT = 3
-const ANGLES = [0, PI/4, PI/2, 3*PI/4, PI, 5*PI/4, 3*PI/2, 7*PI/4]
+# const ANGLES = [0, PI/4, PI/2, 3*PI/4, PI, 5*PI/4, 3*PI/2, 7*PI/4]
+const ANGLES = [0, PI/2, PI, 3*PI/2]
+
+
+func _ready():
+	# Make everything in global position then convert later
+	$Area2D/CollisionShape2D.shape.extents.x = size + border
+	$Area2D/CollisionShape2D.shape.extents.y = size + border
+
+	# Define polygon
+	var _polygon = [Vector2(1, 1), Vector2(-1, 1), Vector2(-1, -1), Vector2(1, -1)]
+	for pt in _polygon:
+		polygon.append(global_position + pt * size)
+
 
 func rvec(l: float, from: Vector2, last: Vector2, drag_to_center: bool = false) -> Vector2:
 	if drag_to_center:
@@ -47,7 +61,7 @@ func rvec(l: float, from: Vector2, last: Vector2, drag_to_center: bool = false) 
 				break
 		return Vector2(cos(angle), sin(angle)) * l
 
-	var idx = int(rand_range(0, 7.5))
+	var idx = min(int(rand_range(0, len(ANGLES))), len(ANGLES) - 1)
 	var angle = ANGLES[idx]
 	var vec = Vector2(cos(angle), sin(angle))
 
@@ -142,8 +156,16 @@ func add_fence(points: Array):
 	fence.points = relative_points
 	fence.global_position = global_position
 	call_deferred("add_child", fence)
+	call_deferred("_add_fence", fence)
 
+func _add_fence(fence):
+	# HACK avoid first two from being breakable because limits
+	var i = 0
 	for gate in fence.parts:
+		i += 1
+		if i <= 2:
+			continue
+
 		if abs(gate.global_position.x - x_limit) < 10 or abs(gate.global_position.y - y_limit) < 10:
 			break
 		# Add a breakable fence in between
@@ -152,16 +174,6 @@ func add_fence(points: Array):
 			gate.call_deferred("set_break", true)
 
 	fences.append(fence)
-
-func _ready():
-	# Make everything in global position then convert later
-	$Area2D/CollisionShape2D.shape.extents.x = size + border
-	$Area2D/CollisionShape2D.shape.extents.y = size + border
-
-	# Define polygon
-	var _polygon = [Vector2(1, 1), Vector2(-1, 1), Vector2(-1, -1), Vector2(1, -1)]
-	for pt in _polygon:
-		polygon.append(global_position + pt * size)
 
 func _process(_delta):
 	if Engine.editor_hint :
@@ -172,6 +184,7 @@ func generate():
 		return
 	generate_thread = Thread.new()
 	generate_thread.start(self, "_thread_function")
+	# _thread_function(1)
 
 func _thread_function(_a):
 	var lines = []
@@ -238,10 +251,30 @@ func _thread_function(_a):
 func _on_Area2D_body_exited(body:Node):
 	if body.is_in_group("player"):
 		emit_signal("player_exited", self)
+		has_player = false
 
 func _on_Area2D_body_entered(body:Node):
 	if body.is_in_group("player"):
 		emit_signal("player_entered", self)
+		has_player = true
+
+func _exit_tree():
+	if is_instance_valid(generate_thread):
+		generate_thread.wait_to_finish()
+
+# Copy export variables from another one
+func from(other):
+	size = other.size
+	border = other.border
+	ammount = other.ammount
+	min_len = other.min_len
+	max_len = other.max_len
+	keep_gap = other.keep_gap
+	breakable_chance = other.breakable_chance
+	breakable_min_size = other.breakable_min_size
+	breakable_max_size = other.breakable_max_size
+	line_spread = other.line_spread
+
 
 # TODO remove
 func debug_orb(pos):
@@ -252,9 +285,3 @@ func debug_orb(pos):
 	n.start_size = 10
 	call_deferred("add_child", n)
 	n.global_position = pos
-
-
-
-func _exit_tree():
-	if is_instance_valid(generate_thread):
-		generate_thread.wait_to_finish()
