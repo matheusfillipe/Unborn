@@ -1,9 +1,9 @@
 extends Node2D
 
 # TODO
-# Make the angel follow the player
 # Make the angel pathfind
 # Auto generation of scenery as player walks. Adding fences and disposing of them in a long radius. how to distrubute them? Repeat Preloaded pattern? Seed generation?
+# Tilable background
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Demon = preload("res://scenes/Demon.tscn")
@@ -12,6 +12,7 @@ var Bubble = preload("res://scenes/TextBubble.tscn")
 var Explosion = preload("res://effects/Explosion.tscn")
 var ShockWave = preload("res://effects/ShockWave.tscn")
 var Fence = preload("res://scenes/Fence.tscn")
+var SceneryGenerator = preload("res://scripts/SceneryGenerator.gd")
 
 onready var player = $Player
 onready var overlay = $FadeInHack
@@ -21,7 +22,7 @@ onready var enemies = $Enemies
 onready var camera = $Camera2D
 onready var safearea = $RemoveLater/SafeArea
 onready var environment = $WorldEnvironment
-
+onready var scenery_gen = $SceneryGen
 
 var has_left_safe_area = false
 var last_world_update = 0.0
@@ -40,7 +41,9 @@ enum Scenery {
 
 # Current scenery
 var scenery = Scenery.safezone setget set_scenery
-var spiritcounter = {}
+var spirit_counter = {}
+
+
 func _ready():
 	player.connect("spirit_kill", self, "on_player_spirit_kill")
 
@@ -213,7 +216,7 @@ func check_scenery():
 		self.scenery = Scenery.heaven
 
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("reset"):
 		fade_to_black("restart")
 
@@ -276,11 +279,32 @@ func add_tutorial_barrier(body: Node):
 	Global.delete_children($Enemies)
 	$Clouds.queue_free()
 
+	bind_sceneries()
+
+func remove_sceneries():
+	pass
+
+func allocate_sceneries():
+	pass
+
+func player_entered_scenery_border(sgen):
+	sgen.generate()
+
+func player_exited_scenery_border(sgen):
+	pass
+
+func bind_sceneries():
+	for sgen in Global.get_children_with_type(scenery_gen, SceneryGenerator):
+		Global.sdisconnect(sgen, "player_entered", self, "player_endered_scenery_border")
+		Global.sdisconnect(sgen, "player_exited", self, "player_endered_scenery_border")
+		sgen.connect("player_entered", self, "player_entered_scenery_border")
+		sgen.connect("player_exited", self, "player_exited_scenery_border")
+
 func on_player_spirit_kill(color, _size):
-	if not scenery in spiritcounter: 
-		spiritcounter[scenery] = {}
+	if not scenery in spirit_counter:
+		spirit_counter[scenery] = {}
 
-	if not color in spiritcounter[scenery]:
-		spiritcounter[scenery][color] = 0
+	if not color in spirit_counter[scenery]:
+		spirit_counter[scenery][color] = 0
 
-	spiritcounter[scenery][color] += 1
+	spirit_counter[scenery][color] += 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/main.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/clouds.png" type="Texture" id=6]
 [ext_resource path="res://scripts/SpiritSpawn.gd" type="Script" id=7]
 [ext_resource path="res://scenes/Gates.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/SceneryGenerator.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -40,7 +41,7 @@ extents = Vector2( 40.5, 133 )
 
 [node name="main" type="Node2D"]
 script = ExtResource( 2 )
-enemy_spawn_density = 0.05
+enemy_spawn_density = 0.0
 enemy_spawn_limit = 3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
@@ -52,16 +53,6 @@ motion_mirroring = Vector2( 2048, 2048 )
 texture = ExtResource( 6 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 2048, 2048 )
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 325, 245 )
-current = true
-zoom = Vector2( 5, 5 )
-process_mode = 0
-smoothing_enabled = true
-smoothing_speed = 100.0
-script = ExtResource( 4 )
-target_path = NodePath("../Player")
 
 [node name="Tween" type="Tween" parent="."]
 
@@ -185,6 +176,21 @@ breakable = true
 position = Vector2( -1014, 531 )
 length = 1600.0
 
+[node name="SceneryGen" type="Node2D" parent="."]
+
+[node name="SceneryGenerator" parent="SceneryGen" instance=ExtResource( 9 )]
+position = Vector2( 4632, 1973 )
+y_limit = -100.0
+x_limit = 2800.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SceneryGen/SceneryGenerator"]
+polygon = PoolVector2Array( -1082, -2045, -1228, -1954, -1719, -1982, -1744, -1426, -441, -1443, -388, -1965, -771, -1970, -785, -2071 )
+
+[node name="SceneryGenerator2" parent="SceneryGen" instance=ExtResource( 9 )]
+position = Vector2( 5420, -2978 )
+y_limit = 1000.0
+x_limit = 3510.0
+
 [node name="RemoveLater" type="Node2D" parent="."]
 
 [node name="SafeArea" type="Area2D" parent="RemoveLater"]
@@ -210,15 +216,18 @@ points = PoolVector2Array( 3026, -736, 3026, -217 )
 
 [node name="Fence4" parent="RemoveLater" instance=ExtResource( 5 )]
 position = Vector2( 485, 229 )
-points = PoolVector2Array( 3357, -219, 3354, -1124 )
+points = PoolVector2Array( 3358, -219, 3358, -1210, 7015, -1202 )
 
 [node name="Fence5" parent="RemoveLater" instance=ExtResource( 5 )]
 position = Vector2( 485, 229 )
-points = PoolVector2Array( 3035, -1013, 3033, -1088 )
+points = PoolVector2Array( 3035, -1013, 3036, -1248 )
+
+[node name="Fence" parent="RemoveLater" instance=ExtResource( 5 )]
+points = PoolVector2Array( 3850, 0, 6800, 0 )
 
 [node name="Fence6" parent="RemoveLater" instance=ExtResource( 5 )]
 position = Vector2( 485, 229 )
-points = PoolVector2Array( 2298, -1014, 2300, -738 )
+points = PoolVector2Array( 2300, -1014, 2301, -219, 3017, -221 )
 invert = true
 
 [node name="Enemies" type="Node2D" parent="."]
@@ -228,6 +237,17 @@ invert = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 3484, -644 )
 shape = SubResource( 6 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 325, 245 )
+current = true
+zoom = Vector2( 5, 5 )
+process_mode = 0
+smoothing_enabled = true
+smoothing_speed = 100.0
+script = ExtResource( 4 )
+target_path = NodePath("../Player")
+use_mouse = true
 
 [node name="FadeInHack" type="Sprite" parent="."]
 visible = false

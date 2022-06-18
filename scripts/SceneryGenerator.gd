@@ -1,4 +1,5 @@
 extends Node2D
+tool
 
 # TODO tile it by dragging starting points to center
 # clip starting points that are out of the rectangle border
@@ -10,10 +11,14 @@ var Fence = preload("res://scenes/Fence.tscn")
 var fences = []
 var end_points = PoolVector2Array()
 var polygon = []
+var cut_shapes = []
 var astar = AStar.new()
+var generated = false
 
 export(float) var size = 5000
 export(float) var border = 500
+export(float) var y_limit = 0
+export(float) var x_limit = 0
 export(float) var ammount = 10
 export(float) var min_len = 200
 export(float) var max_len = 1000
@@ -87,8 +92,27 @@ func random_points(from: Vector2, drag_to_center: bool = false) -> Array:
 
 		# Clip if out of the rect
 		if Geometry.is_point_in_polygon(to, polygon):
+			var must_break = false
+			for pol in cut_shapes:
+				if not Geometry.is_point_in_polygon(to, pol):
+					continue
+				must_break = true
+				var ip = Geometry.intersect_polyline_with_polygon_2d(
+					[from, to],
+					pol)
+
+				if len(ip) > 0:
+					for rpt in ip[0]:
+						if rpt != from and rpt != to:
+							to = rpt
+				break
+
 			points.append(to)
 			astar.add_point(len(astar.get_points()), v3(to))
+
+			if must_break:
+				break
+
 		else:
 			var ip = Geometry.intersect_polyline_with_polygon_2d(
 				[from, to],
@@ -96,11 +120,11 @@ func random_points(from: Vector2, drag_to_center: bool = false) -> Array:
 
 			if len(ip) > 0:
 				for rpt in ip[0]:
-					if rpt != global_position:
-						ip = rpt
-				points.append(ip)
-				end_points.append(ip)
-				astar.add_point(len(astar.get_points()), v3(ip))
+					if rpt != from and rpt != to:
+						to = rpt
+				points.append(to)
+				end_points.append(to)
+				astar.add_point(len(astar.get_points()), v3(to))
 			break
 
 		last = from
@@ -112,13 +136,15 @@ func add_fence(points: Array):
 	var fence = Fence.instance()
 	var relative_points = []
 	for gpt in points:
-		relative_points.append(gpt - global_position)
+		relative_points.append(gpt - 2 * global_position)
 
 	fence.points = relative_points
 	fence.global_position = global_position
 	add_child(fence)
 
 	for gate in fence.parts:
+		if abs(gate.global_position.x - x_limit) < 10 or abs(gate.global_position.y - y_limit) < 10:
+			break
 		# Add a breakable fence in between
 		randomize()
 		if randf() < breakable_chance:
@@ -136,19 +162,39 @@ func _ready():
 	for pt in _polygon:
 		polygon.append(global_position + pt * size)
 
-	# TODO remove
-	generate()
+func _process(_delta):
+	if Engine.editor_hint :
+		_ready()
 
 func generate():
-	var lines = []
+	if generated:
+		return
 
-	# Always separate y == 0 heaven from hell
-	if global_position.y - size / 2  < 0:
+	var lines = []
+	var _cut_shapes = Global.get_children_with_type(self, CollisionPolygon2D)
+	for s in _cut_shapes:
+		cut_shapes.append(s.polygon)
+
+
+	# Always separate
+	var topr = Vector2(global_position.x - size, global_position.y - size)
+	var bottoml = Vector2(global_position.x + size, global_position.y + size)
+
+	if topr.y < y_limit and bottoml.y > y_limit:
 		lines.append(
 			[
-				Vector2(global_position.x - size, 0),
-				Vector2(global_position.x + size, 0),
+				Vector2(global_position.x - size, y_limit),
+				Vector2(global_position.x + size, y_limit),
 			])
+
+
+	if topr.x < x_limit and bottoml.x > x_limit:
+		lines.append(
+			[
+				Vector2(x_limit, global_position.y + size),
+				Vector2(x_limit, global_position.y - size),
+			])
+
 
 	# Generate random fences from starting points
 	for pt in starting_points:
@@ -166,7 +212,6 @@ func generate():
 			# 	if rpt != global_position:
 			# 		addpt = rpt
 
-		debug_orb(addpt)
 		end_points.append(addpt)
 		astar.add_point(len(astar.get_points()), v3(addpt))
 		lines.append(random_points(addpt, true))
@@ -183,14 +228,16 @@ func generate():
 	for points in lines:
 		add_fence(points)
 
+	generated = true
+
 
 func _on_Area2D_body_exited(body:Node):
 	if body.is_in_group("player"):
-		emit_signal("player_exited")
+		emit_signal("player_exited", self)
 
 func _on_Area2D_body_entered(body:Node):
 	if body.is_in_group("player"):
-		emit_signal("player_entered")
+		emit_signal("player_entered", self)
 
 # TODO remove
 func debug_orb(pos):
