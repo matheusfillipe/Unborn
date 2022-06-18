@@ -45,7 +45,7 @@ extents = Vector2( 40.5, 133 )
 [node name="main" type="Node2D" groups=["actions"]]
 script = ExtResource( 2 )
 spirit_spawn_limit = 40
-enemy_spawn_density = 0.05
+enemy_spawn_density = 0.07
 enemy_spawn_limit = 3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
@@ -67,8 +67,15 @@ environment = SubResource( 1 )
 position = Vector2( 484, 0 )
 texture = ExtResource( 6 )
 
+[node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="Checkpoints"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Checkpoints/Area2D"]
+polygon = PoolVector2Array( 3827, -786, 3813, -772, 3935, -647, 3814, -516, 3822, -497, 3947, -633, 4282, -422, 4282, -447 )
+
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( -428, 947 )
+position = Vector2( 3499, -621 )
 collision_brightness_multiplier = 1.2
 
 [node name="Orbs" type="Node2D" parent="."]

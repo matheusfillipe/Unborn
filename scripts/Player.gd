@@ -45,9 +45,7 @@ var knockback = Vector2(0, 0)
 
 func _enter_tree():
 	# Load checkpoint if any
-	print(Global.checkpoint)
 	if Global.checkpoint != null:
-		print("Loading checkpoint")
 		global_position = Global.checkpoint
 
 

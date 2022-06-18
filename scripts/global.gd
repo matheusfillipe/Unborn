@@ -12,6 +12,9 @@ var last_level_for_mode = {}
 var current_scene_path = ""
 var checkpoint = null
 
+# TODO have a proper state management
+var spirit_counter = {}
+
 
 # Let's preload the audio effects
 enum SFX {

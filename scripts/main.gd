@@ -4,7 +4,6 @@ extends Node2D
 #  --  Make the angel pathfind
 # Tilable background
 # Script plot story goals
-# checkpoint after tutorial
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Demon = preload("res://scenes/Demon.tscn")
@@ -14,6 +13,7 @@ var Explosion = preload("res://effects/Explosion.tscn")
 var ShockWave = preload("res://effects/ShockWave.tscn")
 var Fence = preload("res://scenes/Fence.tscn")
 var SceneryGenerator = preload("res://scenes/SceneryGenerator.tscn")
+var Deaths = preload("res://scripts/Deaths.gd")
 var SceneryGeneratorClass = preload("res://scripts/SceneryGenerator.gd")
 
 onready var player = $Player
@@ -27,6 +27,7 @@ onready var environment = $WorldEnvironment
 onready var scenery_gen = $SceneryGen
 onready var hell_map = $SceneryGen/SceneryGenerator
 onready var heaven_map = $SceneryGen/SceneryGenerator2
+onready var checkpoints = $Checkpoints
 
 onready var initial_hell_map_pos = hell_map.global_position
 onready var initial_heaven_map_pos = heaven_map.global_position
@@ -36,7 +37,7 @@ var last_world_update = 0.0
 var current_map
 
 export(float, 1, 10000) var spirit_spawn_radius = 1000.0
-export(float, 0, 2) var spirit_spaw_density = 2
+export(float, 0, 5) var spirit_spaw_density = 2
 export(int, 1, 1000) var spirit_spawn_limit = 20
 export(float, 1, 10000) var enemy_spawn_radius = 1000.0
 export(float, 0, 2) var enemy_spawn_density = 2
@@ -54,11 +55,12 @@ enum Scenery {
 var scenery = Scenery.safezone setget set_scenery
 var grid = {}
 var actions = {0: false}
-var spirit_counter = {}
+var checkpoint_locked = false
 
 func _ready():
 	player.connect("spirit_kill", self, "on_player_spirit_kill")
 	bind_sceneries()
+	bind_checkpoints()
 
 	# platform specific adjust
 	match OS.get_name():
@@ -152,8 +154,11 @@ func restart():
 func player_died(message):
 	Global.play(Global.SFX.death)
 	yield(get_tree().create_timer(2, false), "timeout")
-	Global.popup(message, 3)
-	yield(get_tree().create_timer(2, false), "timeout")
+	randomize()
+	var deaths = Deaths.new()
+	message += "\n" + deaths.messages[scenery][randi() % len(deaths.messages[scenery])]
+	Global.popup(message, 10)
+	yield(get_tree().create_timer(8, false), "timeout")
 	restart()
 
 # Spawn spirits randomly
@@ -285,9 +290,6 @@ func add_tutorial_barrier(body: Node):
 	var barrier = $Bridge/TutorialBarrier
 	barrier.enabled = true
 
-	# Add checkpoint
-	Global.checkpoint = player.global_position
-
 	# Dispose of tutorial
 	$Area2D.queue_free()
 	Global.delete_children($Fences)
@@ -296,18 +298,31 @@ func add_tutorial_barrier(body: Node):
 	Global.delete_children($Enemies)
 	$Clouds.queue_free()
 
+
+func on_checkpoint(body: Node):
+	if checkpoint_locked:
+		return
+
+	if not body == player:
+		return
+
+	# Add checkpoint
+	Global.checkpoint = player.global_position
 	Global.popup("Checkpoint!", 3)
-	print("after append ", Global.checkpoint)
+
+	checkpoint_locked = true
+	yield(get_tree().create_timer(10, false), "timeout")
+	checkpoint_locked = false
 
 
 func on_player_spirit_kill(color, _size):
-	if not scenery in spirit_counter:
-		spirit_counter[scenery] = {}
+	if not scenery in Global.spirit_counter:
+		Global.spirit_counter[scenery] = {}
 
-	if not color in spirit_counter[scenery]:
-		spirit_counter[scenery][color] = 0
+	if not color in Global.spirit_counter[scenery]:
+		Global.spirit_counter[scenery][color] = 0
 
-	spirit_counter[scenery][color] += 1
+	Global.spirit_counter[scenery][color] += 1
 
 
 #####
@@ -398,6 +413,10 @@ func bind_sceneries():
 		Global.sdisconnect(sgen, "player_exited", self, "player_exited_scenery_border")
 		sgen.connect("player_entered", self, "player_entered_scenery_border")
 		sgen.connect("player_exited", self, "player_exited_scenery_border")
+
+func bind_checkpoints():
+	for a in Global.get_children_with_type(checkpoints, Area2D):
+		Global.sconnect(a, "body_entered", self, "on_checkpoint")
 
 
 func act(b: Node):
