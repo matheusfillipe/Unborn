@@ -256,4 +256,5 @@ func debug_orb(pos):
 
 
 func _exit_tree():
-    generate_thread.wait_to_finish()
+	if is_instance_valid(generate_thread):
+		generate_thread.wait_to_finish()

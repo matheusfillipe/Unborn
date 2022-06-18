@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://resources/Backslash-RpJol.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://scripts/Button.gd" type="Script" id=2]
 [ext_resource path="res://resources/Menu.tres" type="StyleBox" id=3]
+[ext_resource path="res://assets/intro.jpeg" type="Texture" id=4]
 
 [sub_resource type="DynamicFont" id=2]
 outline_size = 1
@@ -26,6 +27,12 @@ corner_radius_bottom_left = 8
 [node name="Menu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color( 0.717647, 0.717647, 0.717647, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 4 )
 
 [node name="Play" type="Button" parent="."]
 anchor_left = 0.5
