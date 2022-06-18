@@ -32,6 +32,7 @@ onready var rest_position = global_position
 onready var timer = $RetreatTimer
 onready var scenery_timer = $Timer
 onready var fog = $Clouds
+onready var fire = $Fire
 
 var Explosion = preload("res://effects/Explosion.tscn")
 
@@ -252,5 +253,17 @@ func _on_Timer_timeout():
 	if y < -500:
 		# -0.5 is nothing, 1 is max
 		var value = lerp(-0.5, 1, min(abs(y+500)/40000, 1))
-		print(value)
 		fog.get_node("Sprite").material.set_shader_param("shift", value)
+		fog.visible = true
+
+	elif y > 500:
+		# 5 is nothing, 0.5 is max
+		var value = lerp(4, 0.5, min(abs(y-500)/10000, 1))
+		fire.get_node("Sprite").material.set_shader_param("fire_aperture", value)
+		fire.visible = true
+
+	else:
+		fog.get_node("Sprite").material.set_shader_param("shift", -0.5)
+		fire.get_node("Sprite").material.set_shader_param("fire_aperture", 4)
+		fog.visible = false
+		fire.visible = false

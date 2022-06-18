@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=2]
 [ext_resource path="res://shaders/orb.shader" type="Shader" id=3]
 [ext_resource path="res://scenes/Clouds.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/Fire.tscn" type="PackedScene" id=5]
 
 [sub_resource type="OpenSimplexNoise" id=3]
 
@@ -40,26 +41,33 @@ resource_local_to_scene = true
 script = ExtResource( 1 )
 start_color = 3
 
-[node name="circle" parent="." index="0"]
+[node name="Fire" parent="." index="0" instance=ExtResource( 5 )]
+visible = false
+show_behind_parent = true
+position = Vector2( 0, 43 )
+scale = Vector2( 1, 0.5 )
+
+[node name="circle" parent="." index="1"]
 material = SubResource( 5 )
 texture = SubResource( 6 )
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="2"]
 shape = SubResource( 7 )
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 visible = true
 shape = SubResource( 8 )
 
-[node name="RetreatTimer" type="Timer" parent="." index="5"]
+[node name="RetreatTimer" type="Timer" parent="." index="6"]
 wait_time = 0.5
 one_shot = true
 
-[node name="Timer" type="Timer" parent="." index="6"]
+[node name="Timer" type="Timer" parent="." index="7"]
 wait_time = 0.5
 autostart = true
 
-[node name="Clouds" parent="." index="7" instance=ExtResource( 4 )]
+[node name="Clouds" parent="." index="8" instance=ExtResource( 4 )]
+visible = false
 
 [connection signal="timeout" from="RetreatTimer" to="." method="_on_RetreatTimer_timeout"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://whitesquare.png" type="Texture" id=1]
+[ext_resource path="res://shaders/fire.shader" type="Shader" id=2]
+
+[sub_resource type="OpenSimplexNoise" id=1]
+octaves = 5
+period = 40.0
+persistence = 0.64
+lacunarity = 2.59
+
+[sub_resource type="NoiseTexture" id=2]
+width = 1024
+noise = SubResource( 1 )
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 2 )
+shader_param/root_color = Color( 1.5, 0.75, 0.3, 1 )
+shader_param/tip_color = Color( 1.5, 0.1, 0, 1 )
+shader_param/fire_alpha = 0.819
+shader_param/fire_speed = Vector2( 0.5, 1.2 )
+shader_param/fire_aperture = 4.0
+shader_param/noise_tex = SubResource( 2 )
+
+[node name="Fire" type="Node2D"]
+scale = Vector2( 0.929525, 1.02681 )
+
+[node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 3 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 1 )
