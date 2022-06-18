@@ -23,16 +23,12 @@ const deaths = [
 	]
 
 var texts = [
-	"Well, hello there. Let's see here...",
+	"Odds were agains't you, and yet...",
+	"You were successfull in your quest for reincarnation.",
+	"Damn!",
+	"Well, I do have this little thing called a future log",
 	"",
-	"Well, cool death.",
-	"So, here's the thing, you now gotta wander about with some other souls if you want to get another chance at this wild ride called life.",
-	"Hello there.\n Let's see what we got here...",
-	"I am sorry to say but...\n",
-	"Well, I am sorry for you.\nYou will now receive your final judgment.",
-	"Reincarnation? What a pitiful idea! You see, that is no longer a possibility...",
-	"Wait! Where are you going? You think you can escape from the wrath of angels and demons?",
-	"You shall be taken to your destiny by force!",
+	"bla bla bla add filler as per mattf wish"
 ]
 
 var ready = true
@@ -48,7 +44,7 @@ onready var timer = $UserWakeUpTimer
 func _ready():
 	Global.play_music_once(Global.Music.intro)
 	randomize()
-	texts[1] += deaths[randi() % len(deaths)]
+	texts[4] += deaths[randi() % len(deaths)]
 	nextlabel()
 
 func _input(event):
@@ -56,7 +52,7 @@ func _input(event):
 		if ready:
 			touched = true
 			if textnumber == len(texts):
-				get_tree().change_scene("res://scenes/main.tscn")
+				get_tree().change_scene("res://scenes/Credits.tscn")
 			else:
 				nextlabel()
 
