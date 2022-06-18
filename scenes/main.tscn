@@ -13,7 +13,6 @@
 [sub_resource type="Environment" id=1]
 background_mode = 4
 ambient_light_energy = 0.0
-auto_exposure_enabled = true
 auto_exposure_min_luma = 0.0
 glow_enabled = true
 glow_intensity = 8.0
@@ -41,6 +40,7 @@ extents = Vector2( 40.5, 133 )
 
 [node name="main" type="Node2D"]
 script = ExtResource( 2 )
+spirit_spaw_density = 0.0
 enemy_spawn_density = 0.0
 enemy_spawn_limit = 3
 
@@ -66,6 +66,7 @@ texture = ExtResource( 6 )
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
 position = Vector2( 3393, -633 )
 collision_brightness_multiplier = 1.2
+can_attack = true
 
 [node name="Orbs" type="Node2D" parent="."]
 
@@ -182,15 +183,12 @@ length = 1600.0
 position = Vector2( 4632, 1973 )
 y_limit = -100.0
 x_limit = 2800.0
-breakable_chance = 1.0
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SceneryGen/SceneryGenerator"]
-polygon = PoolVector2Array( -1082, -2045, -1228, -1954, -1719, -1982, -1744, -1426, -441, -1443, -388, -1965, -771, -1970, -785, -2071 )
+breakable_chance = 0.3
 
 [node name="SceneryGenerator2" parent="SceneryGen" instance=ExtResource( 9 )]
-position = Vector2( 5420, -2978 )
-y_limit = 1000.0
+position = Vector2( 5420, -3171 )
 x_limit = 3510.0
+breakable_chance = 0.3
 
 [node name="RemoveLater" type="Node2D" parent="."]
 
@@ -221,7 +219,7 @@ points = PoolVector2Array( 3358, -219, 3358, -1210, 7015, -1202 )
 
 [node name="Fence5" parent="RemoveLater" instance=ExtResource( 5 )]
 position = Vector2( 485, 229 )
-points = PoolVector2Array( 3035, -1013, 3036, -1248 )
+points = PoolVector2Array( 3035, -1013, 3034, -1507 )
 
 [node name="Fence" parent="RemoveLater" instance=ExtResource( 5 )]
 points = PoolVector2Array( 3850, 0, 6800, 0 )

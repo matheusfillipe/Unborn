@@ -12,7 +12,8 @@ var Bubble = preload("res://scenes/TextBubble.tscn")
 var Explosion = preload("res://effects/Explosion.tscn")
 var ShockWave = preload("res://effects/ShockWave.tscn")
 var Fence = preload("res://scenes/Fence.tscn")
-var SceneryGenerator = preload("res://scripts/SceneryGenerator.gd")
+var SceneryGenerator = preload("res://scenes/SceneryGenerator.tscn")
+var SceneryGeneratorClass = preload("res://scripts/SceneryGenerator.gd")
 
 onready var player = $Player
 onready var overlay = $FadeInHack
@@ -23,6 +24,11 @@ onready var camera = $Camera2D
 onready var safearea = $RemoveLater/SafeArea
 onready var environment = $WorldEnvironment
 onready var scenery_gen = $SceneryGen
+onready var hell_map = $SceneryGen/SceneryGenerator
+onready var heaven_map = $SceneryGen/SceneryGenerator2
+
+onready var initial_hell_map_pos = hell_map.global_position
+onready var initial_heaven_map_pos = heaven_map.global_position
 
 var has_left_safe_area = false
 var last_world_update = 0.0
@@ -33,6 +39,8 @@ export(int, 1, 1000) var spirit_spawn_limit = 20
 export(float, 1, 10000) var enemy_spawn_radius = 1000.0
 export(float, 0, 2) var enemy_spawn_density = 2
 export(int, 1, 100) var enemy_spawn_limit = 4
+export(float) var heaven_y_limit = -1000
+export(float) var hell_y_limit = 0
 
 enum Scenery {
 	safezone,
@@ -42,11 +50,13 @@ enum Scenery {
 
 # Current scenery
 var scenery = Scenery.safezone setget set_scenery
+var grid = {}
 var spirit_counter = {}
 
 
 func _ready():
 	player.connect("spirit_kill", self, "on_player_spirit_kill")
+	bind_sceneries()
 
 	# platform specific adjust
 	match OS.get_name():
@@ -280,26 +290,6 @@ func add_tutorial_barrier(body: Node):
 	Global.delete_children($Enemies)
 	$Clouds.queue_free()
 
-	bind_sceneries()
-
-func remove_sceneries():
-	pass
-
-func allocate_sceneries():
-	pass
-
-func player_entered_scenery_border(sgen):
-	sgen.generate()
-
-func player_exited_scenery_border(sgen):
-	pass
-
-func bind_sceneries():
-	for sgen in Global.get_children_with_type(scenery_gen, SceneryGenerator):
-		Global.sdisconnect(sgen, "player_entered", self, "player_endered_scenery_border")
-		Global.sdisconnect(sgen, "player_exited", self, "player_endered_scenery_border")
-		sgen.connect("player_entered", self, "player_entered_scenery_border")
-		sgen.connect("player_exited", self, "player_exited_scenery_border")
 
 func on_player_spirit_kill(color, _size):
 	if not scenery in spirit_counter:
@@ -309,3 +299,89 @@ func on_player_spirit_kill(color, _size):
 		spirit_counter[scenery][color] = 0
 
 	spirit_counter[scenery][color] += 1
+
+
+#####
+# Every time you enter a scenery 8 placeholders non generated are added around
+# When you leave there is a delay and then it is removed
+#####
+
+# TODO refactor all those hell variables intoa  single class
+# TODO get rid of magical numbers
+func add_map(pos: Vector2):
+
+	for other in Global.get_children_with_type(scenery_gen, SceneryGeneratorClass):
+		if other.global_position == pos:
+			if not other.has_player:
+				other.call_deferred("queue_free")
+			else:
+				return
+
+	var sgen = SceneryGenerator.instance()
+
+	var y = player.global_position.y
+	if  y < -500:
+		if pos.y > heaven_y_limit or pos.x < heaven_map.x_limit:
+			sgen.free()
+			return
+
+		sgen.from(heaven_map)
+		sgen.x_limit = heaven_map.x_limit
+
+		# Only the non first maps need y limits set because we need to enter
+		if pos == initial_heaven_map_pos:
+			sgen.y_limit = 0
+		else:
+			sgen.y_limit = heaven_y_limit
+		heaven_map = sgen
+
+	else:
+		if pos.y < hell_y_limit or pos.x < hell_map.x_limit:
+			sgen.free()
+			return
+		sgen.from(hell_map)
+		sgen.x_limit = hell_map.x_limit
+
+		# Only the non first maps need y limits set because we need to enter
+		if pos == initial_hell_map_pos:
+			sgen.y_limit = -100
+		else:
+			sgen.y_limit = hell_y_limit
+		sgen.y_limit = hell_map.y_limit
+		hell_map = sgen
+
+
+	sgen.global_position = pos
+
+	scenery_gen.call_deferred("add_child", sgen)
+	sgen.connect("player_entered", self, "player_entered_scenery_border")
+	sgen.connect("player_exited", self, "player_exited_scenery_border")
+
+
+func player_entered_scenery_border(sgen):
+	# Populated entered map
+	sgen.generate()
+
+	# Generate 8 waiting placeholders around
+	if not scenery in grid:
+		grid[scenery] = []
+
+	var pos = sgen.global_position
+	for d in [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]]:
+		var npos = pos + Vector2(d[0], d[1]) * sgen.size * 2
+		add_map(npos)
+
+
+func player_exited_scenery_border(sgen):
+	# Wait a bit and then free this
+	# yield(get_tree().create_timer(rand_range(5, 15), false), "timeout")
+	if not sgen.has_player:
+		add_map(sgen.global_position)
+		sgen.queue_free()
+
+func bind_sceneries():
+	for sgen in Global.get_children_with_type(scenery_gen, SceneryGeneratorClass):
+		Global.sdisconnect(sgen, "player_entered", self, "player_entered_scenery_border")
+		Global.sdisconnect(sgen, "player_exited", self, "player_exited_scenery_border")
+		sgen.connect("player_entered", self, "player_entered_scenery_border")
+		sgen.connect("player_exited", self, "player_exited_scenery_border")

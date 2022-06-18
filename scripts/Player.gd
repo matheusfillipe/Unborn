@@ -162,7 +162,7 @@ func _physics_process(delta):
 
 func _on_collide(body: Node):
 	if body is Spirit and not body.dying:
-		# Only if a smaller one
+		# Only if a smaller one we hit
 		if body.size > size:
 			return
 
