@@ -44,7 +44,8 @@ extents = Vector2( 40.5, 133 )
 
 [node name="main" type="Node2D" groups=["actions"]]
 script = ExtResource( 2 )
-enemy_spawn_density = 0.1
+spirit_spawn_limit = 40
+enemy_spawn_density = 0.05
 enemy_spawn_limit = 3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
@@ -67,7 +68,7 @@ position = Vector2( 484, 0 )
 texture = ExtResource( 6 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( 3408, -610 )
+position = Vector2( -428, 947 )
 collision_brightness_multiplier = 1.2
 
 [node name="Orbs" type="Node2D" parent="."]

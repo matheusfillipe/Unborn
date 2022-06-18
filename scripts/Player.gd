@@ -35,8 +35,6 @@ var Explosion = preload("res://effects/Explosion.tscn")
 
 var Spirit = preload("res://scripts/Spirit.gd")
 
-var alive = false
-
 
 signal died
 signal spirit_kill(color, size)
@@ -44,6 +42,14 @@ signal spirit_kill(color, size)
 var initial_size
 var dying = false
 var knockback = Vector2(0, 0)
+
+func _enter_tree():
+	# Load checkpoint if any
+	print(Global.checkpoint)
+	if Global.checkpoint != null:
+		print("Loading checkpoint")
+		global_position = Global.checkpoint
+
 
 func _on_ready():
 	initial_size = size
@@ -148,9 +154,6 @@ func get_mana() -> float:
 	return size / initial_size - 1
 
 func _physics_process(delta):
-	if not alive:
-		return
-
 	if dying:
 		return
 
