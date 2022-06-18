@@ -9,13 +9,12 @@ func _on_Area2D_body_exited(body:Node):
 	bodies.erase(body)
 
 func _on_Area2D_body_entered(body:Node):
-	# TODO check for parent of explosion instead of player
+	# TODO check for parent of explosion instead
 	if body.is_in_group("hitable") and not body.is_in_group("player"):
 		bodies.append(body)
 
 
 func _process(_delta):
-	# TODO make enemy in hitable group
 	# Loop over each body and check if it can die
 	for body in bodies:
 		if is_instance_valid(body):

@@ -47,7 +47,7 @@ shader_param/radial_dissolve_curve = SubResource( 9 )
 [sub_resource type="CircleShape2D" id=11]
 radius = 1700.0
 
-[node name="Explosion" instance=ExtResource( 1 )]
+[node name="Explosion" groups=["player"] instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 
 [node name="Sprite" parent="." index="0"]

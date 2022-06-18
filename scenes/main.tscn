@@ -70,6 +70,7 @@ texture = ExtResource( 6 )
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
 position = Vector2( 1596, -632 )
 collision_brightness_multiplier = 1.2
+can_attack = true
 
 [node name="Orbs" type="Node2D" parent="."]
 
@@ -191,6 +192,11 @@ invert = true
 position = Vector2( -1014, 531 )
 length = 1600.0
 
+[node name="Fence2" parent="Fences" instance=ExtResource( 5 )]
+points = PoolVector2Array( 1033, -795, 1031, -955 )
+default_color = Color( 1, 0.5, 0, 1 )
+breakable = true
+
 [node name="SceneryGen" type="Node2D" parent="."]
 
 [node name="SceneryGenerator" parent="SceneryGen" instance=ExtResource( 9 )]
@@ -211,9 +217,8 @@ breakable_chance = 0.3
 position = Vector2( 607, 249 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bridge/SafeArea"]
-visible = false
 position = Vector2( -112, -3.5 )
-polygon = PoolVector2Array( 3022, -1027.5, -1028, -1021.5, -1029, 1018.5, 1014, 1018.5, 1022, -761.5, 3017, -753.5, 3018, -236.5, 3350, -245.5, 3347, -1108.5, 3023, -1105.5 )
+polygon = PoolVector2Array( 3328, -1021.5, -1028, -1021.5, -1029, 1018.5, 1014, 1018.5, 1022, -761.5, 3318, -750.5, 3321, -258.5, 3794, -259.5, 3789, -1147.5, 3331, -1144.5 )
 
 [node name="Gates2" parent="Bridge" instance=ExtResource( 8 )]
 position = Vector2( 1525, -779 )
