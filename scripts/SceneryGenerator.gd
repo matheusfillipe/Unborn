@@ -14,6 +14,7 @@ var polygon = []
 var cut_shapes = []
 var astar = AStar.new()
 var generated = false
+var generate_thread
 
 export(float) var size = 5000
 export(float) var border = 500
@@ -140,7 +141,7 @@ func add_fence(points: Array):
 
 	fence.points = relative_points
 	fence.global_position = global_position
-	add_child(fence)
+	call_deferred("add_child", fence)
 
 	for gate in fence.parts:
 		if abs(gate.global_position.x - x_limit) < 10 or abs(gate.global_position.y - y_limit) < 10:
@@ -169,7 +170,10 @@ func _process(_delta):
 func generate():
 	if generated:
 		return
+	generate_thread = Thread.new()
+	generate_thread.start(self, "_thread_function")
 
+func _thread_function(_a):
 	var lines = []
 	var _cut_shapes = Global.get_children_with_type(self, CollisionPolygon2D)
 	for s in _cut_shapes:
@@ -246,5 +250,10 @@ func debug_orb(pos):
 	var n = Orb.instance()
 	n.start_brightness = 10000
 	n.start_size = 10
-	add_child(n)
+	call_deferred("add_child", n)
 	n.global_position = pos
+
+
+
+func _exit_tree():
+    generate_thread.wait_to_finish()
