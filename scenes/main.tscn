@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/main.gd" type="Script" id=2]
@@ -9,12 +9,14 @@
 [ext_resource path="res://scripts/SpiritSpawn.gd" type="Script" id=7]
 [ext_resource path="res://scenes/Gates.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/SceneryGenerator.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/hell.png" type="Texture" id=10]
+[ext_resource path="res://assets/hellfaces.jpeg" type="Texture" id=11]
+[ext_resource path="res://assets/resources/color_replace.tres" type="Material" id=12]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
 ambient_light_energy = 0.0
 auto_exposure_enabled = true
-auto_exposure_min_luma = 0.0
 glow_enabled = true
 glow_intensity = 8.0
 glow_strength = 1.04
@@ -50,17 +52,39 @@ spirit_limit_per_map = 10
 enemy_spawn_density = 0.05
 enemy_spawn_limit = 3
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( -543, 3177 )
+current = true
+zoom = Vector2( 5, 5 )
+process_mode = 0
+smoothing_enabled = true
+smoothing_speed = 100.0
+script = ExtResource( 4 )
+target_path = NodePath("../Player")
+use_mouse = true
 
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-visible = false
-motion_mirroring = Vector2( 2048, 2048 )
+[node name="ParallaxBackground" type="ParallaxBackground" parent="Camera2D"]
 
-[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="Camera2D/ParallaxBackground"]
+motion_offset = Vector2( 500, 0 )
+motion_mirroring = Vector2( 2046, 1760 )
+
+[node name="Sprite2" type="Sprite" parent="Camera2D/ParallaxBackground/ParallaxLayer2"]
 visible = false
+material = ExtResource( 12 )
 texture = ExtResource( 6 )
 region_enabled = true
-region_rect = Rect2( 0, 0, 2048, 2048 )
+region_rect = Rect2( 0, 41.395, 2046, 1760 )
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Camera2D/ParallaxBackground"]
+motion_mirroring = Vector2( 2046, 1760 )
+
+[node name="Sprite" type="Sprite" parent="Camera2D/ParallaxBackground/ParallaxLayer"]
+visible = false
+material = ExtResource( 12 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 2046, 1760 )
 
 [node name="Tween" type="Tween" parent="."]
 
@@ -88,13 +112,52 @@ texture = ExtResource( 6 )
 
 [node name="Checkpoints" type="Node2D" parent="."]
 
+[node name="Clouds" type="Sprite" parent="Checkpoints"]
+visible = false
+position = Vector2( 3265, -895 )
+texture = ExtResource( 6 )
+
+[node name="Clouds2" type="Sprite" parent="Checkpoints"]
+visible = false
+position = Vector2( 5178, -895 )
+texture = ExtResource( 6 )
+
+[node name="Clouds3" type="Sprite" parent="Checkpoints"]
+visible = false
+position = Vector2( 7128, -895 )
+texture = ExtResource( 6 )
+
 [node name="Area2D" type="Area2D" parent="Checkpoints"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Checkpoints/Area2D"]
 polygon = PoolVector2Array( 3827, -786, 3813, -772, 3935, -647, 3814, -516, 3822, -497, 3947, -633, 4282, -422, 4282, -447 )
 
+[node name="Hellfaces" type="Sprite" parent="Checkpoints"]
+modulate = Color( 0.3, 0.3, 0.3, 1 )
+position = Vector2( 7137, 6708 )
+scale = Vector2( 0.75, 0.75 )
+texture = ExtResource( 11 )
+
+[node name="Hell" type="Sprite" parent="Checkpoints/Hellfaces"]
+position = Vector2( -3998, -1677 )
+texture = ExtResource( 10 )
+
+[node name="SceneryGen" type="Node2D" parent="."]
+
+[node name="SceneryGenerator" parent="SceneryGen" instance=ExtResource( 9 )]
+position = Vector2( 4632, 1973 )
+y_limit = -100.0
+x_limit = 2800.0
+breakable_chance = 0.3
+
+[node name="SceneryGenerator2" parent="SceneryGen" instance=ExtResource( 9 )]
+position = Vector2( 5420, -3171 )
+y_limit = -1000.0
+x_limit = 3510.0
+breakable_chance = 0.3
+
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( -407, 927 )
+position = Vector2( 3571, -633 )
 collision_brightness_multiplier = 1.2
 
 [node name="Orbs" type="Node2D" parent="."]
@@ -121,7 +184,7 @@ tutorial_message = "Oh take care! you can only absorb smaller spirits. But don't
 tutorial_message_time = 5
 
 [node name="TutorialSpirit" parent="Orbs" instance=ExtResource( 1 )]
-position = Vector2( -126, -673 )
+position = Vector2( -185, -621 )
 start_color = 0
 start_size = 2
 start_brightness = 6.0
@@ -181,7 +244,7 @@ tutorial_message_time = 5
 [node name="Spirits" type="Node2D" parent="."]
 
 [node name="SpiritSpawn" type="Position2D" parent="Spirits" groups=["actions"]]
-position = Vector2( 241, -644 )
+position = Vector2( 180, -644 )
 script = ExtResource( 7 )
 ammount = 30
 duration = 1.5
@@ -221,20 +284,6 @@ length = 1600.0
 points = PoolVector2Array( 1033, -795, 1031, -955 )
 default_color = Color( 1, 0.5, 0, 1 )
 breakable = true
-
-[node name="SceneryGen" type="Node2D" parent="."]
-
-[node name="SceneryGenerator" parent="SceneryGen" instance=ExtResource( 9 )]
-position = Vector2( 4632, 1973 )
-y_limit = -100.0
-x_limit = 2800.0
-breakable_chance = 0.3
-
-[node name="SceneryGenerator2" parent="SceneryGen" instance=ExtResource( 9 )]
-position = Vector2( 5420, -3171 )
-y_limit = -1000.0
-x_limit = 3510.0
-breakable_chance = 0.3
 
 [node name="Bridge" type="Node2D" parent="."]
 
@@ -287,16 +336,6 @@ enabled = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 3784, -643 )
 shape = SubResource( 6 )
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 325, 245 )
-current = true
-zoom = Vector2( 5, 5 )
-process_mode = 0
-smoothing_enabled = true
-smoothing_speed = 100.0
-script = ExtResource( 4 )
-target_path = NodePath("../Player")
 
 [node name="FadeInHack" type="Sprite" parent="."]
 visible = false

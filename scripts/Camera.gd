@@ -25,15 +25,6 @@ func _physics_process(delta):
 	position = lerp(position, target.position, speed * delta)
 
 
-func update_paralax():
-	"""Change paralax on zooming"""
-	for layer in paralax_layers:
-		layer[0].motion_scale.x = layer[1].x / zoom.x
-		layer[0].motion_scale.y = layer[1].y / zoom.y
-
-	# HACK This is so the paralax doesn't disappear when detached
-	global_position += Vector2(0, -10)
-
 func _unhandled_input(event):
 	if not use_mouse:
 		return
@@ -44,9 +35,8 @@ func _unhandled_input(event):
 			if event.button_index == BUTTON_WHEEL_UP:
 				# global_position = get_global_mouse_position()
 				zoom /= scroll_wheel_zoom_multiplier
-				update_paralax()
+
 			# zoom out
 			if event.button_index == BUTTON_WHEEL_DOWN:
 				# global_position = get_global_mouse_position()
 				zoom *= scroll_wheel_zoom_multiplier
-				update_paralax()

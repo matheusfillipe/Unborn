@@ -22,8 +22,9 @@ func _on_OptionButton_item_selected(index:int):
 func _on_Music_toggled(button_pressed:bool):
 	Global.play(Global.SFX.tick)
 	Global.music_muted = not button_pressed
-	Global.stop_music_player()
-	if not button_pressed and Global.current_music != null:
+	if not button_pressed:
+		Global.stop_music_player()
+	if button_pressed and Global.current_music != null:
 		Global.play_music(Global.current_music)
 
 

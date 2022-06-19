@@ -62,10 +62,19 @@ var actions = {0: false}
 var checkpoint_locked = false
 
 func _ready():
+	var sprites = []
+	for sprite in Global.get_children_with_type(self, Sprite):
+		if sprite.visible:
+			sprites.append(sprite)
+			sprite.visible = false
+
 	player.connect("spirit_kill", self, "on_player_spirit_kill")
-	Global.start_timer()
 	bind_sceneries()
 	bind_checkpoints()
+
+
+	if Global.checkpoint != null:
+		show_bridge()
 
 	# platform specific adjust
 	match OS.get_name():
@@ -104,6 +113,8 @@ func _ready():
 	overlay.visible = true
 	yield(get_tree().create_timer(1, false), "timeout")
 	overlay.visible = false
+	for sprite in sprites:
+		sprite.visible = true
 
 	yield(get_tree().create_timer(7, false), "timeout")
 	if scenery == Scenery.safezone:
@@ -113,11 +124,11 @@ func _ready():
 # HACK Avoid hickup for when effects are used first time. godot 3.5 has something better for this
 func compile_shaders():
 	var explosion = Explosion.instance()
-	explosion.global_position = Vector2(10000, 10000)
+	explosion.global_position = Vector2(-10000, 10000)
 	add_child(explosion)
 
 	var node = ShockWave.instance()
-	node.global_position = Vector2(10000, 10000)
+	node.global_position = Vector2(-10000, 10000)
 	add_child(node)
 
 
@@ -279,8 +290,42 @@ func _process(_delta):
 		fade_to_black("restart")
 
 
+	# Dynamic coloring
+	var y = player.global_position.y
+	var background = Color(0.113725, 0.482353, 0.901961)
+	var color = Color(1, 1, 1, 1)
+
+	# heaven
+	if y < -1000:
+		var dest = Color(0.1, 0.5, 0.8, 1)
+		var v = min(abs(y+1000)/1000, 1)
+		color = lerp(color, dest, v)
+
+		dest = Color(0.2, 0.4, 0.6)
+		background = lerp(color, dest, v)
+
+	#hell
+	elif y > 100:
+		var dest = Color(0.6, 0.3, 0.3, 1)
+		var v = min(abs(y-100)/1000, 1)
+		color = lerp(color, dest, v)
+
+		dest = Color(0.2, 0.1, 0.1, 1)
+		background = lerp(color, dest, v)
+
+	var sprite1 = $Camera2D/ParallaxBackground/ParallaxLayer/Sprite
+	var sprite2 = $Camera2D/ParallaxBackground/ParallaxLayer2/Sprite2
+
+	sprite1.modulate = color
+	sprite2.modulate = color
+	sprite1.material.set_shader_param("u_replacement_color", background)
+	sprite2.material.set_shader_param("u_replacement_color", background)
+
 
 func update_world():
+	if not is_instance_valid(current_map):
+		return
+
 	if not has_left_safe_area:
 		return
 
@@ -337,6 +382,14 @@ func add_tutorial_barrier(body: Node):
 	Global.delete_children($Orbs)
 	Global.delete_children($Enemies)
 	$Backgrounds.queue_free()
+	show_bridge()
+
+func show_bridge():
+	# $Checkpoints/Clouds.visible = true
+	# $Checkpoints/Clouds2.visible = true
+	# $Checkpoints/Clouds3.visible = true
+	$Camera2D/ParallaxBackground/ParallaxLayer/Sprite.visible = true
+	$Camera2D/ParallaxBackground/ParallaxLayer2/Sprite2.visible = true
 
 
 func on_checkpoint(body: Node):
@@ -350,9 +403,11 @@ func on_checkpoint(body: Node):
 	Global.checkpoint = player.global_position
 	Global.popup("Checkpoint!", 3)
 
+	# Dont keep spamming
 	checkpoint_locked = true
 	yield(get_tree().create_timer(10, false), "timeout")
 	checkpoint_locked = false
+
 
 func initialize_counter(color=null):
 	if not has_left_safe_area:

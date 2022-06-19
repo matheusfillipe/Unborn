@@ -21,6 +21,7 @@ var current_music = null
 
 # TODO have a proper state management including this and checkpoints
 var spirit_counter = {}
+var has_left_safe_area = false
 
 
 func start_timer():

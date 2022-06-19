@@ -251,15 +251,17 @@ func _on_RetreatTimer_timeout():
 # TODO fix magic numbers mess
 func _on_Timer_timeout():
 	var y = global_position.y
+	# heaven
 	if y < -500:
 		# -0.5 is nothing, 1 is max
 		var value = lerp(-0.5, 1, min(abs(y+500)/40000, 1))
 		fog.get_node("Sprite").material.set_shader_param("shift", value)
 		fog.visible = true
 
+	# hell
 	elif y > 500:
-		# 5 is nothing, 0.5 is max
-		var value = lerp(4, 0.5, min(abs(y-500)/10000, 1))
+		# 4 is nothing, 0.5 is max
+		var value = lerp(3.5, 2, min(abs(y-500)/10000, 1))
 		fire.get_node("Sprite").material.set_shader_param("fire_aperture", value)
 		fire.visible = true
 
