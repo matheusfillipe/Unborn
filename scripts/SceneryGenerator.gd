@@ -188,9 +188,12 @@ func generate():
 		ammount *= 1.5
 		breakable_chance *= 2
 
-	generate_thread = Thread.new()
-	generate_thread.start(self, "_thread_function")
-	# _thread_function(1)
+	match OS.get_name():
+		"HTML5":
+			_thread_function(1)
+		_:
+			generate_thread = Thread.new()
+			generate_thread.start(self, "_thread_function")
 
 func _thread_function(_a):
 	var lines = []
