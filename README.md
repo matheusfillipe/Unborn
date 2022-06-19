@@ -3,9 +3,13 @@
 [![Chat with us on irc](https://img.shields.io/badge/-IRC-gray?logo=gitter)](https://mangle.ga/irc)
 
 
-https://unborn.herokuapp.com
+# Play on
 
-https://mattffly.itch.io/unborn
+* [Heroku](https://unborn.herokuapp.com))
+* [Ich.io](https://mattffly.itch.io/unborn)
+* [Download](https://github.com/matheusfillipe/Unborn/releases)
+
+
 
 [![Gameplay](https://img.itch.zone/aW1hZ2UvMTU4MTM3Mi85MjM4MzY4LnBuZw==/original/L0%2BCGl.png)](https://youtu.be/PP0y2beWCqc)
 
