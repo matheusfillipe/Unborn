@@ -2,7 +2,6 @@ extends Node2D
 
 # TODO
 #  --  Make the enemies pathfind
-# Tilable background
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Demon = preload("res://scenes/Demon.tscn")
@@ -22,7 +21,8 @@ onready var spirits = $Spirits
 onready var enemies = $Enemies
 onready var camera = $Camera2D
 onready var safearea = $Bridge/SafeArea
-onready var environment = $WorldEnvironment
+onready var environment = $WorldEnvironment.environment
+onready var normal_exposure = $WorldEnvironment.environment.auto_exposure_min_luma
 onready var scenery_gen = $SceneryGen
 onready var hell_map = $SceneryGen/SceneryGenerator
 onready var heaven_map = $SceneryGen/SceneryGenerator2
@@ -80,6 +80,7 @@ func _ready():
 	match OS.get_name():
 		"Android":
 			environment.auto_exposure_min_luma = 0.08
+			normal_exposure = 0.08
 		"BlackBerry":
 			pass
 		"10":
@@ -315,6 +316,11 @@ func _process(_delta):
 
 		dest = Color(0.2, 0.1, 0.1, 1)
 		background = lerp(color, dest, v)
+
+	if y > 500:
+		environment.auto_exposure_min_luma = 0.12
+	else:
+		environment.auto_exposure_min_luma = normal_exposure
 
 	var sprite1 = $Camera2D/ParallaxBackground/ParallaxLayer/Sprite
 	var sprite2 = $Camera2D/ParallaxBackground/ParallaxLayer2/Sprite2

@@ -61,12 +61,11 @@ smoothing_enabled = true
 smoothing_speed = 100.0
 script = ExtResource( 4 )
 target_path = NodePath("../Player")
-use_mouse = true
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="Camera2D"]
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="Camera2D/ParallaxBackground"]
-motion_offset = Vector2( 500, 0 )
+motion_offset = Vector2( 500, 500 )
 motion_mirroring = Vector2( 2046, 1760 )
 
 [node name="Sprite2" type="Sprite" parent="Camera2D/ParallaxBackground/ParallaxLayer2"]
