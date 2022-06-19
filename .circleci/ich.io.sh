@@ -18,5 +18,7 @@ butler push release/windows.zip mattffly/unborn:win
 butler push release/linux.zip mattffly/unborn:linux
 butler push release/macos.zip mattffly/unborn:mac
 butler push release/android.zip mattffly/unborn:android
-butler push ../assets/Music/ mattffly/unborn:soundtrack
 butler push release/html5.zip mattffly/unborn:html
+
+rm ../assets/Music/*.import
+butler push ../assets/Music/ mattffly/unborn:soundtrack

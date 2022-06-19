@@ -2,8 +2,16 @@
 [![Heroku](https://heroku-badge.herokuapp.com/?app=Unborn&root=index.php)](https://unborn.herokuapp.com)
 [![Chat with us on irc](https://img.shields.io/badge/-IRC-gray?logo=gitter)](https://mangle.ga/irc)
 
+
 https://unborn.herokuapp.com
+
 https://mattffly.itch.io/unborn
+
+[![Gameplay](https://img.itch.zone/aW1hZ2UvMTU4MTM3Mi85MjM4MzY4LnBuZw==/original/L0%2BCGl.png)](https://youtu.be/PP0y2beWCqc)
+
+![Unborn gameplay](https://img.itch.zone/aW1hZ2UvMTU4MTM3Mi85MjM4MzY5LnBuZw==/original/j9std1.png "Hell demon")
+
+![Unborn gameplay](https://img.itch.zone/aW1hZ2UvMTU4MTM3Mi85MjM4MzY3LnBuZw==/original/9gKJk3.png "Death in hell")
 
 # Unborn
 
