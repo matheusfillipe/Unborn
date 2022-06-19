@@ -26,6 +26,9 @@ jobs:
       - run:
           name: Github release
           command: bash .circleci/release.sh
+      - run:
+          name: Ich.io release
+          command: bash .circleci/ich.io.sh
 
 
 workflows:

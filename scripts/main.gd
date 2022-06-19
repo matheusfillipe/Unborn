@@ -165,6 +165,7 @@ func fade_to_black(callback: String):
 
 func restart():
 	Global.sdisconnect(tween, "tween_all_completed", self, "restart")
+# warning-ignore:return_value_discarded
 	get_tree().reload_current_scene()
 
 func player_died(message):
@@ -175,8 +176,10 @@ func player_died(message):
 
 	# HACK this shouldn't be manage by the player. use the scenery
 	if "hell" in message:
+# warning-ignore:return_value_discarded
 		get_tree().change_scene("res://scenes/Hell.tscn")
 	elif "heaven" in message:
+# warning-ignore:return_value_discarded
 		get_tree().change_scene("res://scenes/Heaven.tscn")
 	else:
 		restart()

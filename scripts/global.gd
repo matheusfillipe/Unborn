@@ -219,4 +219,5 @@ static func get_children_with_type(node, type):
 # Based on average reading time
 const WPM = 200
 static func read_time(t: String):
+# warning-ignore:integer_division
 	return len(t.split(" ")) * 60 / WPM
