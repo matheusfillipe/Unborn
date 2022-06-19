@@ -79,8 +79,8 @@ func _ready():
 	# platform specific adjust
 	match OS.get_name():
 		"Android":
-			environment.auto_exposure_min_luma = 0.08
-			normal_exposure = 0.08
+			environment.auto_exposure_enabled = false
+			environment.glow_enabled = false
 		"BlackBerry":
 			pass
 		"10":
