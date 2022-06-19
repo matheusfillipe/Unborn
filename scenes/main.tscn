@@ -156,7 +156,7 @@ x_limit = 3510.0
 breakable_chance = 0.3
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( -387, 958 )
+position = Vector2( 3591, -642 )
 collision_brightness_multiplier = 1.2
 
 [node name="Orbs" type="Node2D" parent="."]

@@ -5,7 +5,7 @@
 
 # Play on
 
-* [Heroku](https://unborn.herokuapp.com))
+* [Heroku](https://unborn.herokuapp.com)
 * [Ich.io](https://mattffly.itch.io/unborn)
 * [Download](https://github.com/matheusfillipe/Unborn/releases)
 

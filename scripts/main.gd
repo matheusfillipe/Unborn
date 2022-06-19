@@ -64,7 +64,7 @@ var checkpoint_locked = false
 func _ready():
 	var sprites = []
 	for sprite in Global.get_children_with_type(self, Sprite):
-		if sprite.visible:
+		if sprite.visible and sprite != overlay:
 			sprites.append(sprite)
 			sprite.visible = false
 
