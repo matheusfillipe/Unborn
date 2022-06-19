@@ -47,14 +47,14 @@ var random_messages = [
 # scenery: {color: count}
 var goal = {
 	Scenery.hell: {
-		COLOR.WHITE: 20,
-		COLOR.YELLOW: 10,
+		COLOR.WHITE: 10,
+		COLOR.YELLOW: 5,
 		COLOR.RED: 5,
 		COLOR.GREEN: 1,
 	},
 	Scenery.heaven: {
-		COLOR.WHITE: 20,
-		COLOR.YELLOW: 10,
+		COLOR.WHITE: 10,
+		COLOR.YELLOW: 5,
 		COLOR.RED: 5,
 		COLOR.GREEN: 1,
 	},

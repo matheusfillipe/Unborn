@@ -13,6 +13,8 @@ onready var initial_width = width
 
 var parts = []
 
+signal on_ready(Node)
+
 func _process(_delta):
 	if Engine.editor_hint :
 		if breakable:
@@ -60,6 +62,7 @@ func _ready():
 
 	self.breakable = breakable
 	self.enabled = enabled
+	emit_signal("on_ready", self)
 
 
 func set_break(_breakable):

@@ -5,6 +5,7 @@ func _ready():
 	Global.checkpoint = null
 	Global.spirit_counter = {}
 	Global.current_music = null
+	Global.play_music(Global.Music.end)
 
 func _on_Options_pressed():
 	Global.play(Global.SFX.pop)

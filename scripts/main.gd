@@ -317,10 +317,12 @@ func _process(_delta):
 		dest = Color(0.2, 0.1, 0.1, 1)
 		background = lerp(color, dest, v)
 
-	if y > 500:
-		environment.auto_exposure_min_luma = 0.12
-	else:
-		environment.auto_exposure_min_luma = normal_exposure
+	if has_left_safe_area:
+		if y > 500:
+			environment.auto_exposure_min_luma = 0.1
+		else:
+			environment.auto_exposure_min_luma = normal_exposure
+
 
 	var sprite1 = $Camera2D/ParallaxBackground/ParallaxLayer/Sprite
 	var sprite2 = $Camera2D/ParallaxBackground/ParallaxLayer2/Sprite2

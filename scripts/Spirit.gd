@@ -14,9 +14,7 @@ var wall_free = true
 
 func _on_ready():
 	yield(get_tree().create_timer(0.1, false), "timeout")
-	# TODO not spawn if this is detected close to wall and delete this print
 	if not wall_free:
-		print("Not spawning near wall")
 		queue_free()
 
 func _physics_process(_delta):
@@ -55,7 +53,7 @@ func _on_Area2D_body_exited(body:Node):
 	if body == self or dying:
 		return
 	is_colliding = false
-	btimer.start()
+	btimer.call_deferred("start")
 
 # Die with one hit
 func hit(body: Node):

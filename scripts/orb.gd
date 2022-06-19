@@ -68,6 +68,7 @@ func _ready():
 
 	# Check for area activation
 	if activate_on_area and get_node(activate_on_area) is Area2D:
+# warning-ignore:return_value_discarded
 		get_node(activate_on_area).connect("body_entered", self, "activate")
 
 	# This is so children classes can overwrite the ready function doing stuff before it
@@ -149,7 +150,7 @@ func _on_Area2D_body_exited(body:Node):
 	if body == self:
 		return
 	is_colliding = false
-	btimer.start()
+	btimer.call_deferred("start")
 
 func _on_collide(body):
 	if body.is_in_group("player") and tutorial_message != "" and not popup_lock:

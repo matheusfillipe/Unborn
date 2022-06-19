@@ -26,3 +26,4 @@ func _on_Options_pressed():
 func _exit_tree():
 	Engine.time_scale = 1
 	get_tree().paused = false
+	Global.play_music(Global.current_music)

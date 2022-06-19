@@ -154,8 +154,8 @@ func add_fence(points: Array):
 
 	fence.points = relative_points
 	fence.global_position = global_position
+	fence.connect("on_ready", self, "_add_fence")
 	call_deferred("add_child", fence)
-	call_deferred("_add_fence", fence)
 
 func _add_fence(fence):
 	# HACK avoid first two from being breakable because limits
@@ -165,7 +165,7 @@ func _add_fence(fence):
 		if i <= 2:
 			continue
 
-		if abs(gate.global_position.x - x_limit) < 10 or abs(gate.global_position.y - y_limit) < 10:
+		if abs(gate.position.x - x_limit) < 10 or abs(gate.position.y - y_limit) < 10:
 			break
 		# Add a breakable fence in between
 		randomize()

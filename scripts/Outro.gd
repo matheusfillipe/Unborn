@@ -34,7 +34,7 @@ onready var timer = $UserWakeUpTimer
 
 
 func _ready():
-	Global.play_music_once(Global.Music.intro)
+	Global.play_music(Global.Music.end)
 	randomize()
 	texts[4] += lives[randi() % len(lives)]
 	nextlabel()
@@ -44,6 +44,7 @@ func _input(event):
 		if ready:
 			touched = true
 			if textnumber == len(texts):
+# warning-ignore:return_value_discarded
 				get_tree().change_scene("res://scenes/Credits.tscn")
 			else:
 				nextlabel()
