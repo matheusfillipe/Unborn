@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://resources/Backslash-RpJol.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://resources/Menu.tres" type="StyleBox" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://resources/Intro.tres" type="Theme" id=5]
 [ext_resource path="res://scripts/OptionsMenu.gd" type="Script" id=6]
 [ext_resource path="res://resources/TiffanyLaurenceRegular-MVlpP.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/helptransparent.png" type="Texture" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 30
@@ -15,6 +16,33 @@ font_data = ExtResource( 1 )
 [sub_resource type="DynamicFont" id=5]
 size = 30
 font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=6]
+outline_size = 1
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.282353, 0.282353, 0.282353, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.905882, 0.905882, 0.905882, 1 )
+border_color = Color( 1, 0, 0, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="DynamicFont" id=2]
 outline_size = 1
@@ -34,6 +62,19 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0, 0, 0, 0.98 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 0.572549, 0.309804, 0.309804, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
 
 [node name="Options" type="Control"]
 anchor_right = 1.0
@@ -86,6 +127,26 @@ text = "Simple"
 items = [ "Simple", null, false, 0, null, "Complex", null, false, 1, null, "Crazy", null, false, 2, null ]
 selected = 0
 
+[node name="Controls" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -190.0
+margin_top = -82.0
+margin_right = -62.0
+margin_bottom = -58.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+custom_styles/hover = SubResource( 7 )
+custom_styles/pressed = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
+text = "Controls"
+
 [node name="Back" type="Button" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -106,6 +167,26 @@ custom_styles/pressed = SubResource( 4 )
 custom_styles/normal = ExtResource( 2 )
 text = "Go Back"
 
+[node name="PopupDialog" type="PopupPanel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -260.0
+margin_top = -260.0
+margin_right = 260.0
+margin_bottom = 260.0
+custom_styles/panel = SubResource( 10 )
+
+[node name="TextureRect" type="TextureRect" parent="PopupDialog"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 517.0
+margin_bottom = 517.0
+texture = ExtResource( 8 )
+
 [connection signal="toggled" from="Music" to="." method="_on_Music_toggled"]
 [connection signal="item_selected" from="OptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="pressed" from="Controls" to="." method="_on_Controls_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
+[connection signal="popup_hide" from="PopupDialog" to="." method="_on_PopupDialog_popup_hide"]

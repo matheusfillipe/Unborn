@@ -336,7 +336,7 @@ func add_tutorial_barrier(body: Node):
 	Global.delete_children($Spirits)
 	Global.delete_children($Orbs)
 	Global.delete_children($Enemies)
-	$Clouds.queue_free()
+	$Backgrounds.queue_free()
 
 
 func on_checkpoint(body: Node):
@@ -355,6 +355,9 @@ func on_checkpoint(body: Node):
 	checkpoint_locked = false
 
 func initialize_counter(color=null):
+	if not has_left_safe_area:
+		return
+
 	var map = current_map.global_position
 	if not map in Global.spirit_counter:
 		Global.spirit_counter[map] = {}
@@ -368,6 +371,9 @@ func initialize_counter(color=null):
 
 
 func on_player_spirit_kill(color, _size):
+	if not has_left_safe_area:
+		return
+
 	var map = initialize_counter(color)
 	Global.spirit_counter[map][scenery][color] += 1
 

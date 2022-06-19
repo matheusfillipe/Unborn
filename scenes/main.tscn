@@ -53,9 +53,11 @@ enemy_spawn_limit = 3
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+visible = false
 motion_mirroring = Vector2( 2048, 2048 )
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+visible = false
 texture = ExtResource( 6 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 2048, 2048 )
@@ -65,8 +67,23 @@ region_rect = Rect2( 0, 0, 2048, 2048 )
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
-[node name="Clouds" type="Sprite" parent="."]
-position = Vector2( 484, 0 )
+[node name="Backgrounds" type="Node2D" parent="."]
+position = Vector2( 484, 229 )
+
+[node name="Clouds" type="Sprite" parent="Backgrounds"]
+position = Vector2( 0, -833 )
+texture = ExtResource( 6 )
+
+[node name="Clouds2" type="Sprite" parent="Backgrounds"]
+position = Vector2( -2039, -833 )
+texture = ExtResource( 6 )
+
+[node name="Clouds3" type="Sprite" parent="Backgrounds"]
+position = Vector2( 0, 1215 )
+texture = ExtResource( 6 )
+
+[node name="Clouds4" type="Sprite" parent="Backgrounds"]
+position = Vector2( -2039, 1215 )
 texture = ExtResource( 6 )
 
 [node name="Checkpoints" type="Node2D" parent="."]
@@ -77,7 +94,7 @@ texture = ExtResource( 6 )
 polygon = PoolVector2Array( 3827, -786, 3813, -772, 3935, -647, 3814, -516, 3822, -497, 3947, -633, 4282, -422, 4282, -447 )
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
-position = Vector2( 3499, -621 )
+position = Vector2( -407, 927 )
 collision_brightness_multiplier = 1.2
 
 [node name="Orbs" type="Node2D" parent="."]

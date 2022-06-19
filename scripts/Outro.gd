@@ -34,7 +34,7 @@ onready var timer = $UserWakeUpTimer
 
 
 func _ready():
-	Global.play_music_once(Global.Music.end)
+	Global.play_music_once(Global.Music.intro)
 	randomize()
 	texts[4] += lives[randi() % len(lives)]
 	nextlabel()

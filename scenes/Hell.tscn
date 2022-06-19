@@ -29,9 +29,9 @@ texture = ExtResource( 3 )
 [node name="Text" type="Label" parent="."]
 anchor_right = 1.0
 margin_left = 8.0
-margin_top = 271.0
+margin_top = 173.0
 margin_right = -12.0
-margin_bottom = 477.0
+margin_bottom = 379.0
 theme = ExtResource( 4 )
 align = 1
 autowrap = true

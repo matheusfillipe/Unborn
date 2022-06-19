@@ -25,3 +25,16 @@ func _on_Music_toggled(button_pressed:bool):
 	Global.stop_music_player()
 	if not button_pressed and Global.current_music != null:
 		Global.play_music(Global.current_music)
+
+
+
+func _on_PopupDialog_popup_hide():
+	Global.play(Global.SFX.tick)
+	$TextureRect.modulate = Color(1, 1, 1, 1)
+	$PopupDialog.visible = false
+
+func _on_Controls_pressed():
+	Global.play(Global.SFX.tick)
+	if not $PopupDialog.visible:
+		$TextureRect.modulate = Color(0.3, 0.3, 0.3, 1)
+		$PopupDialog.popup_centered()
