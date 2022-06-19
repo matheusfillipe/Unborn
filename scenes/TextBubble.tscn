@@ -22,19 +22,19 @@ corner_detail = 20
 expand_margin_left = 10.0
 expand_margin_right = 10.0
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=9]
 size = 22
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=10]
 size = 120
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=4]
-default_font = SubResource( 3 )
+default_font = SubResource( 10 )
 Label/colors/font_color = Color( 0.247059, 0.247059, 0.247059, 1 )
-Label/fonts/font = SubResource( 2 )
+Label/fonts/font = SubResource( 9 )
 
 [sub_resource type="StyleBoxFlat" id=5]
 resource_local_to_scene = true
@@ -78,10 +78,10 @@ anchor_left = 0.1
 anchor_top = 0.5
 anchor_right = 0.9
 anchor_bottom = 0.5
-margin_left = 1.60001
-margin_top = -56.0
-margin_right = 1.60004
-margin_bottom = -6.0
+margin_left = 1.6
+margin_top = -100.0
+margin_right = 1.40002
+margin_bottom = -40.0
 grow_horizontal = 0
 grow_vertical = 0
 theme = SubResource( 4 )

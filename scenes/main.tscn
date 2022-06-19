@@ -280,7 +280,6 @@ smoothing_enabled = true
 smoothing_speed = 100.0
 script = ExtResource( 4 )
 target_path = NodePath("../Player")
-use_mouse = true
 
 [node name="FadeInHack" type="Sprite" parent="."]
 visible = false
@@ -291,6 +290,8 @@ texture = SubResource( 2 )
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2
 autostart = true
+
+[node name="Control" type="CanvasLayer" parent="."]
 
 [connection signal="body_entered" from="Bridge/SafeArea" to="." method="_on_SafeArea_body_entered"]
 [connection signal="body_exited" from="Bridge/SafeArea" to="." method="_on_SafeArea_body_exited"]

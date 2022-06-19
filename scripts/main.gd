@@ -1,9 +1,8 @@
 extends Node2D
 
 # TODO
-#  --  Make the angel pathfind
+#  --  Make the enemies pathfind
 # Tilable background
-# Script plot story goals
 
 var Spirit = preload("res://scenes/Spirit.tscn")
 var Demon = preload("res://scenes/Demon.tscn")
@@ -13,7 +12,6 @@ var Explosion = preload("res://effects/Explosion.tscn")
 var ShockWave = preload("res://effects/ShockWave.tscn")
 var Fence = preload("res://scenes/Fence.tscn")
 var SceneryGenerator = preload("res://scenes/SceneryGenerator.tscn")
-var Deaths = preload("res://scripts/Deaths.gd")
 var SceneryGeneratorClass = preload("res://scripts/SceneryGenerator.gd")
 var Plot = preload("res://scripts/Plot.gd")
 
@@ -160,14 +158,17 @@ func restart():
 
 func player_died(message):
 	Global.play(Global.SFX.death)
-	yield(get_tree().create_timer(2, false), "timeout")
-	randomize()
-	var deaths = Deaths.new()
-	message += "\n\n" + deaths.messages[scenery][randi() % len(deaths.messages[scenery])]
-	var time = max(Global.read_time(message) + 1, 3)
+	var time = max(Global.read_time(message) + 1, 4)
 	Global.popup(message, time)
 	yield(get_tree().create_timer(time, false), "timeout")
-	restart()
+
+	# HACK this shouldn't be manage by the player. use the scenery
+	if "hell" in message:
+		get_tree().change_scene("res://scenes/Hell.tscn")
+	elif "heaven" in message:
+		get_tree().change_scene("res://scenes/Heaven.tscn")
+	else:
+		restart()
 
 # Total spirits in the current map
 func count_map_spirits():
@@ -406,7 +407,7 @@ func show_progress():
 
 	if count <= 0:
 		if check_completed(Scenery.hell) and check_completed(Scenery.heaven):
-			win()
+			return win()
 
 		var goto = ""
 		match place:
@@ -538,6 +539,5 @@ func act(b: Node):
 			$Spirits/SpawnTutorialSpirit2.queue_free()
 			actions[0] = true
 
-# TODO call outro from here
 func win():
-	print("win")
+	return get_tree().change_scene("res://scenes/Outro.tscn")

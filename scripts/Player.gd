@@ -223,7 +223,8 @@ func die(body: Node):
 	elif body.is_in_group("angel"):
 		message = "You were taken to heaven..."
 
-	self.is_present = false
+	$CollisionShape2D.call_deferred("set", "disabled", not is_present)
+	$Area2D/CollisionShape2D.call_deferred("set", "disabled", not is_present)
 	emit_signal("died", message)
 
 	# fade out

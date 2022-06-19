@@ -22,12 +22,12 @@ Explore an infinite generated world, open portals and remember that you cannot r
 - [x] Icon
 - [x] Death phrases
 - [x] Spawn spirits from horizon if not wall in front
-- [ ] Enemy base with walk animation and attack.
-    - [ ] Angel
-    - [ ] Demon
-- [ ] backgrounds for heaven hell ground
+- [x] Enemy base with walk animation and attack.
+    - [x] Angel
+    - [x] Demon
+- [x] backgrounds for heaven hell ground
 - [x] walls
-- [ ] Random generation of walls and spawn of enemies
-- [ ] Score counter
+- [x] Random generation of walls and spawn of enemies
+- [x] Internal Spirit counter
 - [x] Sound effects
 - [x] Music

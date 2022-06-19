@@ -52,7 +52,7 @@ func _input(event):
 		if ready:
 			touched = true
 			if textnumber == len(texts):
-				get_tree().change_scene("res://scenes/Menu.tscn")
+				get_tree().change_scene("res://scenes/main.tscn")
 			else:
 				nextlabel()
 

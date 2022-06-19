@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://resources/Backslash-RpJol.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://scripts/Button.gd" type="Script" id=2]
 [ext_resource path="res://resources/Menu.tres" type="StyleBox" id=3]
 [ext_resource path="res://assets/intro.jpeg" type="Texture" id=4]
+[ext_resource path="res://scripts/MainMenu.gd" type="Script" id=5]
+[ext_resource path="res://assets/wildcards.png" type="Texture" id=6]
+[ext_resource path="res://assets/theme.png" type="Texture" id=7]
 
 [sub_resource type="DynamicFont" id=2]
 outline_size = 1
@@ -27,12 +29,45 @@ corner_radius_bottom_left = 8
 [node name="Menu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 5 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
 modulate = Color( 0.717647, 0.717647, 0.717647, 1 )
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+margin_top = -512.0
+margin_bottom = 512.0
 texture = ExtResource( 4 )
+
+[node name="GridContainer" type="GridContainer" parent="."]
+anchor_left = -0.0283203
+anchor_top = -0.0366667
+anchor_right = 0.217773
+anchor_bottom = 0.518333
+margin_left = 669.0
+margin_top = 381.0
+margin_right = 2717.0
+margin_bottom = 1652.0
+rect_scale = Vector2( 0.15, 0.15 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Theme" type="TextureRect" parent="GridContainer"]
+margin_right = 2300.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 2300, 600 )
+texture = ExtResource( 7 )
+expand = true
+
+[node name="Wildcards" type="TextureRect" parent="GridContainer"]
+margin_top = 604.0
+margin_right = 2300.0
+margin_bottom = 1604.0
+rect_min_size = Vector2( 2300, 1000 )
+texture = ExtResource( 6 )
+expand = true
 
 [node name="Play" type="Button" parent="."]
 anchor_left = 0.5
@@ -40,9 +75,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -128.0
-margin_top = -76.0
+margin_top = -88.0
 margin_right = 128.0
-margin_bottom = -52.0
+margin_bottom = -64.0
 custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
 custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -53,7 +88,6 @@ custom_styles/hover = SubResource( 3 )
 custom_styles/pressed = SubResource( 4 )
 custom_styles/normal = ExtResource( 3 )
 text = "Play"
-script = ExtResource( 2 )
 
 [node name="Options" type="Button" parent="."]
 anchor_left = 0.5
@@ -74,9 +108,8 @@ custom_styles/hover = SubResource( 3 )
 custom_styles/pressed = SubResource( 4 )
 custom_styles/normal = ExtResource( 3 )
 text = "Options"
-script = ExtResource( 2 )
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 
-[connection signal="pressed" from="Play" to="Play" method="_on_Button_pressed"]
-[connection signal="pressed" from="Options" to="Options" method="_on_Button_pressed"]
+[connection signal="pressed" from="Play" to="." method="_on_Play_pressed"]
+[connection signal="pressed" from="Options" to="." method="_on_Options_pressed"]

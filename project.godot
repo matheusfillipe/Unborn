@@ -12,7 +12,9 @@ config_version=4
 
 config/name="Unborn"
 run/main_scene="res://scenes/Menu.tscn"
+boot_splash/image="res://assets/intro.jpeg"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
+config/icon="res://icon.png"
 
 [autoload]
 

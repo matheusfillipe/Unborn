@@ -1,36 +1,111 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://resources/Backslash-RpJol.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://scenes/CheckBox.gd" type="Script" id=2]
-[ext_resource path="res://scripts/OptionButton.gd" type="Script" id=3]
+[ext_resource path="res://resources/Menu.tres" type="StyleBox" id=2]
+[ext_resource path="res://whitesquare.png" type="Texture" id=3]
+[ext_resource path="res://assets/intro.jpeg" type="Texture" id=4]
+[ext_resource path="res://resources/Intro.tres" type="Theme" id=5]
+[ext_resource path="res://scripts/OptionsMenu.gd" type="Script" id=6]
+[ext_resource path="res://resources/TiffanyLaurenceRegular-MVlpP.ttf" type="DynamicFontData" id=7]
 
 [sub_resource type="DynamicFont" id=1]
-size = 20
+size = 30
 font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 30
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=2]
+outline_size = 1
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.282353, 0.282353, 0.282353, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="Options" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -238, -44 )
+theme = ExtResource( 5 )
+script = ExtResource( 6 )
 
-[node name="CheckBox" type="CheckBox" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color( 0.717647, 0.717647, 0.717647, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = 424.0
+texture = ExtResource( 4 )
+
+[node name="TextureRect2" type="Sprite" parent="."]
+modulate = Color( 0, 0, 0, 0.333333 )
+position = Vector2( 520, 315.5 )
+scale = Vector2( 0.502222, 0.425556 )
+texture = ExtResource( 3 )
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Music" type="CheckBox" parent="."]
+margin_left = 322.0
+margin_top = 143.0
+margin_right = 473.0
+margin_bottom = 205.0
+custom_fonts/font = SubResource( 1 )
+pressed = true
+text = "Music"
+
+[node name="Label" type="Label" parent="."]
+margin_left = 322.0
+margin_top = 279.0
+margin_right = 630.0
+margin_bottom = 326.0
+theme = ExtResource( 5 )
+custom_fonts/font = SubResource( 5 )
+text = "World Generation"
+
+[node name="OptionButton" type="OptionButton" parent="."]
+margin_left = 322.0
+margin_top = 322.0
+margin_right = 704.0
+margin_bottom = 351.0
+text = "Simple"
+items = [ "Simple", null, false, 0, null, "Complex", null, false, 1, null, "Crazy", null, false, 2, null ]
+selected = 0
+
+[node name="Back" type="Button" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -192.0
-margin_top = -148.0
-margin_right = 8.0
-margin_bottom = -105.0
-custom_fonts/font = SubResource( 1 )
-text = "Music"
-script = ExtResource( 2 )
+margin_left = -190.0
+margin_top = 154.0
+margin_right = -62.0
+margin_bottom = 178.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color_focus = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 4 )
+custom_styles/normal = ExtResource( 2 )
+text = "Go Back"
 
-[node name="OptionButton" type="OptionButton" parent="."]
-margin_left = 320.0
-margin_top = 208.0
-margin_right = 592.0
-margin_bottom = 228.0
-script = ExtResource( 3 )
-
-[connection signal="toggled" from="CheckBox" to="CheckBox" method="_on_CheckBox_toggled"]
-[connection signal="item_selected" from="OptionButton" to="OptionButton" method="_on_OptionButton_item_selected"]
+[connection signal="toggled" from="Music" to="." method="_on_Music_toggled"]
+[connection signal="item_selected" from="OptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]

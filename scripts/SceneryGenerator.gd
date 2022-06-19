@@ -36,8 +36,7 @@ signal player_entered
 
 const MAX_GAP_CORRECTION_ATTEMPTS = 10
 const CENTER_DRAG_COUNT = 3
-# const ANGLES = [0, PI/4, PI/2, 3*PI/4, PI, 5*PI/4, 3*PI/2, 7*PI/4]
-const ANGLES = [0, PI/2, PI, 3*PI/2]
+var ANGLES = [0, PI/2, PI, 3*PI/2]
 
 
 func _ready():
@@ -182,6 +181,13 @@ func _process(_delta):
 func generate():
 	if generated:
 		return
+
+	if Global.world_complexity > 0:
+		ANGLES = [0, PI/4, PI/2, 3*PI/4, PI, 5*PI/4, 3*PI/2, 7*PI/4]
+	if Global.world_complexity > 1:
+		ammount *= 1.5
+		breakable_chance *= 2
+
 	generate_thread = Thread.new()
 	generate_thread.start(self, "_thread_function")
 	# _thread_function(1)

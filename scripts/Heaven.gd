@@ -1,15 +1,21 @@
 extends Control
 
-const s=["Come with me to the next life.",
-"You cannot escape fate.",
-"You will learn to enjoy your new afterlife.",
-"Ggaaaaaaaaa.",
-"Do not run.",
-"Do not fear.",
-"You will be educated in the new ways.",
-"You will be brought for final judgment.",
-"Come with me to your final destination.",
-"All must go with me.",]
+const s=[
+		"You worshiped the lower echelon god known as Benent Golmia for 3 billion years and were later reborn as a cat named Bato. Bato was unmarried but had three children. He was attacked by a bean beetle and died instantly.",
+		"You worshiped the upper echelon god known as Storga Nodmeetia for 5 million years and were later reborn as a bird named Bao. Bao was unmarried but had seven children. He was attacked by a bean beetle and died instantly.",
+		"You worshiped the upper echelon god known as Stwega Nowtin for 5 million years and were later reborn as a fish named Arowe. Arowe was unmarried but had five children. He was attacked by a bean beetle and died instantly.",
+		"You worshiped the upper echelon god known as Ytre La for 10 million years and were later reborn as a cat named Bato. Bato was unmarried but had three children. He was attacked by a bean beetle and died instantly.",
+		"You worshiped the upper echelon god known as Grafa Noteq for 7 trillion years and were later reborn as a whale named Kalew. Kalew was unmarried but had four children. He was attacked by a bean beetle and died instantly.",
+		"You worshiped the upper echelon god known as Sa Nojeti for 20 million years and were later reborn as a cat named Bato. Bato was unmarried but had three children. He was attacked by a bean beetle and died instantly.",
+		"You worshiped the upper echelon god known as Ra Nogega for 50 trillion years and were later reborn as a cat named Bato. Bato was unmarried but had three children. He was attacked by a bean beetle and died instantly.",
+		"You worshiped the upper echelon god known as Ia Nteua for 20 million years and were later reborn as a cat named Bato. Bato was unmarried but had three children. He was attacked by a bean beetle and died instantly.",
+		"You worshiped the lower god known as Pirga Wermwe for 5 billion years and were later reborn as a bee named Chonzo. Chonzo married, had a child and was hit by a flying plate. At his funeral, people said he was a nice guy.",
+		"You worshiped the upper middling god known as Treageri for 3 thousand years and were later reborn as a bee named Aruga. Aruga married, had a child and was hit by an onion truck. People said she accomplished a lot in her short life.",
+		"You worshiped the lower god known as Keales Lerued for seven trillion years and were later reborn as a dog named Dennis. Dennis married, had five children and was hit by a truck.",
+		"You worshiped the higher god known as Crenler Lopenxo for three hundred years and were later reborn as a bee named Chafri. Chafri married, had two children and was hit by a bean truck. The driver of the truck was Klere Dindo, who lives in a small house in Missouri when he's not out trucking.",
+		"You worshiped the lower god known as Borga Normetar for 2 thousand years and were later reborn as a ferret named Horatio. Horatio married, had a child and was hit by a truck.",
+		"You worshiped the lower god known as Borga Normetar for 5 billion years and were later reborn as a bee named Paloa. Paloa married, had a child and was hit by a truck. She died pretty quickly and then she kind of let out a little sigh as she was falling over.",
+	]
 
 var texts = [
 	"",
@@ -37,7 +43,7 @@ func _input(event):
 		if ready:
 			touched = true
 			if textnumber == len(texts):
-				get_tree().change_scene("res://scenes/Menu.tscn")
+				get_tree().change_scene("res://scenes/main.tscn")
 			else:
 				nextlabel()
 

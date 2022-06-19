@@ -60,6 +60,7 @@ var goal = {
 	},
 }
 
+
 func next_message() -> int:
 	for n in spirit_messages:
 		return n

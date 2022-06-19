@@ -1,23 +1,26 @@
 extends Node
 
 var Bubble = load("res://scenes/TextBubble.tscn")
+var PauseMenu = load("res://scenes/PauseMenu.tscn")
 var bubble = Bubble.instance()
 
 var music_player = AudioStreamPlayer.new()
 var fade = Tween.new()
 var music_muted = false
 var came_from_menu = true
+var world_complexity = 0
 
 var last_level_for_mode = {}
 var current_scene_path = ""
 var checkpoint = null
+var pausemenu
 
 var has_timer_started = false
-var start_time
+var start_time = OS.get_unix_time()
+var current_music = null
 
-# TODO have a proper state management
+# TODO have a proper state management including this and checkpoints
 var spirit_counter = {}
-
 
 
 func start_timer():
@@ -61,7 +64,8 @@ enum Music {
 	entrance,
 	welcome,
 	heaven,
-	hell
+	hell,
+	end,
 	}
 # and music
 var music_list = [
@@ -70,6 +74,7 @@ var music_list = [
 	preload("res://assets/Music/Welcome.mp3"),
 	preload("res://assets/Music/Heaven.mp3"),
 	preload("res://assets/Music/Hell.mp3"),
+	preload("res://assets/Music/End.mp3"),
 ]
 
 
@@ -95,20 +100,21 @@ func show_text(message, time):
 	return bubble
 
 func _input(event):
-	if event.is_action_pressed("pause") and not get_tree().get_current_scene().get_node("Camera2D").use_mouse:
+	if event.is_action_pressed("pause") and get_node("/root/main") != null:
 		get_tree().paused = not get_tree().paused
 
 		# Pause shaders
 		if get_tree().paused:
 			play(SFX.popup)
 			music_player.playing = false
+			pausemenu = PauseMenu.instance()
+			get_node("/root/main/Control").add_child(pausemenu)
 			Engine.time_scale = 0
-			bubble = Bubble.instance()
-			bubble.show("PAUSED", true)
+
 		else:
 			Engine.time_scale = 1
-			bubble.hide()
 			music_player.playing = true
+			pausemenu.queue_free()
 
 
 # Safe disconnect
@@ -148,6 +154,7 @@ func menu_button():
 	play(0)
 
 func play_music(m):
+	current_music = m
 	if music_muted:
 		return
 
@@ -163,6 +170,7 @@ func play_music(m):
 	music_player.play()
 
 func play_music_once(m):
+	current_music = m
 	if music_muted:
 		return
 	play_music(m)

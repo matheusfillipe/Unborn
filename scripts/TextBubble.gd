@@ -1,9 +1,13 @@
 extends CanvasLayer
 
+
+
 onready var tween = $Tween
 onready var timer = $Timer
 onready var labelc = $LabelCentered
 onready var labelb = $Label
+
+
 var label
 
 var showing = false
@@ -41,7 +45,7 @@ func show(message: String = "", middle=false):
 	if showing:
 		return
 
-	Global.get_tree().get_root().add_child(self)
+	Global.get_node('/root').add_child(self)
 
 	if middle:
 		label = labelc
