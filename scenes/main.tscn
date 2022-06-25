@@ -60,7 +60,6 @@ spirit_spawn_limit = 40
 spirit_limit_per_map = 10
 enemy_spawn_density = 0.05
 enemy_spawn_limit = 3
-force_mobile = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( -543, 3177 )
