@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/main.gd" type="Script" id=2]
@@ -12,6 +12,11 @@
 [ext_resource path="res://assets/hell.png" type="Texture" id=10]
 [ext_resource path="res://assets/hellfaces.jpeg" type="Texture" id=11]
 [ext_resource path="res://assets/resources/color_replace.tres" type="Material" id=12]
+[ext_resource path="res://resources/Bubble.tres" type="Theme" id=13]
+[ext_resource path="res://resources/ButtonHover.tres" type="StyleBox" id=14]
+[ext_resource path="res://resources/TextBubbleBox.tres" type="StyleBox" id=15]
+[ext_resource path="res://resources/ButtonPress.tres" type="StyleBox" id=16]
+[ext_resource path="res://resources/Backslash-RpJol.otf" type="DynamicFontData" id=17]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -44,6 +49,10 @@ extents = Vector2( 40.5, 133 )
 
 [sub_resource type="GradientTexture" id=2]
 
+[sub_resource type="DynamicFont" id=8]
+size = 30
+font_data = ExtResource( 17 )
+
 [node name="main" type="Node2D" groups=["actions"]]
 script = ExtResource( 2 )
 spirit_spaw_density = 3.0
@@ -51,6 +60,7 @@ spirit_spawn_limit = 40
 spirit_limit_per_map = 10
 enemy_spawn_density = 0.05
 enemy_spawn_limit = 3
+force_mobile = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( -543, 3177 )
@@ -338,8 +348,8 @@ shape = SubResource( 6 )
 
 [node name="FadeInHack" type="Sprite" parent="."]
 visible = false
-position = Vector2( 0, 185.5 )
-scale = Vector2( 388, 2285 )
+position = Vector2( 0, 2148.5 )
+scale = Vector2( 388, 50913 )
 texture = SubResource( 2 )
 
 [node name="Timer" type="Timer" parent="."]
@@ -348,7 +358,29 @@ autostart = true
 
 [node name="Control" type="CanvasLayer" parent="."]
 
+[node name="Control" type="Control" parent="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="PauseButton" type="Button" parent="Control/Control"]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -196.0
+margin_top = 10.0
+margin_right = -54.0
+margin_bottom = 63.0
+theme = ExtResource( 13 )
+custom_fonts/font = SubResource( 8 )
+custom_styles/hover = ExtResource( 14 )
+custom_styles/pressed = ExtResource( 16 )
+custom_styles/focus = ExtResource( 15 )
+custom_styles/disabled = ExtResource( 15 )
+custom_styles/normal = ExtResource( 15 )
+text = "PAUSE"
+
 [connection signal="body_entered" from="Bridge/SafeArea" to="." method="_on_SafeArea_body_entered"]
 [connection signal="body_exited" from="Bridge/SafeArea" to="." method="_on_SafeArea_body_exited"]
 [connection signal="body_entered" from="Area2D" to="." method="add_tutorial_barrier"]
 [connection signal="timeout" from="Timer" to="." method="update_world"]
+[connection signal="pressed" from="Control/Control/PauseButton" to="." method="_on_PauseButton_pressed"]

@@ -26,7 +26,7 @@ var velocity = Vector2()
 var target = Vector2()
 var has_target = false
 var state = IDLE setget set_state
-export var can_attack = false
+export var can_attack = false setget set_can_attack
 
 onready var rest_position = global_position
 onready var timer = $RetreatTimer
@@ -35,8 +35,8 @@ onready var fog = $Clouds
 onready var fire = $Fire
 
 var Explosion = preload("res://effects/Explosion.tscn")
-
 var Spirit = preload("res://scripts/Spirit.gd")
+var AttackButton = preload("res://scenes/AttackButton.tscn")
 
 
 signal died
@@ -67,6 +67,16 @@ func set_state(new_state):
 			stop()
 	state = new_state
 
+func set_can_attack(_can):
+	if can_attack == _can:
+		return
+	can_attack = _can
+	if can_attack and Global.is_mobile:
+		var attack_button = AttackButton.instance()
+		attack_button.player = self
+		get_node("/root/main/Control").add_child(attack_button)
+
+
 func stop():
 	has_target = false
 	rest_position = global_position
@@ -85,9 +95,9 @@ func attack():
 		set_size(initial_size)
 		health = 2
 		set_color(health_colors[health])
-		can_attack = false
+		self.can_attack = false
 
-func _input(event):
+func _unhandled_input(event):
 	# Mouse click / tap control
 	if event.is_action_pressed("click"):
 		go_to(get_global_mouse_position())
@@ -190,7 +200,7 @@ func _on_collide(body: Node):
 		if new_size > size_limit:
 			new_size = size_limit
 			set_color(COLOR.BLUE)
-			can_attack = true
+			self.can_attack = true
 
 		set_size(new_size)
 		emit_signal("spirit_kill", body.color, body.size)

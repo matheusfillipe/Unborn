@@ -27,6 +27,8 @@ onready var scenery_gen = $SceneryGen
 onready var hell_map = $SceneryGen/SceneryGenerator
 onready var heaven_map = $SceneryGen/SceneryGenerator2
 onready var checkpoints = $Checkpoints
+onready var pausebtn = $Control/Control/PauseButton
+
 onready var plot = Plot.new()
 
 onready var initial_hell_map_pos = hell_map.global_position
@@ -49,6 +51,8 @@ export(float, 0, 1) var spirit_random_message_chance = 0.05
 export(float) var heaven_y_limit = -1200
 export(float) var hell_y_limit = 0
 
+export(bool) var force_mobile = false
+
 enum Scenery {
 	safezone,
 	hell,
@@ -60,6 +64,7 @@ var scenery = Scenery.safezone setget set_scenery
 var grid = {}
 var actions = {0: false}
 var checkpoint_locked = false
+var is_mobile = false
 
 func _ready():
 	var sprites = []
@@ -81,8 +86,9 @@ func _ready():
 		"Android":
 			environment.auto_exposure_enabled = false
 			environment.glow_enabled = false
+			is_mobile = true
 		"BlackBerry":
-			pass
+			is_mobile = true
 		"10":
 			pass
 		"Flash":
@@ -90,7 +96,7 @@ func _ready():
 		"Haiku":
 			pass
 		"iOS":
-			pass
+			is_mobile = true
 		"HTML5":
 			pass
 		"OSX":
@@ -103,6 +109,13 @@ func _ready():
 			pass
 		"X11":
 			pass
+
+	is_mobile = is_mobile or force_mobile
+	Global.is_mobile = is_mobile
+
+	if is_mobile:
+		pausebtn.visible = true
+
 
 	# Start
 	Global.play_music_once(Global.Music.entrance)
@@ -613,3 +626,7 @@ func act(b: Node):
 
 func win():
 	return get_tree().change_scene("res://scenes/Outro.tscn")
+
+
+func _on_PauseButton_pressed():
+	Global.toggle_pause()

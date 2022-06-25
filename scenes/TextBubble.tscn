@@ -4,23 +4,7 @@
 [ext_resource path="res://scripts/TextBubble.gd" type="Script" id=2]
 [ext_resource path="res://resources/TiffanyLaurenceRegular-MVlpP.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://assets/resources/HeavenlyWings.ttf" type="DynamicFontData" id=4]
-
-[sub_resource type="StyleBoxFlat" id=1]
-resource_local_to_scene = true
-bg_color = Color( 0.713726, 0.768627, 0.772549, 0.431373 )
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color( 0, 0, 0, 1 )
-border_blend = true
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-corner_detail = 20
-expand_margin_left = 10.0
-expand_margin_right = 10.0
+[ext_resource path="res://resources/TextBubbleBox.tres" type="StyleBox" id=5]
 
 [sub_resource type="DynamicFont" id=9]
 size = 22
@@ -68,7 +52,7 @@ grow_vertical = 0
 theme = ExtResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_styles/normal = SubResource( 1 )
+custom_styles/normal = ExtResource( 5 )
 text = "PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED PAUSED "
 align = 1
 autowrap = true

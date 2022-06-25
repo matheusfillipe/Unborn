@@ -23,6 +23,9 @@ var current_music = null
 var spirit_counter = {}
 var has_left_safe_area = false
 
+var is_mobile = false
+var mobile_font_resized = false
+
 
 func start_timer():
 	if not has_timer_started:
@@ -100,22 +103,30 @@ func show_text(message, time):
 	bubble.show(message, time)
 	return bubble
 
-func _input(event):
+func _unhandled_input(event):
 	if event.is_action_pressed("pause") and get_node("/root/main") != null:
-		get_tree().paused = not get_tree().paused
+		toggle_pause()
 
-		# Pause shaders
-		if get_tree().paused:
-			play(SFX.popup)
-			music_player.playing = false
-			pausemenu = PauseMenu.instance()
-			get_node("/root/main/Control").add_child(pausemenu)
-			Engine.time_scale = 0
+func toggle_pause():
+	get_tree().paused = not get_tree().paused
 
-		else:
-			Engine.time_scale = 1
-			music_player.playing = true
-			pausemenu.queue_free()
+	# Pause shaders
+	# TODO make fadeinHACK part of the player instead of huge thing
+	if get_tree().paused:
+		play(SFX.popup)
+		music_player.playing = false
+		pausemenu = PauseMenu.instance()
+		get_node("/root/main/Control").add_child(pausemenu)
+		get_node("/root/main/FadeInHack").modulate = Color(1, 1, 1, 0.5)
+		get_node("/root/main/FadeInHack").visible = true
+		Engine.time_scale = 0
+
+	else:
+		Engine.time_scale = 1
+		music_player.playing = true
+		get_node("/root/main/FadeInHack").modulate = Color(1, 1, 1, 1)
+		get_node("/root/main/FadeInHack").visible = false
+		pausemenu.queue_free()
 
 
 # Safe disconnect

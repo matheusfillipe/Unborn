@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+const mobile_font_multiplier = 1.5
 
 
 onready var tween = $Tween
@@ -12,7 +13,16 @@ var label
 
 var showing = false
 
+var font_increased = false
+
 func _ready():
+	# Resize fonts on mobile
+	if Global.is_mobile and not Global.mobile_font_resized:
+		labelb.get_font('font').size *= mobile_font_multiplier
+		labelc.get_font('font').size *= mobile_font_multiplier
+		Global.mobile_font_resized = true
+
+
 	label = labelb
 	labelc.modulate = Color(1, 1, 1, 0)
 	labelb.modulate = Color(1, 1, 1, 0)
