@@ -360,6 +360,7 @@ autostart = true
 [node name="Control" type="Control" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 
 [node name="PauseButton" type="Button" parent="Control/Control"]
 visible = false
@@ -369,6 +370,7 @@ margin_left = -196.0
 margin_top = 10.0
 margin_right = -54.0
 margin_bottom = 63.0
+mouse_filter = 1
 theme = ExtResource( 13 )
 custom_fonts/font = SubResource( 8 )
 custom_styles/hover = ExtResource( 14 )

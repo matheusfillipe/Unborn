@@ -4,7 +4,11 @@ var Bubble = load("res://scenes/TextBubble.tscn")
 var PauseMenu = load("res://scenes/PauseMenu.tscn")
 var bubble = Bubble.instance()
 
+
+const mobile_font_multiplier = 1.5
+
 var music_player = AudioStreamPlayer.new()
+var music_player_pos = 0.0
 var fade = Tween.new()
 var music_muted = false
 var came_from_menu = true
@@ -24,7 +28,7 @@ var spirit_counter = {}
 var has_left_safe_area = false
 
 var is_mobile = false
-var mobile_font_resized = false
+var mobile_font_resized = {}
 
 
 func start_timer():
@@ -83,6 +87,9 @@ var music_list = [
 
 
 func _ready():
+	match OS.get_name():
+		"Android", "BlackBerry", "iOS":
+			is_mobile = true
 	pause_mode = Node.PAUSE_MODE_PROCESS
 	add_child(music_player)
 	add_child(fade)
@@ -108,24 +115,32 @@ func _unhandled_input(event):
 		toggle_pause()
 
 func toggle_pause():
-	get_tree().paused = not get_tree().paused
+	if get_tree().paused:
+		unpause()
+	else:
+		pause()
+
+func pause():
+	get_tree().paused = true
+	play(SFX.popup)
+	music_player_pos = music_player.get_playback_position()
+	music_player.stop()
+	pausemenu = PauseMenu.instance()
 
 	# Pause shaders
+	Engine.time_scale = 0
 	# TODO make fadeinHACK part of the player instead of huge thing
-	if get_tree().paused:
-		play(SFX.popup)
-		music_player.playing = false
-		pausemenu = PauseMenu.instance()
-		get_node("/root/main/Control").add_child(pausemenu)
-		get_node("/root/main/FadeInHack").modulate = Color(1, 1, 1, 0.5)
-		get_node("/root/main/FadeInHack").visible = true
-		Engine.time_scale = 0
+	get_node("/root/main/Control").add_child(pausemenu)
+	get_node("/root/main/FadeInHack").modulate = Color(1, 1, 1, 0.5)
+	get_node("/root/main/FadeInHack").visible = true
 
-	else:
-		Engine.time_scale = 1
-		music_player.playing = true
-		get_node("/root/main/FadeInHack").modulate = Color(1, 1, 1, 1)
-		get_node("/root/main/FadeInHack").visible = false
+func unpause():
+	get_tree().paused = false
+	Engine.time_scale = 1
+	music_player.play(music_player_pos)
+	get_node("/root/main/FadeInHack").modulate = Color(1, 1, 1, 1)
+	get_node("/root/main/FadeInHack").visible = false
+	if is_instance_valid(pausemenu):
 		pausemenu.queue_free()
 
 
@@ -232,3 +247,21 @@ const WPM = 200
 static func read_time(t: String):
 # warning-ignore:integer_division
 	return len(t.split(" ")) * 60 / WPM
+
+func multiply_node_font(node: Node):
+	var r_name = str(node.get_font('font'))
+	if r_name in mobile_font_resized:
+		return
+	node.get_font('font').size *= Global.mobile_font_multiplier
+	mobile_font_resized[r_name] = true
+
+# If mobile increase font size of children label nodes
+func multiply_font_size(parent: Node):
+	if not Global.is_mobile:
+		return
+
+	for label in Global.get_children_with_type(parent, Label):
+		multiply_node_font(label)
+
+	for btn in Global.get_children_with_type(parent, Button):
+		multiply_node_font(btn)

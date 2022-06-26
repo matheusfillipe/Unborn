@@ -64,7 +64,6 @@ var scenery = Scenery.safezone setget set_scenery
 var grid = {}
 var actions = {0: false}
 var checkpoint_locked = false
-var is_mobile = false
 
 func _ready():
 	var sprites = []
@@ -86,9 +85,8 @@ func _ready():
 		"Android":
 			environment.auto_exposure_enabled = false
 			environment.glow_enabled = false
-			is_mobile = true
 		"BlackBerry":
-			is_mobile = true
+			pass
 		"10":
 			pass
 		"Flash":
@@ -96,7 +94,7 @@ func _ready():
 		"Haiku":
 			pass
 		"iOS":
-			is_mobile = true
+			pass
 		"HTML5":
 			pass
 		"OSX":
@@ -110,10 +108,9 @@ func _ready():
 		"X11":
 			pass
 
-	is_mobile = is_mobile or force_mobile
-	Global.is_mobile = is_mobile
+	Global.is_mobile = Global.is_mobile or force_mobile
 
-	if is_mobile:
+	if Global.is_mobile:
 		pausebtn.visible = true
 
 

@@ -3,6 +3,7 @@ extends Control
 var options = preload("res://scenes/Options.tscn")
 
 func _ready():
+	Global.multiply_font_size(self)
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
 func _on_Continue_pressed():
@@ -24,6 +25,4 @@ func _on_Options_pressed():
 	add_child(opt)
 
 func _exit_tree():
-	Engine.time_scale = 1
-	get_tree().paused = false
-	Global.play_music(Global.current_music)
+	Global.unpause()

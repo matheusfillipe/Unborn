@@ -6,6 +6,7 @@ onready var optbtn = $OptionButton
 onready var music = $Music
 
 func _ready():
+	Global.multiply_font_size(self)
 	music.pressed = not Global.music_muted
 	optbtn.selected = Global.world_complexity
 

@@ -34,6 +34,8 @@ onready var scenery_timer = $Timer
 onready var fog = $Clouds
 onready var fire = $Fire
 
+var attack_button
+
 var Explosion = preload("res://effects/Explosion.tscn")
 var Spirit = preload("res://scripts/Spirit.gd")
 var AttackButton = preload("res://scenes/AttackButton.tscn")
@@ -72,10 +74,12 @@ func set_can_attack(_can):
 		return
 	can_attack = _can
 	if can_attack and Global.is_mobile:
-		var attack_button = AttackButton.instance()
+		attack_button = AttackButton.instance()
 		attack_button.player = self
 		get_node("/root/main/Control").add_child(attack_button)
 
+		# Get rid of bubbles. Call on all of the group
+		get_tree().call_group("bubble", "hide")
 
 func stop():
 	has_target = false
@@ -84,6 +88,9 @@ func stop():
 
 func attack():
 	if can_attack:
+		if is_instance_valid(attack_button):
+			attack_button.queue_free()
+
 		var explosion = Explosion.instance()
 		get_parent().add_child(explosion)
 		explosion.global_position = global_position

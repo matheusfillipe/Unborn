@@ -9,6 +9,7 @@
 [node name="AttackButton" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 script = ExtResource( 3 )
 
 [node name="Button" type="Button" parent="."]
@@ -19,6 +20,7 @@ margin_left = 100.0
 margin_top = -200.0
 margin_right = -100.0
 margin_bottom = -116.0
+mouse_filter = 1
 theme = ExtResource( 2 )
 custom_styles/hover = ExtResource( 4 )
 custom_styles/pressed = ExtResource( 5 )

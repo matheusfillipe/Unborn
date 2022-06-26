@@ -2,6 +2,7 @@ extends Control
 
 # RESET game status
 func _ready():
+	Global.multiply_font_size(self)
 	Global.checkpoint = null
 	Global.spirit_counter = {}
 	Global.current_music = null
