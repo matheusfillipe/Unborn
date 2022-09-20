@@ -1,6 +1,6 @@
 [![CircleCI Build Status](https://circleci.com/gh/matheusfillipe/Unborn.svg?style=shield)](https://circleci.com/gh/matheusfillipe/Unborn)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=Unborn&root=index.php)](https://unborn.herokuapp.com)
-[![Cloudflare Pages](https://img.shields.io/endpoint?url=https://cloudflare-pages-badges.mattf.workers.dev//?projectName=)](https://unborn.pages.dev/)
+[![Cloudflare Pages](https://img.shields.io/endpoint?url=https://cloudflare-pages-badges.mattf.workers.dev//?projectName=unborn)](https://unborn.pages.dev/)
 [![Chat with us on irc](https://img.shields.io/badge/-IRC-gray?logo=gitter)](https://mangle.ga/irc)
 
 
