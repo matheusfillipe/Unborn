@@ -6,6 +6,7 @@
 # Play on
 
 * [Heroku](https://unborn.herokuapp.com)
+* [Cloudflare](https://unborn.pages.dev)
 * [Ich.io](https://mattffly.itch.io/unborn)
 * [Download](https://github.com/matheusfillipe/Unborn/releases)
 
