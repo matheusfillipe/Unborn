@@ -16,6 +16,7 @@ jobs:
           mkdir -p ./build/linux
           mkdir -v -p build/android
       - run: godot --export HTML5 ./build/html/index.html
+      - run: .circleci/compress.sh ./build/html/index.html
       # - run:
       #     name: Heroku deploy
       #     command: bash .circleci/deploy-heroku.sh

@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-apt install -y npm
-npm install -g wrangler
+apt update
+apt -y install curl
 
-cat <<EOF > "build/html/wrangler.toml"
-name = "unborn"
-workers_dev = false
-EOF
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install --lts
+nvm use --lts
 
-npx wrangler pages publish build/html
+npx wrangler pages publish build/html --project-name "unborn"
