@@ -9,4 +9,4 @@ export NVM_DIR="$HOME/.nvm"
 nvm install --lts
 nvm use --lts
 
-npx wrangler pages publish build/html --project-name "unborn"
+npx wrangler pages publish --env production build/html --project-name "unborn"
