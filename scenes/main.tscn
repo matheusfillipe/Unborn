@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scenes/orb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/main.gd" type="Script" id=2]
@@ -9,8 +9,6 @@
 [ext_resource path="res://scripts/SpiritSpawn.gd" type="Script" id=7]
 [ext_resource path="res://scenes/Gates.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/SceneryGenerator.tscn" type="PackedScene" id=9]
-[ext_resource path="res://assets/hell.png" type="Texture" id=10]
-[ext_resource path="res://assets/hellfaces.jpeg" type="Texture" id=11]
 [ext_resource path="res://assets/resources/color_replace.tres" type="Material" id=12]
 [ext_resource path="res://resources/Bubble.tres" type="Theme" id=13]
 [ext_resource path="res://resources/ButtonHover.tres" type="StyleBox" id=14]
@@ -140,33 +138,41 @@ texture = ExtResource( 6 )
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Checkpoints/Area2D"]
 polygon = PoolVector2Array( 3827, -786, 3813, -772, 3935, -647, 3814, -516, 3822, -497, 3947, -633, 4282, -422, 4282, -447 )
 
-[node name="Hellfaces" type="Sprite" parent="Checkpoints"]
-modulate = Color( 0.3, 0.3, 0.3, 1 )
-position = Vector2( 7137, 6708 )
-scale = Vector2( 0.75, 0.75 )
-texture = ExtResource( 11 )
-
-[node name="Hell" type="Sprite" parent="Checkpoints/Hellfaces"]
-position = Vector2( -3998, -1677 )
-texture = ExtResource( 10 )
-
 [node name="SceneryGen" type="Node2D" parent="."]
 
 [node name="SceneryGenerator" parent="SceneryGen" instance=ExtResource( 9 )]
 position = Vector2( 4632, 1973 )
 y_limit = -100.0
 x_limit = 2800.0
+ammount = 10
+min_len = 200
+max_len = 1000
 breakable_chance = 0.3
+breakable_min_size = 50
+breakable_max_size = 100
 
 [node name="SceneryGenerator2" parent="SceneryGen" instance=ExtResource( 9 )]
 position = Vector2( 5420, -3171 )
 y_limit = -1000.0
 x_limit = 3510.0
+ammount = 10
+min_len = 200
+max_len = 1000
 breakable_chance = 0.3
+breakable_min_size = 50
+breakable_max_size = 100
 
 [node name="Player" parent="." groups=["orbs"] instance=ExtResource( 3 )]
 position = Vector2( -387, 958 )
 collision_brightness_multiplier = 1.2
+max_speed = 600
+knockback_speed = 1200
+acceleration = 800
+friction = 800
+noise_amplitude = 0.2
+noise_speed = 8.0
+size_limit = 10.0
+can_attack = false
 
 [node name="Orbs" type="Node2D" parent="."]
 
