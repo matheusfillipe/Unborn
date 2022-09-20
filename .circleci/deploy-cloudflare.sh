@@ -9,5 +9,7 @@ export NVM_DIR="$HOME/.nvm"
 nvm install --lts
 nvm use --lts
 
-git checkout -b production
+branch=$(git rev-parse --abbrev-ref HEAD)
+name=$(basename $(git config remote.origin.url |sed "s/\.git$//") | sed "s/ /-/g" | tr '[:upper:]' '[:lower:]')
+npx wrangler pages project create unborn --production-branch "$branch" || true
 npx wrangler pages publish build/html --project-name "unborn"
