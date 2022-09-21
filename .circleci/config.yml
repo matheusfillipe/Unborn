@@ -25,8 +25,8 @@ jobs:
           command: bash .circleci/deploy-cloudflare.sh
       - run: godot --export "Windows Desktop" ./build/windows/$CIRCLE_PROJECT_REPONAME.exe
       - run: godot --export "Linux/X11" ./build/linux/$CIRCLE_PROJECT_REPONAME
-      # - run: godot --export "Mac OSX" ./build/macos/$CIRCLE_PROJECT_REPONAME.dmg
-      # - run: godot -v --export-debug "Android Debug" ./build/android/$CIRCLE_PROJECT_REPONAME-debug.apk
+      - run: godot --export "Mac OSX" ./build/macos/$CIRCLE_PROJECT_REPONAME.app
+      - run: godot -v --export-debug "Android Debug" ./build/android/$CIRCLE_PROJECT_REPONAME-debug.apk
       - run:
           name: Github release
           command: bash .circleci/release.sh
