@@ -12,11 +12,11 @@ rm -rf ./html/.git
 rm -f ./html/index.php
 rm -f ./html/composer.json
 
-zip linux.zip linux/*
-zip macos.zip macos/*
-zip windows.zip windows/*
-zip html5.zip ./html/*
-zip android.zip ./android/*
+zip -r linux.zip linux/*
+zip -r macos.zip macos/*
+zip -r windows.zip windows/*
+zip -r html5.zip ./html/*
+zip -r android.zip ./android/*
 mv *.zip release/
 
 echo "RELEASE VERSION $VERSION"
